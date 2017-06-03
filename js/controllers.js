@@ -37,8 +37,7 @@
  */
  function LoginCtrl($window,$scope,$firebaseAuth){
  	var auth = $firebaseAuth();
-    
-    
+    var location = "rxjob";
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         // User is signed in.;
@@ -53,7 +52,7 @@
         // login with Google
           auth.$signInWithPopup("google").then(function(firebaseUser) {
             console.log("Signed in as:", firebaseUser);
-            $window.location = "/angularg";
+            $window.location = location;
           }).catch(function(error) {
             console.log("Authentication failed:", error);
           });
