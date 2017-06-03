@@ -37,7 +37,7 @@
  */
  function LoginCtrl($window,$scope,$firebaseAuth){
  	var auth = $firebaseAuth();
-    var location = "";
+    var location = "/";
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         // User is signed in.;
