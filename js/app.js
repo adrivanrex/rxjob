@@ -11,6 +11,7 @@
         'pascalprecht.translate',       // Angular Translate
         'ngIdle',                        // Idle timer
         'firebase',						// Firebase
+        'ngMap',						//Angular Map
     ])
 })();
 

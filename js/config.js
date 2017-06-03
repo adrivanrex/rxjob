@@ -454,6 +454,25 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
             templateUrl: "views/contacts.html",
             data: { pageTitle: 'Contacts' }
         })
+        .state('app.create_jobpost',{
+            url:"/create_jobpost",
+            templateUrl: "views/create_jobpost",
+            data: { pageTitle: 'Create Jobpost'},
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'ui.event',
+                            files: ['js/plugins/uievents/event.js']
+                        },
+                        {
+                            name: 'ui.map',
+                            files: ['js/plugins/uimaps/ui-map.js']
+                        },
+                    ]);
+                }
+            }
+        })
         .state('app.job_apply',{
             url:"/job_apply",
             templateUrl: "views/job_apply.html",
