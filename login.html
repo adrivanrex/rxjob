@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html ng-app="inspinia">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Page title set in pageTitle directive -->
+    <title page-title></title>
+    <!-- Font awesome -->
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Main Inspinia CSS files -->
+    <link href="css/animate.css" rel="stylesheet">
+    <link id="loadBefore" href="css/style.css" rel="stylesheet">
+
+
+    
+
+</head>
+
+<body ng-controller="LoginCtrl" class="gray-bg">
+
+    <div class="middle-box text-center loginscreen  animated fadeInDown">
+        <div>
+            <div>
+
+                <h1 class="logo-name">IN+</h1>
+
+            </div>
+            <h3>{{welcome}}</h3>
+            <p>Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.
+                <!--Continually expanded and constantly improved Inspinia Admin Them (IN+)-->
+            </p>
+            <p>Login in. To see it in action.</p>
+            <button ng-click="googlelogin()" class="btn btn-primary block full-width m-b">Google</button>
+            <button ng-click="facebooklogin()" class="btn btn-primary block full-width m-b">Facebook</button>
+            <form class="m-t" role="form" ng-submit="login()">
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="Username" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Password" required="">
+                </div>
+                <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
+
+                <a href="#"><small>Forgot password?</small></a>
+                <p class="text-muted text-center"><small>Do not have an account?</small></p>
+                <a class="btn btn-sm btn-white btn-block" href="register.html">Create an account</a>
+            </form>
+            <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p>
+        </div>
+    </div>
+    
+    
+    <!-- jQuery and Bootstrap -->
+    <script src="js/jquery/jquery-2.1.1.min.js"></script>
+    <script src="js/plugins/jquery-ui/jquery-ui.js"></script>
+    <script src="js/bootstrap/bootstrap.min.js"></script>
+    <!-- MetsiMenu -->
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <!-- SlimScroll -->
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <!-- Peace JS -->
+    <script src="js/plugins/pace/pace.min.js"></script>
+    <!-- Custom and plugin javascript -->
+    <script src="js/inspinia.js"></script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
+    
+    <!-- Main Angular scripts-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="js/plugins/oclazyload/dist/ocLazyLoad.min.js"></script>
+    <script src="js/angular-translate/angular-translate.min.js"></script>
+    <script src="js/ui-router/angular-ui-router.min.js"></script>
+    <script src="js/bootstrap/ui-bootstrap-tpls-0.12.0.min.js"></script>
+    <script src="js/plugins/angular-idle/angular-idle.js"></script>
+    <!--
+ You need to include this script on any page that has a Google Map.
+ When using Google Maps on your own site you MUST signup for your own API key at:
+ https://developers.google.com/maps/documentation/javascript/tutorial#api_key
+ After your sign up replace the key in the URL below..
+-->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQTpXj82d8UpCi97wzo_nKXL7nYrd4G70"></script>
+    <script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyA8lq9sgFNGWFCzPcOn60YbyX2gk6caza0",
+        authDomain: "jobwaki.firebaseapp.com",
+        databaseURL: "https://jobwaki.firebaseio.com",
+        projectId: "jobwaki",
+        storageBucket: "jobwaki.appspot.com",
+        messagingSenderId: "643537213620"
+    };
+    firebase.initializeApp(config);
+    </script>
+    <!-- AngularFire -->
+    <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+    <!-- Anglar App Script -->
+    <script src="js/app.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/directives.js"></script>
+    <script src="js/controllers.js"></script>
+
+</body>
+
+</html>
