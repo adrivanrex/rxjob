@@ -74,7 +74,8 @@ function LoginCtrl($window, $scope, $firebaseAuth) {
 }
 
 function MainCtrl($window, $scope, $firebaseAuth,$location,$firebaseObject,$timeout,) {
-
+    var firstlocation = $location.path();
+    console.log('first location', firstlocation);
     var auth = $firebaseAuth();
     var database = firebase.database();
 
@@ -82,8 +83,7 @@ function MainCtrl($window, $scope, $firebaseAuth,$location,$firebaseObject,$time
         
 
     }
-    if($location.path('/app/project_detail')){
-    }
+
     $scope.projects = [];
     if($location.path('/dashboards/projects')){
         console.log('hello');
@@ -108,6 +108,11 @@ function MainCtrl($window, $scope, $firebaseAuth,$location,$firebaseObject,$time
                     });
     }
 
+    if($location.path('/app/project_detail')){
+        console.log('test');
+    }
+    console.log('located',$window.location);
+    $location.path('/');
 
     console.log('scope', $scope.projects);
 
@@ -115,7 +120,7 @@ function MainCtrl($window, $scope, $firebaseAuth,$location,$firebaseObject,$time
        switch($location.path()){
             case '/app/project_detail':
                 console.log('hi');
-                
+
 
             case '/dashboards/projects':
 
@@ -142,7 +147,7 @@ function MainCtrl($window, $scope, $firebaseAuth,$location,$firebaseObject,$time
        }
 
 
-
+      
 
 
 
@@ -152,6 +157,7 @@ function MainCtrl($window, $scope, $firebaseAuth,$location,$firebaseObject,$time
         }
     });
 
+     $location.path(firstlocation);
     
 
     $scope.logout = function() {
