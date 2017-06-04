@@ -8,12 +8,12 @@
  *
  */
 function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdleProvider, KeepaliveProvider) {
-
-    $urlRouterProvider.otherwise("/dashboards/dashboard_2");
+    
+    $urlRouterProvider.otherwise("/dashboards/dashboard_1");
 
     $ocLazyLoadProvider.config({
         // Set to true if you want to see what and when is dynamically loaded
-        debug: true
+        debug: false
     });
 
     $stateProvider
@@ -454,7 +454,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
             templateUrl: "views/contacts.html",
             data: { pageTitle: 'Contacts' }
         })
-        .state('app.create_jobpost',{
+        .state('dashboards.create_jobpost',{
             url:"/create_jobpost",
             templateUrl: "views/create_jobpost",
             data: { pageTitle: 'Create Jobpost'},
@@ -483,7 +483,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
             templateUrl: "views/profile.html",
             data: { pageTitle: 'Profile' }
         })
-        .state('app.projects', {
+        .state('dashboards.projects', {
             url: "/projects",
             templateUrl: "views/projects.html",
             data: { pageTitle: 'Projects' }

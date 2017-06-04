@@ -41,7 +41,8 @@ function LoginCtrl($window, $scope, $firebaseAuth) {
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             // User is signed in.;
-            console.log(user);
+            console.log("userinfo", user);
+            $scope.user = user;
         }
 
     });
@@ -72,10 +73,76 @@ function LoginCtrl($window, $scope, $firebaseAuth) {
 
 }
 
-function MainCtrl($window, $scope, $firebaseAuth) {
+function MainCtrl($window, $scope, $firebaseAuth,$location,$firebaseObject,$timeout) {
 
     var auth = $firebaseAuth();
     var database = firebase.database();
+
+    function getProjects() {
+        
+
+    }
+    
+    $scope.projects = [];
+    if($location.path('/dashboards/projects')){
+        console.log('hello');
+
+                firebase.auth().onAuthStateChanged((user) => {
+                    console.log(user.uid);
+                    let ref = firebase.database().ref("JobPost")
+                    .orderByChild('Poster')
+                    .equalTo(user.uid);
+
+                    ref.on("value", function(snapshot) {
+                        console.log(snapshot.val());
+                        $timeout(function() {
+                          $scope.projects = snapshot.val();
+                        });
+
+                    }, function(errorObject) {
+                        console.log("The read failed: " + errorObject.code);
+                    });
+                    });
+    }
+
+    console.log('scope', $scope.projects);
+
+    $scope.$on('$locationChangeStart', function(event) {
+       switch($location.path()){
+            case '/dashboards/projects':
+
+                firebase.auth().onAuthStateChanged((user) => {
+                    console.log(user.uid);
+                    let ref = firebase.database().ref("JobPost")
+                    .orderByChild('Poster')
+                    .equalTo(user.uid);
+
+                    ref.on("value", function(snapshot) {
+                        console.log(snapshot.val());
+                        $scope.projects = snapshot.val();
+
+                    }, function(errorObject) {
+                        console.log("The read failed: " + errorObject.code);
+                    });
+                    });
+                
+                break
+            default:
+                console.log('routes');
+       }
+
+
+
+
+
+
+
+    if ($scope.form.$invalid) {
+       event.preventDefault();
+        }
+    });
+
+    
 
     $scope.logout = function() {
         firebase.auth().signOut().then(function() {
@@ -95,6 +162,10 @@ function MainCtrl($window, $scope, $firebaseAuth) {
         });
     }
 
+    /*
+     * Firebase functions
+     */
+
     function getUsers() {
         let ref = firebase.database().ref("users");
         ref.on("value", function(snapshot) {
@@ -105,7 +176,39 @@ function MainCtrl($window, $scope, $firebaseAuth) {
 
     }
 
-    getUsers();
+
+
+    $scope.createJobPost = function() {
+        $scope.JobPostTitle = this.JobPostTitle;
+        $scope.JobPostDescription = this.JobPostDescription;
+        console.log($scope.latlngaddress[0]);
+
+        for (var i = $scope.latlngaddress.length - 1; i >= 0; i--) {
+            delete $scope.latlngaddress[i].geometry.location.lat;
+            delete $scope.latlngaddress[i].geometry.location.lng;
+        }
+
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                uniqueID = 'test';
+                var post = firebase.database().ref('JobPost/').push({
+                    Poster: user.uid,
+                    Title: this.JobPostTitle,
+                    Description: this.JobPostDescription,
+                    Location: $scope.latlngaddress,
+                    Status: 'active',
+                });
+                var JobpostID = post.key;
+                console.log(JobpostID);
+                $location.path('/dashboards/projects');
+
+            }
+        });
+
+    }
+
+
+
 
 
 
@@ -125,16 +228,16 @@ function MainCtrl($window, $scope, $firebaseAuth) {
 
 
 
-    $scope.latlng = [10.314919285813161,124.453125];
+    $scope.latlng = [10.314919285813161, 124.453125];
     $scope.getpos = function(event) {
-        
+
         $scope.latlng = [event.latLng.lat(), event.latLng.lng()];
         console.log($scope.latlng);
 
-        var latlng = new google.maps.LatLng($scope.latlng[0],$scope.latlng[1]);
+        var latlng = new google.maps.LatLng($scope.latlng[0], $scope.latlng[1]);
         // This is making the Geocode request
         var geocoder = new google.maps.Geocoder();
-        geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+        geocoder.geocode({ 'latLng': latlng }, function(results, status) {
             if (status !== google.maps.GeocoderStatus.OK) {
                 console.log(status);
             }
@@ -142,12 +245,12 @@ function MainCtrl($window, $scope, $firebaseAuth) {
             if (status == google.maps.GeocoderStatus.OK) {
                 $scope.latlngaddress = results;
                 var address = (results[0].formatted_address);
-                
+
             }
         });
 
-        
-    console.log($scope.latlngaddress);
+
+        console.log($scope.latlngaddress);
     };
 
 
