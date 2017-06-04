@@ -9,6 +9,7 @@
  */
 function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdleProvider, KeepaliveProvider) {
     
+    
     $urlRouterProvider.otherwise("/dashboards/dashboard_1");
 
     $ocLazyLoadProvider.config({

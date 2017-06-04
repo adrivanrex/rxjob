@@ -33,7 +33,7 @@
                         </div>
                     </div>
                     <div class="project-list">
-                        <div class="project-feed" ng-repeat="projects in projects">
+                        <div class="project-feed" ng-repeat="(key, value) in projects">
                             <div class="project-status">
                                 <span class="label label-primary">Active</span>
                             </div>
@@ -45,6 +45,8 @@
                                 <a href=""><img alt="image" class="img-circle" src="img/a5.jpg"></a>
                             </div>
                             <div class="project-title">
+                                {{key}}<br>
+                                {{value.Description}}<br>
                                 <a ui-sref="project_detail">{{projects.Description}}</a>
                                 <br/>
                                 <small>Created 14.08.2014</small>

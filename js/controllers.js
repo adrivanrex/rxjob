@@ -73,7 +73,7 @@ function LoginCtrl($window, $scope, $firebaseAuth) {
 
 }
 
-function MainCtrl($window, $scope, $firebaseAuth,$location,$firebaseObject,$timeout) {
+function MainCtrl($window, $scope, $firebaseAuth,$location,$firebaseObject,$timeout,) {
 
     var auth = $firebaseAuth();
     var database = firebase.database();
@@ -82,7 +82,8 @@ function MainCtrl($window, $scope, $firebaseAuth,$location,$firebaseObject,$time
         
 
     }
-    
+    if($location.path('/app/project_detail')){
+    }
     $scope.projects = [];
     if($location.path('/dashboards/projects')){
         console.log('hello');
@@ -96,7 +97,9 @@ function MainCtrl($window, $scope, $firebaseAuth,$location,$firebaseObject,$time
                     ref.on("value", function(snapshot) {
                         console.log(snapshot.val());
                         $timeout(function() {
+                            console.log('testing', typeof snapshot.val());
                           $scope.projects = snapshot.val();
+                          console.log('scope', $scope.projects);
                         });
 
                     }, function(errorObject) {
@@ -105,10 +108,15 @@ function MainCtrl($window, $scope, $firebaseAuth,$location,$firebaseObject,$time
                     });
     }
 
+
     console.log('scope', $scope.projects);
 
     $scope.$on('$locationChangeStart', function(event) {
        switch($location.path()){
+            case '/app/project_detail':
+                console.log('hi');
+                
+
             case '/dashboards/projects':
 
                 firebase.auth().onAuthStateChanged((user) => {
@@ -127,8 +135,10 @@ function MainCtrl($window, $scope, $firebaseAuth,$location,$firebaseObject,$time
                     });
                 
                 break
+            case '/app/project_detail':
+                console.log('details');
             default:
-                console.log('routes');
+                console.log('routes',$location.path());
        }
 
 
@@ -197,6 +207,7 @@ function MainCtrl($window, $scope, $firebaseAuth,$location,$firebaseObject,$time
                     Description: this.JobPostDescription,
                     Location: $scope.latlngaddress,
                     Status: 'active',
+                    CreatedAt: firebase.database.ServerValue.TIMESTAMP,
                 });
                 var JobpostID = post.key;
                 console.log(JobpostID);
