@@ -73,7 +73,7 @@ function LoginCtrl($window, $scope, $firebaseAuth) {
 
 }
 
-function MainCtrl($window, $scope, $firebaseAuth,$location,$firebaseObject,$timeout,) {
+function MainCtrl($window, $scope, $firebaseAuth,$location,$firebaseObject,$timeout) {
     var firstlocation = $location.path();
     console.log('first location', firstlocation);
     var auth = $firebaseAuth();
