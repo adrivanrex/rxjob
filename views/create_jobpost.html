@@ -8,9 +8,9 @@
                     </ng-map>
                 </section>
             </div>
-            <div class="row wrapper">
-                <form name="createjobpost" ng-submit="createJobPost()">
-                    <div class="form-group">
+            <div class="row wrapper-content">
+                <form name="createjobpost" ng-submit="createJobPost()" class="form-horizontal ng-pristine ng-valid r">
+                    <div class="form-group ng-pristine ng-valid">
                         <label class="col-lg-2 control-label">Coordinates:</label>
                         <div class="col-lg-10">
                             <input type="text"  placeholder="Coordinates" value="{{latlng}}" class="form-control">
