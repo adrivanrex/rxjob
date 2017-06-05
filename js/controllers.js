@@ -80,13 +80,15 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     var database = firebase.database();
     $scope.projects = [];
 
-    function getProjects() {
+    function getUserProjects() {
         firebase.auth().onAuthStateChanged((user) => {
-            let ref = firebase.database().ref("JobPost");
+            let ref = firebase.database().ref("JobPost")
+            	.orderByChild('PosterID')
+                .equalTo(user.uid);
             ref.on("value", function(snapshot) {
                 console.log(snapshot.val());
                 $timeout(function() {
-                    $scope.projects = snapshot.val();
+                    $scope.userProjects = snapshot.val();
                 });
 
             }, function(errorObject) {
@@ -135,7 +137,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
     if ($location.path('/dashboards/projects')) {
-        getProjects();
+        getUserProjects();
     }
     if ($location.path('/app/project_detail')) {
 
@@ -212,9 +214,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     }
 
-    function getUserDetails(id) {
-
-    }
 
 
 
