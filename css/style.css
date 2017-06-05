@@ -608,6 +608,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .open .dropdown-toggle.btn-primary {
     background-image: none;
 }
+
 .btn-primary.disabled,
 .btn-primary.disabled:hover,
 .btn-primary.disabled:focus,
@@ -6419,4 +6420,8 @@ body.skin-3 {
     .welcome-message {
         display: none;
     }
+}
+
+.profilepic {
+    width:80px;
 }
