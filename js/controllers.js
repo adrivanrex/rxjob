@@ -86,9 +86,12 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             	.orderByChild('PosterID')
                 .equalTo(user.uid);
             ref.on("value", function(snapshot) {
-                console.log(snapshot.val());
+
+                console.log('userProjects',snapshot.val());
+
                 $timeout(function() {
                     $scope.userProjects = snapshot.val();
+
                 });
 
             }, function(errorObject) {
@@ -223,7 +226,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     $scope.createJobPost = function() {
         $scope.JobPostTitle = this.JobPostTitle;
         $scope.JobPostDescription = this.JobPostDescription;
-        console.log($scope.latlngaddress[0]);
+        console.log('coordinates',$scope.latlngaddress[0]);
 
         for (var i = $scope.latlngaddress.length - 1; i >= 0; i--) {
             delete $scope.latlngaddress[i].geometry.location.lat;
@@ -233,6 +236,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 var post = firebase.database().ref('JobPost/').push({
+                	Coordinates: $scope.latlng,
                     PosterID: user.uid,
                     PosterName: user.displayName,
                     Title: this.JobPostTitle,

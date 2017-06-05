@@ -11,6 +11,13 @@
         </ol>
     </div>
 </div>
+<div class="row wrapper-content">
+<section id="map">
+                    <ng-map center="{{projectDetail.Coordinates}}" zoom="13" on-click="getpos($event)">
+                        <marker position="{{projectDetail.Coordinates}}" title="Hello World!" on-dragend="getpos($event)" animation="Animation.BOUNCE" animation="DROP" draggable="true"></marker>
+                    </ng-map>
+                </section>
+</div>
 <div class="row">
 <div class="col-lg-9">
 <div class="wrapper wrapper-content animated fadeInUp">
