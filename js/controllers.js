@@ -78,49 +78,67 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     console.log('first location', firstlocation);
     var auth = $firebaseAuth();
     var database = firebase.database();
-    $scope.projects =[];
+    $scope.projects = [];
 
-     function getProjects() {
-            firebase.auth().onAuthStateChanged((user) => {
-                let ref = firebase.database().ref("JobPost");
-                ref.on("value", function(snapshot) {
-                    console.log(snapshot.val());
-                    $timeout(function() {
-                          $scope.projects = snapshot.val();
-                        });
-
-                }, function(errorObject) {
-                    console.log("The read failed: " + errorObject.code);
+    function getProjects() {
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref("JobPost");
+            ref.on("value", function(snapshot) {
+                console.log(snapshot.val());
+                $timeout(function() {
+                    $scope.projects = snapshot.val();
                 });
-            });
-        }
 
-    function getProjectDetail(id){
+            }, function(errorObject) {
+                console.log("The read failed: " + errorObject.code);
+            });
+        });
+    }
+
+    function getProjectDetail(id) {
 
         firebase.auth().onAuthStateChanged((user) => {
-                let ref = firebase.database().ref("JobPost")
-                    .orderByChild('id')
-                    .equalTo(id);
+            let ref = firebase.database().ref("JobPost")
+                .orderByChild('Id')
+                .equalTo(id);
 
-                ref.on("value", function(snapshot) {
-                    console.log(snapshot.val());
-                    $timeout(function() {
-                            console.log('testing', typeof snapshot.val());
-                          $scope.projectDetail = snapshot.val();
-                          console.log('projectdetails', $scope.projectDetail);
-                        });
-
-                }, function(errorObject) {
-                    console.log("The read failed: " + errorObject.code);
+            ref.on("value", function(snapshot) {
+                console.log(snapshot.val());
+                $timeout(function() {
+                    console.log('testing', snapshot.val());
+                    projectDetail = snapshot.val();
+                    keys = Object.keys(projectDetail);
+                    $scope.projectDetail = projectDetail[keys[0]];
                 });
+
+            }, function(errorObject) {
+                console.log("The read failed: " + errorObject.code);
             });
+        });
     }
+
+    function getUserDetails(id) {
+
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref("users")
+                .orderByChild('Id')
+                .equalTo(id);
+
+            ref.on("value", function(snapshot) {
+                return snapshot.val();
+        
+            }, function(errorObject) {
+                console.log("The read failed: " + errorObject.code);
+            });
+        });
+    }
+
 
     if ($location.path('/dashboards/projects')) {
         getProjects();
     }
     if ($location.path('/app/project_detail')) {
-        
+
         getProjectDetail($location.search().id);
     }
 
@@ -128,7 +146,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     $scope.$on('$locationChangeStart', function(event) {
         switch ($location.path()) {
             case '/app/project_detail':
-                consol
+                getProjectDetail($location.search().id);
 
 
             case '/dashboards/projects':
@@ -141,7 +159,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         }
 
 
-       
+
 
 
 
@@ -166,12 +184,19 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     }
 
     function registerUser(userId, name, email, imageUrl) {
-        firebase.database().ref('users/' + userId).set({
-            username: name,
-            email: email,
-            profile_picture: imageUrl
+    	firebase.auth().onAuthStateChanged((user) => {
+
+    		console.log('userdetails', user);
+    		firebase.database().ref('users/' + user.uid).set({
+	            username: user.displayName,
+	            email: user.email,
+	            profile_picture: user.photoURL
+	        });
+	        
         });
     }
+
+    registerUser();
 
     /*
      * Firebase functions
@@ -180,12 +205,19 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     function getUsers() {
         let ref = firebase.database().ref("users");
         ref.on("value", function(snapshot) {
-            console.log(snapshot.val());
+            console.log('users', snapshot.val());
         }, function(errorObject) {
             console.log("The read failed: " + errorObject.code);
         });
 
     }
+
+    function getUserDetails(id) {
+
+    }
+
+
+
 
 
 
@@ -201,9 +233,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                uniqueID = 'test';
                 var post = firebase.database().ref('JobPost/').push({
-                    Poster: user.uid,
+                    PosterID: user.uid,
+                    PosterName: user.displayName,
                     Title: this.JobPostTitle,
                     Description: this.JobPostDescription,
                     Location: $scope.latlngaddress,
@@ -213,7 +245,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 var JobpostID = post.key;
                 console.log(JobpostID);
                 firebase.database().ref().child('/JobPost/' + JobpostID)
-                    .update({ Id: JobpostID});
+                    .update({ Id: JobpostID });
 
                 $location.path('/dashboards/projects');
 

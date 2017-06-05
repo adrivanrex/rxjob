@@ -17,19 +17,20 @@
             <div class="ibox">
                 <div class="ibox-title">
                     <div class="ibox-tools">
-                        <a href="" class="btn btn-primary btn-xs">Create new project</a>
+                        <a href="#!/dashboards/create_jobpost" class="btn btn-primary btn-xs">Create new project</a>
                     </div>
                 </div>
                 <div class="ibox-content">
                     <div class="row m-b-sm m-t-sm">
                         
-                        <div class="col-md-11">
+                        <div class="col-md-12">
                             <div class="input-group">
                                 <input type="text" placeholder="Search" class="input-sm form-control"> <span class="input-group-btn">
                                         <button type="button" class="btn btn-sm btn-primary"> Go!</button> </span></div>
                         </div>
                     </div>
-                    <div class="project-list">
+                    <div class="row wrapper">
+                    <div class="row wrapper project-list">
                         <div class="project-feed" ng-repeat="(key, value) in projects">
                             <div class="project-status">
                                 <span class="label label-primary">Active</span>
@@ -42,9 +43,8 @@
                                 <a href=""><img alt="image" class="img-circle" src="img/a5.jpg"></a>
                             </div>
                             <div class="project-title">
-                                {{key}}<br>
-                                {{value.Description}}<br>
-                                <a ui-sref="project_detail">{{projects.Description}}</a>
+                                {{value.Title}}<br>
+                                <a ui-sref="project_detail">{{value.Description}}</a>
                                 <br/>
                                 <small>Created 14.08.2014</small>
                             </div>
@@ -54,12 +54,13 @@
                                     <div style="width: 48%;" class="progress-bar"></div>
                                 </div>
                             </div>
-                            <div class="project-actions">
-                                <button href="" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </button>
-                                <a href="" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+
+                            <div class="row wrapper-content project-actions">
+                                <a href="#!/app/project_detail?id={{key}}" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
                             </div>
                         </div>
                         
+                </div>
                 </div>
             </div>
         </div>
