@@ -73,92 +73,87 @@ function LoginCtrl($window, $scope, $firebaseAuth) {
 
 }
 
-function MainCtrl($window, $scope, $firebaseAuth,$location,$firebaseObject,$timeout) {
+function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $timeout, ) {
     var firstlocation = $location.path();
     console.log('first location', firstlocation);
     var auth = $firebaseAuth();
     var database = firebase.database();
+    $scope.projects =[];
 
-    function getProjects() {
-        
-
-    }
-
-    $scope.projects = [];
-    if($location.path('/dashboards/projects')){
-        console.log('hello');
-
-                firebase.auth().onAuthStateChanged((user) => {
-                    console.log(user.uid);
-                    let ref = firebase.database().ref("JobPost")
-                    .orderByChild('Poster')
-                    .equalTo(user.uid);
-
-                    ref.on("value", function(snapshot) {
-                        console.log(snapshot.val());
-                        $timeout(function() {
-                            console.log('testing', typeof snapshot.val());
+     function getProjects() {
+            firebase.auth().onAuthStateChanged((user) => {
+                let ref = firebase.database().ref("JobPost");
+                ref.on("value", function(snapshot) {
+                    console.log(snapshot.val());
+                    $timeout(function() {
                           $scope.projects = snapshot.val();
-                          console.log('scope', $scope.projects);
                         });
 
-                    }, function(errorObject) {
-                        console.log("The read failed: " + errorObject.code);
-                    });
-                    });
+                }, function(errorObject) {
+                    console.log("The read failed: " + errorObject.code);
+                });
+            });
+        }
+
+    function getProjectDetail(id){
+
+        firebase.auth().onAuthStateChanged((user) => {
+                let ref = firebase.database().ref("JobPost")
+                    .orderByChild('id')
+                    .equalTo(id);
+
+                ref.on("value", function(snapshot) {
+                    console.log(snapshot.val());
+                    $timeout(function() {
+                            console.log('testing', typeof snapshot.val());
+                          $scope.projectDetail = snapshot.val();
+                          console.log('projectdetails', $scope.projectDetail);
+                        });
+
+                }, function(errorObject) {
+                    console.log("The read failed: " + errorObject.code);
+                });
+            });
     }
 
-    if($location.path('/app/project_detail')){
-        console.log('test');
+    if ($location.path('/dashboards/projects')) {
+        getProjects();
     }
-    console.log('located',$window.location);
-    $location.path('/');
+    if ($location.path('/app/project_detail')) {
+        
+        getProjectDetail($location.search().id);
+    }
 
-    console.log('scope', $scope.projects);
 
     $scope.$on('$locationChangeStart', function(event) {
-       switch($location.path()){
+        switch ($location.path()) {
             case '/app/project_detail':
-                console.log('hi');
+                consol
 
 
             case '/dashboards/projects':
-
-                firebase.auth().onAuthStateChanged((user) => {
-                    console.log(user.uid);
-                    let ref = firebase.database().ref("JobPost")
-                    .orderByChild('Poster')
-                    .equalTo(user.uid);
-
-                    ref.on("value", function(snapshot) {
-                        console.log(snapshot.val());
-                        $scope.projects = snapshot.val();
-
-                    }, function(errorObject) {
-                        console.log("The read failed: " + errorObject.code);
-                    });
-                    });
-                
+                getProjects();
                 break
             case '/app/project_detail':
                 console.log('details');
             default:
-                console.log('routes',$location.path());
-       }
+                console.log('routes', $location.path());
+        }
 
 
-      
+       
 
 
 
 
-    if ($scope.form.$invalid) {
-       event.preventDefault();
+
+        if ($scope.form.$invalid) {
+            event.preventDefault();
         }
     });
 
-     $location.path(firstlocation);
-    
+    $location.path(firstlocation);
+
 
     $scope.logout = function() {
         firebase.auth().signOut().then(function() {
@@ -217,6 +212,9 @@ function MainCtrl($window, $scope, $firebaseAuth,$location,$firebaseObject,$time
                 });
                 var JobpostID = post.key;
                 console.log(JobpostID);
+                firebase.database().ref().child('/JobPost/' + JobpostID)
+                    .update({ Id: JobpostID});
+
                 $location.path('/dashboards/projects');
 
             }
