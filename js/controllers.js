@@ -76,9 +76,55 @@ function LoginCtrl($window, $scope, $firebaseAuth) {
 function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $timeout, ) {
     var firstlocation = $location.path();
     console.log('first location', firstlocation);
+
     var auth = $firebaseAuth();
     var database = firebase.database();
     $scope.projects = [];
+
+    $scope.submitApply = function(){
+        let applyjob = {};
+        applyjob.Price = this.applyjob.Price;
+        applyjob.Description = this.applyjob.Description;
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref('JobPost/' + $scope.projectDetail.Id+'/Applicant')
+                .orderByChild('Applicant')
+                .equalTo(user.uid);
+        ref.once("value", function(snapshot) {
+            var applicationid = [];
+            if(snapshot.val() == null){
+               post = firebase.database().ref('JobPost/' + $scope.projectDetail.Id+'/Applicant').push({
+                    Applicant: user.uid,
+                    ApplicantPhotoUrl: user.photoURL,
+                    ApplicantDisplayName: user.displayName,
+                    price: applyjob.Price,
+                    Description: applyjob.Description
+                });
+               var ApplicantID = post.key;
+                applicationid.push(post.key);
+                firebase.database().ref().child('JobPost/' + $scope.projectDetail.Id+'/Applicant/'+ApplicantID)
+                    .update({ Id: ApplicantID });
+
+            }else{
+                let ref = firebase.database().ref('JobPost/' + $scope.projectDetail.Id+'/Applicant')
+                .orderByChild('Applicant')
+                .equalTo(user.uid);
+                ref.once("value", function(snapshot) {
+                    console.log(Object.keys(snapshot.val())[0]);
+                    firebase.database().ref().child('JobPost/' + $scope.projectDetail.Id+'/Applicant/'+Object.keys(snapshot.val())[0])
+                    .update({ Price: applyjob.Price,
+                    Description: applyjob.Description });
+
+
+                });
+                
+                
+            }
+        }, function(errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
+
+        });
+    }
 
     $scope.submitEditJobPost = function(){
         console.log('Edit!',$scope.editJobPost);
@@ -92,6 +138,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     };
 
    
+    function applyjobpost(){
+
+    }
 
     function getUserProjects() {
         firebase.auth().onAuthStateChanged((user) => {
@@ -138,7 +187,52 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             });
         });
     }
+    function getApplicants(){
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref('JobPost/' + $location.search().id+'/Applicant')
+                ref.on("value", function(snapshot){
+                    $timeout(function(){
+                        $scope.applicantlist = snapshot.val();
+                    });
+                });
+
+        })
+
+
+    }
+    function getApplyDetails(){
+             firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref('JobPost/' + $location.search().id+'/Applicant')
+                .orderByChild('Applicant')
+                .equalTo(user.uid);
+                ref.once("value", function(snapshot){
+                     
+                     
+                        $timeout(function(){
+
+                        
+                        if(snapshot.val()){
+                            projectDetail = snapshot.val();
+                            keys = Object.keys(projectDetail);
+                            $scope.applyjob = projectDetail[keys[0]];
+                        }else{
+                            $scope.applyjob = {};
+                        }
+                        });
+                     
+                });
+
+            });
+
+        }
+
+
     function getProjectDetail(id) {
+
+        
+
+        getApplyDetails();
+        getApplicants();
 
         firebase.auth().onAuthStateChanged((user) => {
             let ref = firebase.database().ref("JobPost")
@@ -179,6 +273,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     function getLatestJobPost(){
         firebase.auth().onAuthStateChanged((user) => {
             let ref = firebase.database().ref("JobPost")
+            .limitToLast(20)
 
 
             ref.on("value", function(snapshot) {
