@@ -13,8 +13,8 @@
 </div>
 <div class="row wrapper-content">
     <section id="map">
-        <ng-map center="{{projectDetail.Coordinates}}" zoom="13" on-click="getposedit($event)">
-            <marker position="{{projectDetail.Coordinates}}" title="Hello World!" on-dragend="getposedit($event)" animation="Animation.BOUNCE" animation="DROP" draggable="true"></marker>
+        <ng-map center="{{projectDetail.Coordinates}}" zoom="13" map-type-id="SATELLITE"">
+            <marker position="{{projectDetail.Coordinates}}" title="Hello World!" animation="Animation.BOUNCE" animation="DROP" draggable="true"></marker>
         </ng-map>
     </section>
 </div>
