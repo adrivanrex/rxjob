@@ -176,6 +176,23 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         });
     }
 
+    function getLatestJobPost(){
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref("JobPost")
+
+
+            ref.on("value", function(snapshot) {
+                $timeout(function() {
+                    $scope.latestJobPost = snapshot.val();
+                });
+        
+            }, function(errorObject) {
+                console.log("The read failed: " + errorObject.code);
+            });
+        });
+
+    }
+
 
     if ($location.path('/dashboards/projects')) {
         getUserProjects();
@@ -187,6 +204,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     if ($location.path('/dashboards/edit_jobpost')) {
         propagateEditJobPost($location.search().id);
     }
+    if ($location.path('/dashboards/dashboard_1')) {
+        getLatestJobPost();
+    }
+    
 
 
 
@@ -335,7 +356,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             }
             // This is checking to see if the Geoeode Status is OK before proceeding
             if (status == google.maps.GeocoderStatus.OK) {
-                $scope.latlngaddress = results;
+               
+                $timeout(function() {
+                     $scope.latlngaddress = results;
+                });
                 var address = (results[0].formatted_address);
 
             }
