@@ -3,7 +3,7 @@
         <div class="col-lg-12">
             <div class="row wrapper">
                 <section id="map">
-                    <ng-map center="10.314919285813161,124.453125" zoom="5" on-click="getpos($event)">
+                    <ng-map center="10.314919285813161,124.453125" zoom="5" on-click="getpos($event)" map-type-id="HYBRID">
                         <marker position="{{latlng}}" title="Hello World!" on-dragend="getpos($event)" animation="Animation.BOUNCE" animation="DROP" draggable="true"></marker>
                     </ng-map>
                 </section>
