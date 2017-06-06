@@ -1,0 +1,48 @@
+<div class="row white-bg">
+    <div class="row wrapper-content">
+        <div class="col-lg-12">
+            <div class="row wrapper">
+                <section id="map">
+                    <ng-map center="{{editJobPost.Coordinates}}" zoom="5" on-click="getposeditjob($event)">
+                        <marker position="{{editJobPost.Coordinates}}" title="Hello World!" on-dragend="getposeditjob($event)" animation="Animation.BOUNCE" animation="DROP" draggable="true"></marker>
+                    </ng-map>
+                </section>
+            </div>
+            <div class="row wrapper-content">
+                <form name="editjobpost" ng-submit="submitEditJobPost()" class="form-horizontal ng-pristine ng-valid">
+                    <div class="form-group ng-pristine ng-valid">
+                        <label class="col-lg-2 control-label">Coordinates:</label>
+                        <div class="col-lg-10">
+                            <input type="text"  placeholder="Coordinates" value="{{editJobPost.Coordinates}}" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Address:</label>
+                        <div class="col-lg-10">
+                            <input type="text" placeholder="{{editJobPost.Location[0].formatted_address}}" value="{{editJobPost.Location[0].formatted_address}}" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Job title:</label>
+                        <div class="col-lg-10">
+                            <input type="text" ng-model="editJobPost.Title" placeholder="Job title" class="form-control">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-lg-12">
+                            <textarea ng-model="editJobPost.Description" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="pull-right">
+                            <button class="btn" type="submit">Edit JobPost</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

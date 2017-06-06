@@ -13,8 +13,8 @@
 </div>
 <div class="row wrapper-content">
 <section id="map">
-                    <ng-map center="{{projectDetail.Coordinates}}" zoom="13" on-click="getpos($event)">
-                        <marker position="{{projectDetail.Coordinates}}" title="Hello World!" on-dragend="getpos($event)" animation="Animation.BOUNCE" animation="DROP" draggable="true"></marker>
+                    <ng-map center="{{projectDetail.Coordinates}}" zoom="13" on-click="getposedit($event)">
+                        <marker position="{{projectDetail.Coordinates}}" title="Hello World!" on-dragend="getposedit($event)" animation="Animation.BOUNCE" animation="DROP" draggable="true"></marker>
                     </ng-map>
                 </section>
 </div>
@@ -25,12 +25,8 @@
 <div class="ibox-content">
 <div class="row">
     <div class="col-lg-12">
-        <div class="m-b-md">
-            <a href="" class="btn btn-white btn-xs pull-right">Edit project</a>
-
-            <h2>{{projectDetail.Title}}</h2>
-        </div>
-        <dl class="dl-horizontal">
+        
+        <dl class="">
             <dt>Status:</dt>
             <dd><span class="label label-primary">{{projectDetail.Status}}</span></dd>
         </dl>
@@ -38,10 +34,11 @@
 </div>
 <div class="row">
     <div class="col-lg-5">
-        <dl class="dl-horizontal">
-
+        <dl>
+            <dt>Title:</dt>
+            <dd>{{projectDetail.Title}}</dd>
             <dt>Created by:</dt>
-            <dd>{{projectDetail.displayName}}</dd>
+            <dd>{{projectDetail.PosterName}}</dd>
             <dt>Messages:</dt>
             <dd> 162</dd>
             <dt>Client:</dt>

@@ -473,6 +473,25 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 }
             }
         })
+        .state('dashboards.edit_jobpost',{
+            url:"/edit_jobpost",
+            templateUrl: "views/edit_jobpost",
+            data: { pageTitle: 'Edit Jobpost'},
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'ui.event',
+                            files: ['js/plugins/uievents/event.js']
+                        },
+                        {
+                            name: 'ui.map',
+                            files: ['js/plugins/uimaps/ui-map.js']
+                        },
+                    ]);
+                }
+            }
+        })
         .state('app.job_apply',{
             url:"/job_apply",
             templateUrl: "views/job_apply.html",

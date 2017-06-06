@@ -80,6 +80,16 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     var database = firebase.database();
     $scope.projects = [];
 
+    $scope.submitEditJobPost = function(){
+        console.log('Edit!',$scope.editJobPost);
+        firebase.auth().onAuthStateChanged((user) => {
+            firebase.database().ref('JobPost/' + $scope.editJobPost.Id).set($scope.editJobPost);
+        });
+        
+    };
+
+   
+
     function getUserProjects() {
         firebase.auth().onAuthStateChanged((user) => {
             let ref = firebase.database().ref("JobPost")
@@ -87,10 +97,11 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 .equalTo(user.uid);
             ref.on("value", function(snapshot) {
 
-                console.log('userProjects',snapshot.val());
+
 
                 $timeout(function() {
                     $scope.userProjects = snapshot.val();
+
 
                 });
 
@@ -100,6 +111,30 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         });
     }
 
+
+
+    function propagateEditJobPost(id){
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref("JobPost")
+                .orderByChild('Id')
+                .equalTo(id);
+
+            ref.on("value", function(snapshot) {
+                console.log(snapshot.val());
+                $timeout(function() {
+                    console.log('testing', snapshot.val());
+                    editJobPost = snapshot.val();
+                    keys = Object.keys(editJobPost);
+                    $scope.editJobPost = editJobPost[keys[0]];
+                });
+
+
+
+            }, function(errorObject) {
+                console.log("The read failed: " + errorObject.code);
+            });
+        });
+    }
     function getProjectDetail(id) {
 
         firebase.auth().onAuthStateChanged((user) => {
@@ -146,6 +181,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
         getProjectDetail($location.search().id);
     }
+    if ($location.path('/dashboards/edit_jobpost')) {
+        propagateEditJobPost($location.search().id);
+    }
+
 
 
     $scope.$on('$locationChangeStart', function(event) {
@@ -226,7 +265,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     $scope.createJobPost = function() {
         $scope.JobPostTitle = this.JobPostTitle;
         $scope.JobPostDescription = this.JobPostDescription;
-        console.log('coordinates',$scope.latlngaddress[0]);
 
         for (var i = $scope.latlngaddress.length - 1; i >= 0; i--) {
             delete $scope.latlngaddress[i].geometry.location.lat;
@@ -302,6 +340,67 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
         console.log($scope.latlngaddress);
     };
+
+    $scope.getposeditjob = function(event) {
+
+        $scope.editJobPost.Coordinates = [event.latLng.lat(), event.latLng.lng()];
+        console.log($scope.latlng);
+
+        var latlng = new google.maps.LatLng($scope.editJobPost.Coordinates[0], $scope.editJobPost.Coordinates[1]);
+        // This is making the Geocode request
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'latLng': latlng }, function(results, status) {
+            if (status !== google.maps.GeocoderStatus.OK) {
+                console.log(status);
+            }
+            // This is checking to see if the Geoeode Status is OK before proceeding
+            if (status == google.maps.GeocoderStatus.OK) {
+                
+                var address = (results[0].formatted_address);
+                
+                $timeout(function() {
+                    
+
+                    $scope.editJobPost.Location = results;
+                    for (var i = $scope.editJobPost.Location.length - 1; i >= 0; i--) {
+                        delete $scope.editJobPost.Location[i].geometry.location.lat;
+                        delete $scope.editJobPost.Location.geometry.location.lng;
+                    }
+
+                    console.log('location!');
+
+                });
+
+            }
+        });
+
+
+        console.log($scope.latlngaddress);
+    };
+
+
+    $scope.getposedit = function(event) {
+
+        $scope.projectDetail.Coordinates = [event.latLng.lat(), event.latLng.lng()];
+
+        var latlng = new google.maps.LatLng($scope.projectDetail.Coordinates[0], $scope.projectDetail.Coordinates[1]);
+        // This is making the Geocode request
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'latLng': latlng }, function(results, status) {
+            if (status !== google.maps.GeocoderStatus.OK) {
+                console.log(status);
+            }
+            // This is checking to see if the Geoeode Status is OK before proceeding
+            if (status == google.maps.GeocoderStatus.OK) {
+                $scope.latlngaddress = results;
+                var address = (results[0].formatted_address);
+
+            }
+        });
+
+
+    };
+
 
 
     /**
