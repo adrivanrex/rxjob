@@ -82,10 +82,13 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     $scope.submitEditJobPost = function(){
         console.log('Edit!',$scope.editJobPost);
+        
+        
+
         firebase.auth().onAuthStateChanged((user) => {
             firebase.database().ref('JobPost/' + $scope.editJobPost.Id).set($scope.editJobPost);
         });
-        
+
     };
 
    
@@ -364,7 +367,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     $scope.editJobPost.Location = results;
                     for (var i = $scope.editJobPost.Location.length - 1; i >= 0; i--) {
                         delete $scope.editJobPost.Location[i].geometry.location.lat;
-                        delete $scope.editJobPost.Location.geometry.location.lng;
+                        delete $scope.editJobPost.Location[i].geometry.location.lng;
                     }
 
                     console.log('location!');
