@@ -200,6 +200,19 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
     }
+
+    function getProjectApplicants(){
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref('JobPost/' + $location.search().id+'/Applicant')
+                ref.on("value", function(snapshot){
+                    $timeout(function(){
+                        $scope.projectApplicantList = snapshot.val();
+                    });
+                });
+
+        })
+
+    }
     function getApplyDetails(){
              firebase.auth().onAuthStateChanged((user) => {
             let ref = firebase.database().ref('JobPost/' + $location.search().id+'/Applicant')
@@ -302,6 +315,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     if ($location.path('/dashboards/dashboard_1')) {
         getLatestJobPost();
     }
+    if ($location.path('/app/project_applicants')) {
+        getProjectApplicants();
+    }
     
 
 
@@ -318,6 +334,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 break
             case '/app/project_detail':
                 console.log('details');
+            case '/dashboards/project_applicants':
+                getProjectApplicants();
             default:
                 console.log('routes', $location.path());
         }
