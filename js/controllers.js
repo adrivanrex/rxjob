@@ -195,7 +195,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             case '/app/project_detail':
                 getProjectDetail($location.search().id);
 
-
+            case '/dashboards/edit_jobpost':
+                propagateEditJobPost($location.search().id);
             case '/dashboards/projects':
                 getProjects();
                 break
@@ -395,7 +396,12 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             }
             // This is checking to see if the Geoeode Status is OK before proceeding
             if (status == google.maps.GeocoderStatus.OK) {
-                $scope.latlngaddress = results;
+                $timeout(function() {
+                    $scope.latlngaddress = results;
+
+                });
+
+                
                 var address = (results[0].formatted_address);
 
             }
