@@ -51,16 +51,7 @@
             <li ui-sref-active="active">
                 <a ui-sref="widgets"><i class="fa fa-flask"></i> <span class="nav-label">{{ 'WIDGETS' | translate }}</span></a>
             </li>
-            <li ng-class="{active: $state.includes('forms')}">
-                <a href=""><i class="fa fa-edit"></i> <span class="nav-label">{{ 'FORMS' | translate }}</span><span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level" ng-class="{in: $state.includes('forms')}">
-                    <li ui-sref-active="active"><a ui-sref="forms.basic_form">Basic form</a></li>
-                    <li ui-sref-active="active"><a ui-sref="forms.advanced_plugins">Advanced Plugins</a></li>
-                    <li ui-sref-active="active"><a ui-sref="forms.wizard.step_one">Wizard</a></li>
-                    <li ui-sref-active="active"><a ui-sref="forms.file_upload">File Upload</a></li>
-                    <li ui-sref-active="active"><a ui-sref="forms.text_editor">Text Editor</a></li>
-                </ul>
-            </li>
+            
             
             
         </ul>
