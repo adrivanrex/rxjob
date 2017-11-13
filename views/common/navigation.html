@@ -34,10 +34,7 @@
                     <li ui-sref-active="active"><a ui-sref="dashboards.create_jobpost">Create JobPost</a></li>
                 </ul>
             </li>
-            <li ui-sref-active="active">
-                <a ui-sref="layouts"><i class="fa fa-diamond"></i> <span class="nav-label">{{ 'LAYOUTS' | translate }}</span> <span class="label label-primary pull-right">NEW</span></a>
-            </li>
-
+           
             
             <li ng-class="{active: $state.includes('mailbox')}">
                 <a ui-sref="inbox"><i class="fa fa-envelope"></i> <span class="nav-label">{{ 'MAILBOX' | translate }} </span><span class="label label-warning pull-right">16/24</span></a>
@@ -47,9 +44,6 @@
                     <li ui-sref-active="active"><a ui-sref="mailbox.email_compose">Compose email</a></li>
                     <li ui-sref-active="active"><a ui-sref="mailbox.email_template">Email template</a></li>
                 </ul>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="widgets"><i class="fa fa-flask"></i> <span class="nav-label">{{ 'WIDGETS' | translate }}</span></a>
             </li>
             
             
