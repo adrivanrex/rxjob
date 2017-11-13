@@ -69,7 +69,7 @@ function LoginCtrl($window, $scope, $firebaseAuth) {
     }
 
 
-    $scope.welcome = "Realtime location based jobsite";
+    $scope.welcome = "Balay";
 
 }
 
