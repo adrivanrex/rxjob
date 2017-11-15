@@ -3310,6 +3310,7 @@ code {
     margin-bottom: 25px;
     margin-top: 0;
     padding: 0;
+    padding-top: 20px;
 }
 .ibox.collapsed .ibox-content {
     display: none;
