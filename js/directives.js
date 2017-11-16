@@ -30,7 +30,7 @@ function pageTitle($rootScope, $timeout) {
         link: function(scope, element) {
             var listener = function(event, toState, toParams, fromState, fromParams) {
                 // Default title - load on Dashboard 1
-                var title = 'Jobwaki | Responsive Admin Theme';
+                var title = 'Jobwaki';
                 // Create your own title pattern
                 if (toState.data && toState.data.pageTitle) title = 'INSPINIA | ' + toState.data.pageTitle;
                 $timeout(function() {
