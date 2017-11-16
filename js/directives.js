@@ -32,7 +32,7 @@ function pageTitle($rootScope, $timeout) {
                 // Default title - load on Dashboard 1
                 var title = 'Jobwaki';
                 // Create your own title pattern
-                if (toState.data && toState.data.pageTitle) title = 'INSPINIA | ' + toState.data.pageTitle;
+                if (toState.data && toState.data.pageTitle) title = 'Jobwaki | ' + toState.data.pageTitle;
                 $timeout(function() {
                     element.text(title);
                 });
