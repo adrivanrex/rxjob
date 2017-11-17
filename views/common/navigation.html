@@ -36,15 +36,7 @@
             </li>
            
             
-            <li ng-class="{active: $state.includes('mailbox')}">
-                <a ui-sref="inbox"><i class="fa fa-envelope"></i> <span class="nav-label">{{ 'MAILBOX' | translate }} </span><span class="label label-warning pull-right">16/24</span></a>
-                <ul class="nav nav-second-level" ng-class="{in: $state.includes('mailbox')}">
-                    <li ui-sref-active="active"><a ui-sref="mailbox.inbox">Inbox</a></li>
-                    <li ui-sref-active="active"><a ui-sref="mailbox.email_view">Email view</a></li>
-                    <li ui-sref-active="active"><a ui-sref="mailbox.email_compose">Compose email</a></li>
-                    <li ui-sref-active="active"><a ui-sref="mailbox.email_template">Email template</a></li>
-                </ul>
-            </li>
+           
             
             
             
