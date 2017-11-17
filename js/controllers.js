@@ -427,7 +427,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     Location: $scope.latlngaddress,
                     Status: 'active',
                     CreatedAt: firebase.database.ServerValue.TIMESTAMP,
-                    CreatedInUTC: inUTC,
                 });
                 var JobpostID = post.key;
                 console.log(JobpostID);
