@@ -286,12 +286,16 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     function getLatestJobPost(){
         firebase.auth().onAuthStateChanged((user) => {
             let ref = firebase.database().ref("JobPost")
-            .limitToLast(20)
+            .limitToLast(100)
 
 
             ref.on("value", function(snapshot) {
                 $timeout(function() {
                     $scope.latestJobPost = snapshot.val();
+                    console.log("LOL",$scope.latestJobPost[1]);
+                    for (var i = $scope.latestJobPost.length - 1; i >= 0; i--) {
+                        consol.log("LATEST",Things[i]);
+                    }
                 });
         
             }, function(errorObject) {
@@ -300,6 +304,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         });
 
     }
+
+    /** custom functions **/
+
 
 
     if ($location.path('/dashboards/projects')) {
@@ -420,6 +427,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     Location: $scope.latlngaddress,
                     Status: 'active',
                     CreatedAt: firebase.database.ServerValue.TIMESTAMP,
+                    CreatedInUTC: inUTC,
                 });
                 var JobpostID = post.key;
                 console.log(JobpostID);
@@ -546,6 +554,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
     };
+
 
 
 
