@@ -292,10 +292,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             ref.on("value", function(snapshot) {
                 $timeout(function() {
                     $scope.latestJobPost = snapshot.val();
-                    console.log("LOL",$scope.latestJobPost[1]);
-                    for (var i = $scope.latestJobPost.length - 1; i >= 0; i--) {
-                        consol.log("LATEST",Things[i]);
-                    }
                 });
         
             }, function(errorObject) {
@@ -405,7 +401,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
 
-
+    $scope.order = 0;
 
     $scope.createJobPost = function() {
         $scope.JobPostTitle = this.JobPostTitle;
@@ -418,22 +414,49 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                var post = firebase.database().ref('JobPost/').push({
-                	Coordinates: $scope.latlng,
-                    PosterID: user.uid,
-                    PosterName: user.displayName,
-                    Title: this.JobPostTitle,
-                    Description: this.JobPostDescription,
-                    Location: $scope.latlngaddress,
-                    Status: 'active',
-                    CreatedAt: firebase.database.ServerValue.TIMESTAMP,
-                });
-                var JobpostID = post.key;
-                console.log(JobpostID);
-                firebase.database().ref().child('/JobPost/' + JobpostID)
-                    .update({ Id: JobpostID });
+                let ref = firebase.database().ref("JobPost")
+                .limitToLast(1)
 
-                $location.path('/dashboards/projects');
+
+                ref.once("value", function(snapshot) {
+                    $timeout(function() {
+                        $scope.checkPost = snapshot.val();
+                        
+
+                        if($scope.checkPost == null){
+                            $scope.order = 0;
+                        }else{
+                            console.log("check",$scope.checkPost);
+                            key = Object.keys($scope.checkPost);
+                            $scope.order =  $scope.checkPost[key].order + 1;
+                        }
+
+
+
+                        var post = firebase.database().ref('JobPost/').push({
+                            Coordinates: $scope.latlng,
+                            PosterID: user.uid,
+                            PosterName: user.displayName,
+                            Title: $scope.JobPostTitle,
+                            Description:  $scope.JobPostDescription,
+                            Location: $scope.latlngaddress,
+                            Status: 'active',
+                            CreatedAt: firebase.database.ServerValue.TIMESTAMP,
+                            order: $scope.order
+                        });
+                        var JobpostID = post.key;
+                        console.log(JobpostID);
+                        firebase.database().ref().child('/JobPost/' + JobpostID)
+                            .update({ Id: JobpostID });
+
+                        $location.path('/dashboards/projects');
+                    });
+            
+                }, function(errorObject) {
+                    console.log("The read failed: " + errorObject.code);
+                });
+
+                
 
             }
         });
