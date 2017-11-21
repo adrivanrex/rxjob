@@ -1,7 +1,9 @@
 <div class="row  border-bottom white-bg dashboard-header">
    <div class="row>
-      <div class="input-group">		
-      <input type="text" placeholder="Search for something" class="input-sm form-control">		
+      <div class="input-group">	
+      <form ng-submit="searchQuery()">	
+      <input type="text" ng-model="searchText" placeholder="Search for something" class="input-sm form-control">	
+      </form>	
    </div>
    <div class="row">
       <div class="col-lg-8">

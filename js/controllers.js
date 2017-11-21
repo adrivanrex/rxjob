@@ -80,6 +80,31 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     var auth = $firebaseAuth();
     var database = firebase.database();
     $scope.projects = [];
+    $scope.searchText = "";
+
+    $scope.searchQuery = function(){
+        $scope.searchText = this.searchText;
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref('JobPost')
+            .orderByChild('Title').equalTo($scope.searchText)
+
+
+            ref.on("value", function(snapshot) {
+                $timeout(function() {
+                    $scope.latestJobPost = snapshot.val();
+                    console.log($scope.latestJobPost);
+                });
+        
+            }, function(errorObject) {
+                console.log("The read failed: " + errorObject.code);
+            });
+        });
+
+
+    };
+
+
+
 
     $scope.submitApply = function(){
         let applyjob = {};
