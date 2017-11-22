@@ -104,6 +104,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     };
 
 
+    
 
 
     $scope.submitApply = function(){
@@ -142,14 +143,37 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
                 });
                 
-                
+              /*
+              * notify
+              * notify the user when someone is applying for the jobpost
+              */
+
+
+
+              function notify(reciever,sender) {
+
+                  firebase.database().ref('Notifications').push({
+                    reciever: reciever,
+                    sender: sender
+                  });
+                };
+
+
+                notify($location.search().id,user.uid);
+
+
             }
+
+        
+
         }, function(errorObject) {
             console.log("The read failed: " + errorObject.code);
         });
 
         });
     }
+
+    
 
     $scope.submitEditJobPost = function(){
         console.log('Edit!',$scope.editJobPost);
@@ -196,7 +220,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 .orderByChild('Id')
                 .equalTo(id);
 
-            ref.on("value", function(snapshot) {
+            ref.once("value", function(snapshot) {
                 console.log(snapshot.val());
                 $timeout(function() {
                     console.log('testing', snapshot.val());
