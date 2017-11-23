@@ -47,6 +47,9 @@ function LoginCtrl($window, $scope, $firebaseAuth) {
 
     });
 
+function SideCtrl($window, $scope, $firebaseAuth){
+    $scope.hideCtrl = "hide";
+}
 
 
     $scope.googlelogin = function() {
