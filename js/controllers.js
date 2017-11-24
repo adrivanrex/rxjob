@@ -177,6 +177,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                                 createdAt: firebase.database.ServerValue.TIMESTAMP
                               });
 
+
                         });
 
                     }, function(errorObject) {
@@ -203,9 +204,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         });
     }
 
-    
-    
-
+    $scope.showNotification = function(){
+        $scope.notificationShow = "hide";
+        $scope.notificationCount = 0;
+    }
 
     $scope.submitEditJobPost = function(){
         console.log('Edit!',$scope.editJobPost);
@@ -393,12 +395,17 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             let ref = firebase.database().ref("Notifications")
             .orderByChild("reciever")
             .equalTo(user.displayName)
-            .limitToLast(100)
+            .limitToLast(10)
 
 
             ref.on("value", function(snapshot) {
                 $timeout(function() {
                     $scope.userNotification = snapshot.val();
+                    $scope.notificationShow = "show";
+                    if($scope.notificationCount == null){
+                        $scope.notificationCount = 0;
+                    }
+                    $scope.notificationCount = $scope.notificationCount+1;
                 });
         
             }, function(errorObject) {

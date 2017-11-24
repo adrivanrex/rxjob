@@ -4,9 +4,9 @@
             <span minimaliza-sidebar></span>
         </div>
         <ul class="nav navbar-top-links navbar-right">
-            <li class="dropdown" dropdown="">
+            <li class="dropdown" dropdown="" ng-click="showNotification()">
                 <a class="dropdown-toggle count-info" href="" dropdown-toggle="" aria-haspopup="true" aria-expanded="false">
-                    <i class="fa fa-bell"></i> <span class="label label-primary show">1</span>
+                    <i class="fa fa-bell"></i> <span class="label label-primary {{notificationShow}}">{{notificationCount}}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-alerts">
                     <li  ng-repeat="userNotification in userNotification">
