@@ -551,6 +551,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     $scope.createJobPost = function() {
         $scope.JobPostTitle = this.JobPostTitle;
         $scope.JobPostDescription = this.JobPostDescription;
+        $scope.ItemCount = this.JobPostNumberOfItems;
 
         for (var i = $scope.latlngaddress.length - 1; i >= 0; i--) {
             delete $scope.latlngaddress[i].geometry.location.lat;
@@ -588,7 +589,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             Status: 'active',
                             CreatedAt: firebase.database.ServerValue.TIMESTAMP,
                             order: $scope.order,
-                            ItemCount: $scope.JobPostNumberOfItem
+                            ItemCount: $scope.ItemCount
                         });
                         var JobpostID = post.key;
                         console.log(JobpostID);
