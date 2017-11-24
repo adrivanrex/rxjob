@@ -119,14 +119,20 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 .orderByChild('Applicant')
                 .equalTo(user.uid);
         ref.once("value", function(snapshot) {
+
             var applicationid = [];
+            
+
+
             if(snapshot.val() == null){
                post = firebase.database().ref('JobPost/' + $scope.projectDetail.Id+'/Applicant').push({
                     Applicant: user.uid,
                     ApplicantPhotoUrl: user.photoURL,
                     ApplicantDisplayName: user.displayName,
-                    price: applyjob.Price,
-                    Description: applyjob.Description
+                    Price: applyjob.Price,
+                    Description: applyjob.Description,
+                    CreatedAt: firebase.database.ServerValue.TIMESTAMP,
+                    Updated: firebase.database.ServerValue.TIMESTAMP
                 });
                var ApplicantID = post.key;
                 applicationid.push(post.key);
@@ -138,11 +144,31 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 .orderByChild('Applicant')
                 .equalTo(user.uid);
                 ref.once("value", function(snapshot) {
+                    
                     console.log(Object.keys(snapshot.val())[0]);
                     firebase.database().ref().child('JobPost/' + $scope.projectDetail.Id+'/Applicant/'+Object.keys(snapshot.val())[0])
                     .update({ Price: applyjob.Price,
-                    Description: applyjob.Description });
+                    Description: applyjob.Description,
+                    Updated: firebase.database.ServerValue.TIMESTAMP
+                     });
+                    let win = firebase.database().ref('JobPost/' + $scope.projectDetail.Id+'/Applicant')
+                    .orderByChild('Applicant')
+                    .equalTo(user.uid);
 
+                    win.once("value", function(snapshot){
+                        $scope.timeReadable = snapshot.val();
+                        key = Object.keys($scope.timeReadable);
+                        updated = $scope.timeReadable[key].Updated;
+                        $scope.UpdatedTime = new Date(updated);
+                        $scope.humanTime = $scope.UpdatedTime.toString();
+                        firebase.database().ref().child('JobPost/' + $scope.projectDetail.Id+'/Applicant/'+Object.keys(snapshot.val())[0])
+                        .update({ Price: applyjob.Price,
+                        Description: applyjob.Description,
+                        Updated: $scope.UpdatedTime,
+                        HumanTime: $scope.humanTime
+                         });
+
+                    });
 
                 });
                 
