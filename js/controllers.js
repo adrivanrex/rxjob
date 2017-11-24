@@ -155,10 +155,37 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
               function notify(reciever,sender) {
 
-                  firebase.database().ref('Notifications').push({
-                    reciever: reciever,
-                    sender: sender
-                  });
+                    firebase.auth().onAuthStateChanged((user) => {
+
+                    let ref = firebase.database().ref("JobPost")
+                        .orderByChild('Id')
+                        .equalTo(reciever);
+                    ref.once("value", function(snapshot) {
+
+
+
+                        $timeout(function() {
+                            $scope.notificationReciever = snapshot.val();
+
+
+
+                            recieverKey = Object.keys($scope.notificationReciever);
+
+                            firebase.database().ref('Notifications').push({
+                                reciever: $scope.notificationReciever[recieverKey].PosterName,
+                                sender: user.displayName
+                                createdAt: firebase.database.ServerValue.TIMESTAMP,
+                              });
+
+                        });
+
+                    }, function(errorObject) {
+                        console.log("The read failed: " + errorObject.code);
+                    });
+
+
+                });
+
                 };
 
 
@@ -177,6 +204,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     }
 
     
+    
+
 
     $scope.submitEditJobPost = function(){
         console.log('Edit!',$scope.editJobPost);
@@ -353,6 +382,35 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     }
 
+    
+
+
+    /*
+    *   Notify User
+    */
+   
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref("Notifications")
+            .orderByChild("reciever")
+            .equalTo(user.displayName)
+            .limitToLast(100)
+
+
+            ref.on("value", function(snapshot) {
+                $timeout(function() {
+                    $scope.userNotification = snapshot.val();
+                });
+        
+            }, function(errorObject) {
+                console.log("The read failed: " + errorObject.code);
+            });
+
+
+        });
+   
+
+
+
     /** custom functions **/
 
 
@@ -419,6 +477,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             console.log(error);
         });
     }
+
+
 
     function registerUser(userId, name, email, imageUrl) {
     	firebase.auth().onAuthStateChanged((user) => {
@@ -3539,6 +3599,7 @@ function notifyCtrl($scope, notify) {
             templateUrl: $scope.template
         });
     };
+
     $scope.closeAll = function() {
         notify.closeAll();
     };

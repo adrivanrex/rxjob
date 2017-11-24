@@ -1,9 +1,34 @@
-<div class="row border-bottom">
+<div class="row border-bottom" >
     <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
             <span minimaliza-sidebar></span>
         </div>
         <ul class="nav navbar-top-links navbar-right">
+            <li class="dropdown" dropdown="">
+                <a class="dropdown-toggle count-info" href="" dropdown-toggle="" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-bell"></i> <span class="label label-primary show">1</span>
+                </a>
+                <ul class="dropdown-menu dropdown-alerts">
+                    <li  ng-repeat="userNotification in userNotification">
+                        <a ui-sref="inbox">
+                            <div>
+                                <i class="fa fa-envelope fa-fw"></i> {{userNotification.sender}} wants to connect
+                            </div>
+                        </a>
+                    </li>
+                    
+                    <li class="divider"></li>
+                    <li>
+                        <div class="text-center link-block">
+                            <a ui-sref="notifications_tooltips">
+                                <strong>See All Alerts</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+
             <li>
                  <i ng-click="logout()" class="fa fa-sign-out"></i>
             </li>
