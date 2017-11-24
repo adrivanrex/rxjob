@@ -561,7 +561,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             Location: $scope.latlngaddress,
                             Status: 'active',
                             CreatedAt: firebase.database.ServerValue.TIMESTAMP,
-                            order: $scope.order
+                            order: $scope.order,
+                            ItemCount: $scope.JobPostNumberOfItem
                         });
                         var JobpostID = post.key;
                         console.log(JobpostID);
