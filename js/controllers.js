@@ -173,8 +173,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
                             firebase.database().ref('Notifications').push({
                                 reciever: $scope.notificationReciever[recieverKey].PosterName,
-                                sender: user.displayName
-                                createdAt: firebase.database.ServerValue.TIMESTAMP,
+                                sender: user.displayName,
+                                createdAt: firebase.database.ServerValue.TIMESTAMP
                               });
 
                         });
@@ -226,7 +226,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     function getUserProjects() {
         firebase.auth().onAuthStateChanged((user) => {
             let ref = firebase.database().ref("JobPost")
-            	.orderByChild('PosterID')
+                .orderByChild('PosterID')
                 .equalTo(user.uid);
             ref.on("value", function(snapshot) {
 
@@ -481,15 +481,15 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
     function registerUser(userId, name, email, imageUrl) {
-    	firebase.auth().onAuthStateChanged((user) => {
+        firebase.auth().onAuthStateChanged((user) => {
 
-    		console.log('userdetails', user);
-    		firebase.database().ref('users/' + user.uid).set({
-	            username: user.displayName,
-	            email: user.email,
-	            profile_picture: user.photoURL
-	        });
-	        
+            console.log('userdetails', user);
+            firebase.database().ref('users/' + user.uid).set({
+                username: user.displayName,
+                email: user.email,
+                profile_picture: user.photoURL
+            });
+            
         });
     }
 
