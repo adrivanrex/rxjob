@@ -108,80 +108,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
     
-
-
-    $scope.submitApply = function(){
-        let applyjob = {};
-        applyjob.Price = this.applyjob.Price;
-        applyjob.Description = this.applyjob.Description;
-        firebase.auth().onAuthStateChanged((user) => {
-            let ref = firebase.database().ref('JobPost/' + $scope.projectDetail.Id+'/Applicant')
-                .orderByChild('Applicant')
-                .equalTo(user.uid);
-        ref.once("value", function(snapshot) {
-
-            var applicationid = [];
-            
-
-
-            if(snapshot.val() == null){
-               post = firebase.database().ref('JobPost/' + $scope.projectDetail.Id+'/Applicant').push({
-                    Applicant: user.uid,
-                    ApplicantPhotoUrl: user.photoURL,
-                    ApplicantDisplayName: user.displayName,
-                    Price: applyjob.Price,
-                    Description: applyjob.Description,
-                    CreatedAt: firebase.database.ServerValue.TIMESTAMP,
-                    Updated: firebase.database.ServerValue.TIMESTAMP
-                });
-               var ApplicantID = post.key;
-                applicationid.push(post.key);
-                firebase.database().ref().child('JobPost/' + $scope.projectDetail.Id+'/Applicant/'+ApplicantID)
-                    .update({ Id: ApplicantID });
-
-                    console.log("PLEASE NOTIFY");
-
-            }else{
-                let ref = firebase.database().ref('JobPost/' + $scope.projectDetail.Id+'/Applicant')
-                .orderByChild('Applicant')
-                .equalTo(user.uid);
-                ref.once("value", function(snapshot) {
-                    
-                    console.log(Object.keys(snapshot.val())[0]);
-                    firebase.database().ref().child('JobPost/' + $scope.projectDetail.Id+'/Applicant/'+Object.keys(snapshot.val())[0])
-                    .update({ Price: applyjob.Price,
-                    Description: applyjob.Description,
-                    Updated: firebase.database.ServerValue.TIMESTAMP
-                     });
-                    let win = firebase.database().ref('JobPost/' + $scope.projectDetail.Id+'/Applicant')
-                    .orderByChild('Applicant')
-                    .equalTo(user.uid);
-
-                    win.once("value", function(snapshot){
-                        $scope.timeReadable = snapshot.val();
-                        key = Object.keys($scope.timeReadable);
-                        updated = $scope.timeReadable[key].Updated;
-                        $scope.UpdatedTime = new Date(updated);
-                        $scope.humanTime = $scope.UpdatedTime.toString();
-                        firebase.database().ref().child('JobPost/' + $scope.projectDetail.Id+'/Applicant/'+Object.keys(snapshot.val())[0])
-                        .update({ Price: applyjob.Price,
-                        Description: applyjob.Description,
-                        Updated: $scope.UpdatedTime,
-                        HumanTime: $scope.humanTime
-                         });
-
-                    });
-
-                });
-                
-              /*
-              * notify
-              * notify the user when someone is applying for the jobpost
-              */
-
-
-
-              function notify(reciever,sender) {
+    function notify(reciever,sender) {
 
                     firebase.auth().onAuthStateChanged((user) => {
 
@@ -218,6 +145,71 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 };
 
 
+
+    $scope.submitApply = function(){
+        let applyjob = {};
+        applyjob.Price = this.applyjob.Price;
+        applyjob.Description = this.applyjob.Description;
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref('JobPost/' + $scope.projectDetail.Id+'/Applicant')
+                .orderByChild('Applicant')
+                .equalTo(user.uid);
+        ref.once("value", function(snapshot) {
+
+            var applicationid = [];
+            
+
+
+            if(snapshot.val() == null){
+               post = firebase.database().ref('JobPost/' + $scope.projectDetail.Id+'/Applicant').push({
+                    Applicant: user.uid,
+                    ApplicantPhotoUrl: user.photoURL,
+                    ApplicantDisplayName: user.displayName,
+                    Price: applyjob.Price,
+                    Description: applyjob.Description,
+                    CreatedAt: firebase.database.ServerValue.TIMESTAMP,
+                    Updated: firebase.database.ServerValue.TIMESTAMP
+                });
+               var ApplicantID = post.key;
+                applicationid.push(post.key);
+                firebase.database().ref().child('JobPost/' + $scope.projectDetail.Id+'/Applicant/'+ApplicantID)
+                    .update({ Id: ApplicantID });
+
+                    notify($location.search().id,user.uid);
+
+            }else{
+                let ref = firebase.database().ref('JobPost/' + $scope.projectDetail.Id+'/Applicant')
+                .orderByChild('Applicant')
+                .equalTo(user.uid);
+                ref.once("value", function(snapshot) {
+                    
+                    console.log(Object.keys(snapshot.val())[0]);
+                    firebase.database().ref().child('JobPost/' + $scope.projectDetail.Id+'/Applicant/'+Object.keys(snapshot.val())[0])
+                    .update({ Price: applyjob.Price,
+                    Description: applyjob.Description,
+                    Updated: firebase.database.ServerValue.TIMESTAMP
+                     });
+                    let win = firebase.database().ref('JobPost/' + $scope.projectDetail.Id+'/Applicant')
+                    .orderByChild('Applicant')
+                    .equalTo(user.uid);
+
+                    win.once("value", function(snapshot){
+                        $scope.timeReadable = snapshot.val();
+                        key = Object.keys($scope.timeReadable);
+                        updated = $scope.timeReadable[key].Updated;
+                        $scope.UpdatedTime = new Date(updated);
+                        $scope.humanTime = $scope.UpdatedTime.toString();
+                        firebase.database().ref().child('JobPost/' + $scope.projectDetail.Id+'/Applicant/'+Object.keys(snapshot.val())[0])
+                        .update({ Price: applyjob.Price,
+                        Description: applyjob.Description,
+                        Updated: $scope.UpdatedTime,
+                        HumanTime: $scope.humanTime
+                         });
+
+                    });
+
+                });
+
                 notify($location.search().id,user.uid);
 
 
@@ -236,6 +228,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         $scope.notificationShow = "hide";
         $scope.notificationCount = 0;
     }
+
+
 
     $scope.submitEditJobPost = function(){
         console.log('Edit!',$scope.editJobPost);
@@ -432,8 +426,11 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     $scope.notificationShow = "show";
                     if($scope.notificationCount == null){
                         $scope.notificationCount = 0;
+                        $scope.notificationShow = "hide";
+                    }else{
+                        $scope.notificationCount = $scope.notificationCount+1;
                     }
-                    $scope.notificationCount = $scope.notificationCount+1;
+                    
                 });
         
             }, function(errorObject) {
