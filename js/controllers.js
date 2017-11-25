@@ -107,7 +107,30 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     };
 
 
-    
+    firebase.auth().onAuthStateChanged((user) => {
+        $scope.user = user;
+
+        let ref = firebase.database().ref("users")
+                    .orderByChild("profile_picture")
+                    .equalTo($scope.user.photoURL)
+                    ref.once("value", function(snapshot) {
+                        $scope.userDetails = snapshot.val();
+                        userDetails = Object.keys($scope.userDetails);
+                        $scope.userKey = userDetails;
+                        if($scope.userDetails[$scope.userKey].about == null){
+                            $scope.aboutMeDescription = "About yourself";
+                        }
+                    });
+    });
+
+
+
+    $scope.aboutMe = function(){
+        console.log("ONCHANGE",this);
+        firebase.database().ref().child('/users/' + $scope.userKey)
+        .update({ about: this.aboutMeDescription});
+    }
+
     function notify(reciever,sender) {
 
                     firebase.auth().onAuthStateChanged((user) => {
