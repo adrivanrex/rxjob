@@ -111,8 +111,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         $scope.user = user;
 
         let ref = firebase.database().ref("users")
-                    .orderByChild("profile_picture")
-                    .equalTo($scope.user.photoURL)
+                    .orderByChild("email")
+                    .equalTo($scope.user.email)
                     ref.once("value", function(snapshot) {
                         $scope.userDetails = snapshot.val();
                         userDetails = Object.keys($scope.userDetails);
