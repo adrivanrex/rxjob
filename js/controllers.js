@@ -139,6 +139,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 firebase.database().ref().child('JobPost/' + $scope.projectDetail.Id+'/Applicant/'+ApplicantID)
                     .update({ Id: ApplicantID });
 
+                    console.log("PLEASE NOTIFY");
+
             }else{
                 let ref = firebase.database().ref('JobPost/' + $scope.projectDetail.Id+'/Applicant')
                 .orderByChild('Applicant')
