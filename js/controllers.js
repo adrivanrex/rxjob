@@ -50,8 +50,30 @@ function LoginCtrl($window, $scope, $firebaseAuth) {
 function SideCtrl($window, $scope, $firebaseAuth){
     $scope.hideCtrl = "hide";
 }
+function LoginUsernamePass(email,password){
+    firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // ...
+    });
+    $window.location = location;
+}
+
+  function register(email,password){
+            firebase.auth().createUserWithEmailAndPassword(email, password).then(function(value) {
+                console.log(value);
+                LoginUsernamePass(email,password);
+                }).catch(function(error) {
+                    console.log(error);
+                });
+
+        }
 
 
+$scope.register = function(){
+    register($scope.registerEmail,$scope.registerPassword);
+}
     $scope.googlelogin = function() {
         // login with Google
         auth.$signInWithPopup("google").then(function(firebaseUser) {
