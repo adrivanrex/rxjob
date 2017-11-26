@@ -127,8 +127,28 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     $scope.aboutMe = function(){
         console.log("ONCHANGE",this);
-        firebase.database().ref().child('/users/' + $scope.userKey)
-        .update({ about: this.aboutMeDescription});
+        about = this.aboutMeDescription;
+        firebase.auth().onAuthStateChanged((user) => {
+
+            console.log("GuestUser", user);
+            let ref = firebase.database().ref("Guest")
+                        .limitToLast(1)
+                    ref.once("value", function(snapshot) {
+                        $scope.Guestinfo = snapshot.val();
+                        if($scope.Guestinfo == null){
+                            post = firebase.database().ref('Guest/').push({
+                                about:about,
+                                user: user.uid,
+                                picture: user.photoURL
+                            });
+                        }else{
+                            key = Object.keys(snapshot.val())
+                            firebase.database().ref().child('Guest/' + key )
+                    .update({ about:about  });
+                        }
+                    });
+        });
+       
     }
 
     function notify(reciever,sender) {
