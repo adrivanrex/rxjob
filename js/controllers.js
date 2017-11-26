@@ -108,17 +108,17 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
     firebase.auth().onAuthStateChanged((user) => {
-        $scope.user = user;
-
-        let ref = firebase.database().ref("users")
+        let ref = firebase.database().ref("Guest")
                     .orderByChild("email")
-                    .equalTo($scope.user.email)
+                    .equalTo(user.email)
                     ref.once("value", function(snapshot) {
                         $scope.userDetails = snapshot.val();
                         userDetails = Object.keys($scope.userDetails);
                         $scope.userKey = userDetails;
                         if($scope.userDetails[$scope.userKey].about == null){
                             $scope.aboutMeDescription = "About yourself";
+                        }else{
+                            $scope.aboutMeDescription = $scope.userDetails[$scope.userKey].about;
                         }
                     });
     });
@@ -129,9 +129,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         console.log("ONCHANGE",this);
         about = this.aboutMeDescription;
         firebase.auth().onAuthStateChanged((user) => {
-
             console.log("GuestUser", user);
             let ref = firebase.database().ref("Guest")
+                        .orderByChild("email")
+                        .equalTo(user.email)
                         .limitToLast(1)
                     ref.once("value", function(snapshot) {
                         $scope.Guestinfo = snapshot.val();
@@ -139,7 +140,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             post = firebase.database().ref('Guest/').push({
                                 about:about,
                                 user: user.uid,
-                                picture: user.photoURL
+                                picture: user.photoURL,
+                                email: user.email
                             });
                         }else{
                             key = Object.keys(snapshot.val())
@@ -150,6 +152,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         });
        
     }
+
 
     function notify(reciever,sender) {
 
@@ -562,7 +565,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             firebase.database().ref('users/' + user.uid).set({
                 username: user.displayName,
                 email: user.email,
-                profile_picture: user.photoURL
+                picture: user.photoURL
             });
             
         });
