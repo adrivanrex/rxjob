@@ -231,9 +231,16 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 ref.once("value", function(snapshot) {
                     
                     console.log(Object.keys(snapshot.val())[0]);
+                    $scope.timeReadable = snapshot.val();
+                        key = Object.keys($scope.timeReadable);
+                        updated = $scope.timeReadable[key].Updated;
+                        $scope.UpdatedTime = new Date(updated);
+                        $scope.humanTime = $scope.UpdatedTime.toString();
+
                     firebase.database().ref().child('JobPost/' + $scope.projectDetail.Id+'/Applicant/'+Object.keys(snapshot.val())[0])
                     .update({ Price: applyjob.Price,
                     Description: applyjob.Description,
+                    HumanTime: $scope.humanTime,
                     Updated: firebase.database.ServerValue.TIMESTAMP
                      });
                     let win = firebase.database().ref('JobPost/' + $scope.projectDetail.Id+'/Applicant')
@@ -511,7 +518,23 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     if ($location.path('/app/user')) {
         showUserInfo($location.search().id);
     }
-
+    if ($location.path('/app/profile')){
+        firebase.auth().onAuthStateChanged((user) => {
+        let ref = firebase.database().ref("Guest")
+                    .orderByChild("email")
+                    .equalTo(user.email)
+                    ref.once("value", function(snapshot) {
+                        $scope.userDetails = snapshot.val();
+                        userDetails = Object.keys($scope.userDetails);
+                        $scope.userKey = userDetails;
+                        if($scope.userDetails[$scope.userKey].about == null){
+                            $scope.aboutMeDescription = "About yourself";
+                        }else{
+                            $scope.aboutMeDescription = $scope.userDetails[$scope.userKey].about;
+                        }
+                    });
+    });
+    }
    
 
 
