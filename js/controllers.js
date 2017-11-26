@@ -325,7 +325,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             ref.once("value", function(snapshot) {
                 console.log(snapshot.val());
                 $timeout(function() {
-                    console.log('testing', snapshot.val());
                     editJobPost = snapshot.val();
                     keys = Object.keys(editJobPost);
                     $scope.editJobPost = editJobPost[keys[0]];
@@ -406,7 +405,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             ref.on("value", function(snapshot) {
                 console.log(snapshot.val());
                 $timeout(function() {
-                    console.log('testing', snapshot.val());
                     projectDetail = snapshot.val();
                     keys = Object.keys(projectDetail);
                     $scope.projectDetail = projectDetail[keys[0]];
@@ -509,7 +507,24 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     if ($location.path('/app/project_applicants')) {
         getProjectApplicants();
     }
-    
+    if ($location.path('/app/user')) {
+
+    firebase.auth().onAuthStateChanged((user) => {
+        let ref = firebase.database().ref("Guest")
+                    .orderByChild("user")
+                    .equalTo($location.search().id)
+                    ref.once("value", function(snapshot) {
+                        $scope.userDataInfo = snapshot.val();
+                        userDataInfoKey = Object.keys($scope.userDataInfo);
+                        $scope.userDataInfo = $scope.userDataInfo[userDataInfoKey];
+                        console.log("UserGuestInfo",$scope.userDataInfo)
+                    });
+    });
+
+
+    }
+
+   
 
 
 

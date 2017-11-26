@@ -502,6 +502,11 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
             templateUrl: "views/profile.html",
             data: { pageTitle: 'Profile' }
         })
+        .state('app.user', {
+            url: "/user",
+            templateUrl: "views/user.html",
+            data: { pageTitle: 'User Profile' }
+        })
         .state('dashboards.projects', {
             url: "/projects",
             templateUrl: "views/projects.html",

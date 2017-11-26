@@ -33,7 +33,7 @@
                     <div class="row wrapper project-list">
                         <div class="row project-feed" ng-repeat="projectApplicantList in projectApplicantList">
                             <div class="col-lg-1">
-                                <img width="80px" src="{{projectApplicantList.ApplicantPhotoUrl}}">
+                                <a href="#!/app/user?id={{projectApplicantList.Applicant}}"><img width="80px" src="{{projectApplicantList.ApplicantPhotoUrl}}"></a>
                             </div>
                             <div class="col-lg-11">
                                 
@@ -41,6 +41,7 @@
                                 <strong>{{projectApplicantList.Description}}</strong>
                                 <br/>
                                 <small>{{projectApplicantList.HumanTime}}</small>
+
                             </div>
 
                             <div class="row wrapper-content project-actions">
