@@ -2,7 +2,6 @@
 <html ng-app="inspinia">
 
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Page title set in pageTitle directive -->
@@ -14,14 +13,10 @@
     <!-- Main Inspinia CSS files -->
     <link href="css/animate.css" rel="stylesheet">
     <link id="loadBefore" href="css/style.css" rel="stylesheet">
-
-
-    
-
 </head>
 
 <body id="page-top" class="landing-page no-skin-config" ng-controller="LoginCtrl" class="gray-bg">
-<div class="navbar-wrapper">
+    <div class="navbar-wrapper">
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header page-scroll">
@@ -29,40 +24,50 @@
                 </div>
             </div>
         </nav>
-</div>
+    </div>
 
-    <div class="middle-box text-center loginscreen  animated fadeInDown">
-        <div>
-            <div>
-
+    <div class="loginColumns animated fadeInDown">
+        <div class="row">
+            <div class="col-md-6">
+                <h2 class="font-bold">Welcome</h2>
+                <p>
+                    WORLD
+                </p>
+               
             </div>
-            </br>
-           
-          
-                
-            </p>
-            <button ng-click="googlelogin()" class="btn btn-primary block full-width m-b">Google</button>
-            <!--
-            <button ng-click="facebooklogin()" class="btn btn-primary block full-width m-b">Facebook</button>
-            <form class="m-t" role="form" ng-submit="login()">
-                <div class="form-group">
-                    <input type="email" class="form-control" placeholder="Username" required="">
+            <div class="col-md-6">
+                <div class="ibox-content">
+                    <form class="m-t" role="form" action="index.html">
+                        <div class="form-group">
+                            <input type="email" class="form-control" placeholder="Username" required="">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" placeholder="Password" required="">
+                        </div>
+                        <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
+                        <button ng-click="googlelogin()" class="btn btn-primary block full-width m-b">Google</button>
+                        <a href="#">
+                            <small>Forgot password?</small>
+                        </a>
+                        <p class="text-muted text-center">
+                            <small>Do not have an account?</small>
+                        </p>
+                        <a class="btn btn-sm btn-white btn-block" href="register.html">Create an account</a>
+                    </form>
+                    
                 </div>
-                <div class="form-group">
-                    <input type="password" class="form-control" placeholder="Password" required="">
-                </div>
-                <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
-
-                <a href="#"><small>Forgot password?</small></a>
-                <p class="text-muted text-center"><small>Do not have an account?</small></p>
-                <a class="btn btn-sm btn-white btn-block" href="register.html">Create an account</a>
-            </form>
-            <p class="m-t"> <small>Jobwaki &copy; 2017</small> </p>
-            -->
+            </div>
+        </div>
+        <hr/>
+        <div class="row">
+            <div class="col-md-6">
+                Company
+            </div>
+            <div class="col-md-6 text-right">
+                <small>© 2017</small>
+            </div>
         </div>
     </div>
-    
-    
     <!-- jQuery and Bootstrap -->
     <script src="js/jquery/jquery-2.1.1.min.js"></script>
     <script src="js/plugins/jquery-ui/jquery-ui.js"></script>
@@ -77,7 +82,6 @@
     <script src="js/inspinia.js"></script>
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
-    
     <!-- Main Angular scripts-->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
     <script src="js/plugins/oclazyload/dist/ocLazyLoad.min.js"></script>
@@ -93,7 +97,6 @@
 -->
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQTpXj82d8UpCi97wzo_nKXL7nYrd4G70"></script>
     <script src="https://rawgit.com/allenhwkim/angularjs-google-maps/master/build/scripts/ng-map.js"></script>
-    
     <script>
     // Initialize Firebase
     var config = {
@@ -114,7 +117,6 @@
     <script src="js/translations.js"></script>
     <script src="js/directives.js"></script>
     <script src="js/controllers.js"></script>
-
 </body>
 
 </html>
