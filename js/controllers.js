@@ -106,26 +106,24 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     };
 
-    function showUserInfo(){
-        console.log("PUP");
+    function showUserInfo(userinfo){
         firebase.auth().onAuthStateChanged((user) => {
         let ref = firebase.database().ref("Guest")
-                    .orderByChild("email")
-                    .equalTo(user.email)
-                    ref.once("value", function(snapshot) {
-                        $scope.userDetails = snapshot.val();
-                        userDetails = Object.keys($scope.userDetails);
-                        $scope.userKey = userDetails;
-                        if($scope.userDetails[$scope.userKey].about == null){
-                            $scope.aboutMeDescription = "About you";
-                        }else{
-                            $scope.aboutMeDescription = $scope.userDetails[$scope.userKey].about;
-                        }
+                    .orderByChild("user")
+                    .equalTo(userinfo)
+                    ref.on("value", function(snapshot) {
+                        $timeout(function() {
+                            $scope.userDataInfo = snapshot.val();
+                        userDataInfoKey = Object.keys($scope.userDataInfo);
+                        $scope.userDataInfo = $scope.userDataInfo[userDataInfoKey];
+                        console.log("UserGuestInfo",$scope.userDataInfo)
+                        });
+                        
                     });
     });
+      
     }
     
-    showUserInfo();
 
 
     $scope.aboutMe = function(){
@@ -511,20 +509,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         getProjectApplicants();
     }
     if ($location.path('/app/user')) {
-
-    firebase.auth().onAuthStateChanged((user) => {
-        let ref = firebase.database().ref("Guest")
-                    .orderByChild("user")
-                    .equalTo($location.search().id)
-                    ref.once("value", function(snapshot) {
-                        $scope.userDataInfo = snapshot.val();
-                        userDataInfoKey = Object.keys($scope.userDataInfo);
-                        $scope.userDataInfo = $scope.userDataInfo[userDataInfoKey];
-                        console.log("UserGuestInfo",$scope.userDataInfo)
-                    });
-    });
-
-
+        showUserInfo($location.search().id);
     }
 
    
@@ -546,8 +531,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             case '/dashboards/project_applicants':
                 getProjectApplicants();
             case '/app/user':
-                showUserInfo();
-
+                showUserInfo($location.search().id);
             default:
                 console.log('routes', $location.path());
         }
