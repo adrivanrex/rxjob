@@ -338,6 +338,20 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 }
             }
         })
+        .state('forms.verifyUser', {
+            url: "/verifyUser",
+            templateUrl: "views/verifyUser.html",
+            data: { pageTitle: 'Verify User' },
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            files: ['css/plugins/iCheck/custom.css','js/plugins/iCheck/icheck.min.js']
+                        }
+                    ]);
+                }
+            }
+        })
         .state('forms.advanced_plugins', {
             url: "/advanced_plugins",
             templateUrl: "views/form_advanced.html",
@@ -448,6 +462,11 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
             abstract: true,
             url: "/app",
             templateUrl: "views/common/content.html",
+        })
+        .state('app.verifyUser', {
+            url: "/verifyUser",
+            templateUrl: "views/verifyUser.html",
+            data: { pageTitle: 'Verify User' }
         })
         .state('app.contacts', {
             url: "/contacts",
