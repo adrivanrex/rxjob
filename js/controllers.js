@@ -106,8 +106,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     };
 
-
-    firebase.auth().onAuthStateChanged((user) => {
+    function showUserInfo(){
+        console.log("PUP");
+        firebase.auth().onAuthStateChanged((user) => {
         let ref = firebase.database().ref("Guest")
                     .orderByChild("email")
                     .equalTo(user.email)
@@ -116,13 +117,15 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         userDetails = Object.keys($scope.userDetails);
                         $scope.userKey = userDetails;
                         if($scope.userDetails[$scope.userKey].about == null){
-                            $scope.aboutMeDescription = "About yourself";
+                            $scope.aboutMeDescription = "About you";
                         }else{
                             $scope.aboutMeDescription = $scope.userDetails[$scope.userKey].about;
                         }
                     });
     });
-
+    }
+    
+    showUserInfo();
 
 
     $scope.aboutMe = function(){
@@ -542,6 +545,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 console.log('details');
             case '/dashboards/project_applicants':
                 getProjectApplicants();
+            case '/app/user':
+                showUserInfo();
+
             default:
                 console.log('routes', $location.path());
         }
