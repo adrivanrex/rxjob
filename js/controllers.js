@@ -35,6 +35,8 @@
  * Contains severals global data used in diferent view
  *
  */
+ var site = "/rxjob";
+ 
 function LoginCtrl($window, $scope, $firebaseAuth) {
     var auth = $firebaseAuth();
     var location = "/rxjob";
@@ -598,6 +600,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     $scope.verifySubmit = function(){
         $scope.verifyName = this.verifyName;
+        $scope.verifyGuest = this.verifyAbout;
         firebase.auth().onAuthStateChanged(function(user) {
             user.updateProfile({
           displayName: $scope.verifyName,
@@ -614,8 +617,31 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
           // An error happened.
         });
 
+        /*
+        * add as guest
+        */
+
+        firebase.auth().onAuthStateChanged((user) => {
+            console.log("GuestUser", user);
+            let ref = firebase.database().ref("Guest")
+                .orderByChild("email")
+                .equalTo(user.email)
+                .limitToLast(1)
+            ref.once("value", function(snapshot) {
+                $scope.Guestinfo = snapshot.val();
+                if ($scope.Guestinfo == null) {
+                    post = firebase.database().ref('Guest/').push({
+                        about: $scope.verifyGuest,
+                        user: user.uid,
+                        picture: user.photoURL,
+                        email: user.email
+                    });
+                }
+            });
+        });
+
         registerUser();
-        $window.location = location;
+        $window.location = site;
 
         });
 
