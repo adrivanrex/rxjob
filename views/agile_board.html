@@ -1,6 +1,6 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Agile board</h2>
+        <h2>Production</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="index.html">Home</a>
@@ -10,7 +10,7 @@
                 <a>Miscellaneous</a>
             </li>
             <li class="active">
-                <strong>Agile board</strong>
+                <strong>Products</strong>
             </li>
         </ol>
     </div>
@@ -26,13 +26,16 @@
                 <div class="ibox-content">
                     <h3>To-do</h3>
                     <p class="small"><i class="fa fa-hand-o-up"></i> Drag task between list</p>
-
+                    <form ng-submit="addTask()">
                     <div class="input-group">
-                        <input type="text" placeholder="Add new task. " class="input input-sm form-control">
+                        
+                        <input type="text" ng-model="taskText" placeholder="Add new task. " class=" form-control">
                                 <span class="input-group-btn">
-                                        <button type="button" class="btn btn-sm btn-white"> <i class="fa fa-plus"></i> Add task</button>
+                                        <button ng-click="addTask()" type="button" class="btn btn-sm btn-white"> <i class="fa fa-plus" ></i> Add task</button>
                                 </span>
+                        
                     </div>
+                    </form>
                     <ul ui-sortable="sortableOptions" class="sortable-list connectList agile-list" ng-model="todoList">
                         <li class="{{task.statusClass}}-element" ng-repeat="task in todoList">
                             {{task.content}}
