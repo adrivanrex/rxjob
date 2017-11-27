@@ -37,7 +37,7 @@
  */
 var site = "/rxjob";
 
-function LoginCtrl($window, $scope, $firebaseAuth) {
+function LoginCtrl($window, $scope, $firebaseAuth,$timeout) {
     var auth = $firebaseAuth();
     var location = "/rxjob";
     firebase.auth().onAuthStateChanged(function(user) {
@@ -87,12 +87,41 @@ function LoginCtrl($window, $scope, $firebaseAuth) {
     }
 
     function register(email, password) {
+        document.getElementById("registerEmailError").classList.add('hide');
+
         firebase.auth().createUserWithEmailAndPassword(email, password).then(function(value) {
             console.log(value);
             registerLoginUsernamePass(email, password);
         }).catch(function(error) {
+            $timeout(function() {
+                /*
+            *   Register Validation
+            */
+
             console.log(error);
+            if(error.code == "auth/invalid-email"){
+                console.log("compare");
+                document.getElementById("registerEmailError").classList.remove('hide');
+                document.getElementById("registerEmailError").innerHTML = error.message;
+            }
+
+            if(error.code == "auth/argument-error"){
+                document.getElementById("registerPasswordError").classList.remove('hide');
+                document.getElementById("registerPasswordError").innerHTML = error.message;
+            }
+            if(error.code== "auth/weak-password"){
+                
+                document.getElementById("registerPasswordError").classList.remove('hide');
+                document.getElementById("registerPasswordError").innerHTML = error.message;
+            }
+            });
+
+
+            
+
         });
+
+        
 
     }
 
@@ -3980,6 +4009,7 @@ function formValidation($scope) {
     $scope.signupForm = function() {
         if ($scope.signup_form.$valid) {
             // Submit as normal
+
         } else {
             $scope.signup_form.submitted = true;
         }

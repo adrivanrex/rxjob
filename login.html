@@ -43,13 +43,24 @@
             </div>
             <div class="col-md-6">
                 <div class="ibox-content">
-                    <form  ng-submit="register()" class="m-t" role="form">
+                    <form  ng-submit="register()" name="signup_form" novalidate  class="m-t" role="form">
                         <div class="form-group">
                             <input ng-model="registerEmail" type="email" class="form-control" placeholder="Email" required="">
+                            <div  class="m-t-xs">
+                                <small id="registerEmailError" class="text-danger hide"></small>
+                                
+                            </div>
                         </div>
+                        
+
                         <div class="form-group">
                             <input ng-model="registerPassword" type="password" class="form-control" placeholder="Password" required="">
+                            <div class="m-t-xs">
+                                <small id="registerPasswordError" class="text-danger hide">Please input a username</small>
+                                
+                            </div>
                         </div>
+                        
                         <button type="submit" class="btn btn-primary block full-width m-b">Register</button>
                         <button ng-click="googlelogin()" class="btn btn-primary block full-width m-b">Google</button>
                         <a href="#">
