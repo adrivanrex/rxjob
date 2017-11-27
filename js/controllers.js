@@ -607,10 +607,12 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             }).then(function() {
                 // Profile updated successfully!
                 // "Jane Q. User"
-                var displayName = user.displayName;
+                $timeout(function(){
+                    var displayName = user.displayName;
                 // "https://example.com/jane-q-user/profile.jpg"
                 var photoURL = user.photoURL;
-                alert(displayName);
+                });
+                
 
             }, function(error) {
                 // An error happened.
@@ -619,11 +621,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             /*
              * add as guest
              */
-
-
-        });
-        
-            firebase.auth().onAuthStateChanged((user) => {
+             
+             firebase.auth().onAuthStateChanged((user) => {
                 console.log("GuestUser", user);
                 let ref = firebase.database().ref("Guest")
                     .orderByChild("email")
@@ -644,8 +643,12 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
             registerUser();
             $window.location = site;
+           
+            
 
+        });
 
+        
     }
 
     $scope.$on('$locationChangeStart', function(event) {
