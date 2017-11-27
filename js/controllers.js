@@ -611,18 +611,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     var displayName = user.displayName;
                 // "https://example.com/jane-q-user/profile.jpg"
                 var photoURL = user.photoURL;
-                });
-                
 
-            }, function(error) {
-                // An error happened.
-            });
-
-            /*
-             * add as guest
-             */
-             
-             firebase.auth().onAuthStateChanged((user) => {
+                firebase.auth().onAuthStateChanged((user) => {
                 console.log("GuestUser", user);
                 let ref = firebase.database().ref("Guest")
                     .orderByChild("email")
@@ -637,12 +627,27 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             picture: user.photoURL,
                             email: user.email
                         });
+                    }else{
+
                     }
                 });
             });
 
             registerUser();
             $window.location = site;
+
+                });
+                
+
+            }, function(error) {
+                // An error happened.
+            });
+
+            /*
+             * add as guest
+             */
+             
+             
            
             
 
