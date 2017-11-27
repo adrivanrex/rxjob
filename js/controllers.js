@@ -35,8 +35,8 @@
  * Contains severals global data used in diferent view
  *
  */
- var site = "/rxjob";
- 
+var site = "/rxjob";
+
 function LoginCtrl($window, $scope, $firebaseAuth) {
     var auth = $firebaseAuth();
     var location = "/rxjob";
@@ -597,54 +597,55 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     }
 
 
-    $scope.verifySubmit = function(){
+    $scope.verifySubmit = function() {
         $scope.verifyName = this.verifyName;
         $scope.verifyGuest = this.verifyAbout;
         firebase.auth().onAuthStateChanged(function(user) {
             user.updateProfile({
-          displayName: $scope.verifyName,
-          photoURL: "img/anonymous.png"
-        }).then(function() {
-          // Profile updated successfully!
-          // "Jane Q. User"
-          var displayName = user.displayName;
-          // "https://example.com/jane-q-user/profile.jpg"
-          var photoURL = user.photoURL;
-          
+                displayName: $scope.verifyName,
+                photoURL: "img/anonymous.png"
+            }).then(function() {
+                // Profile updated successfully!
+                // "Jane Q. User"
+                var displayName = user.displayName;
+                // "https://example.com/jane-q-user/profile.jpg"
+                var photoURL = user.photoURL;
+                alert(displayName);
 
-        }, function(error) {
-          // An error happened.
-        });
-
-        /*
-        * add as guest
-        */
-
-        firebase.auth().onAuthStateChanged((user) => {
-            console.log("GuestUser", user);
-            let ref = firebase.database().ref("Guest")
-                .orderByChild("email")
-                .equalTo(user.email)
-                .limitToLast(1)
-            ref.once("value", function(snapshot) {
-                $scope.Guestinfo = snapshot.val();
-                if ($scope.Guestinfo == null) {
-                    post = firebase.database().ref('Guest/').push({
-                        about: $scope.verifyGuest,
-                        user: user.uid,
-                        picture: user.photoURL,
-                        email: user.email
-                    });
-                }
+            }, function(error) {
+                // An error happened.
             });
+
+            /*
+             * add as guest
+             */
+
+
         });
-
-        registerUser();
-        $window.location = site;
-
-        });
-
         
+            firebase.auth().onAuthStateChanged((user) => {
+                console.log("GuestUser", user);
+                let ref = firebase.database().ref("Guest")
+                    .orderByChild("email")
+                    .equalTo(user.email)
+                    .limitToLast(1)
+                ref.once("value", function(snapshot) {
+                    $scope.Guestinfo = snapshot.val();
+                    if ($scope.Guestinfo == null) {
+                        post = firebase.database().ref('Guest/').push({
+                            about: $scope.verifyGuest,
+                            user: user.uid,
+                            picture: user.photoURL,
+                            email: user.email
+                        });
+                    }
+                });
+            });
+
+            registerUser();
+            $window.location = site;
+
+
     }
 
     $scope.$on('$locationChangeStart', function(event) {
@@ -905,7 +906,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     $scope.latlngaddress = results;
 
                 });
-
 
                 var address = (results[0].formatted_address);
 
@@ -3988,7 +3988,7 @@ function formValidation($scope) {
 /**
  * agileBoard - Controller for agile Board view
  */
-function agileBoard($scope) {
+function agileBoard($scope, $firebaseAuth) {
 
 
     $scope.todoList = [];
@@ -3999,14 +3999,63 @@ function agileBoard($scope) {
         connectWith: ".connectList"
     };
 
-    $scope.addTask = function(){
-        todo = {
-            content:$scope.taskText,
+    var auth = $firebaseAuth();
+
+    
+
+    $scope.addTask = function() {
+
+        var todo = {
+            content: $scope.taskText,
             date: '12.10.2017',
             tagName: 'remove'
         };
+
         $scope.todoList.push(todo);
+        /*
+        
+        
+        $scope.inProgressList = $scope.inProgressList.toString();
+        $scope.inProgressListEncrypted = CryptoJS.AES.encrypt($scope.inProgressList, "Secret Passphrase");
+        $scope.completedList = $scope.completedList.toString();
+        $scope.completedListEncrypted = CryptoJS.AES.encrypt($scope.completedListEncrypted, "Secret Passphrase");
+        */
+        todoList = JSON.stringify($scope.todoList); 
+        var auth = $firebaseAuth();
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref("Board")
+                .limitToLast(1)
+            ref.once("value", function(snapshot) {
+                console.log(snapshot.val());
+                if (snapshot.val() == null) {
+
+                    var post = firebase.database().ref('Board/').push({
+                        user: user.uid,
+                        email: user.email,
+                        todoList: todoList
+
+                    });
+                } else {
+                    let ref = firebase.database().ref("Board")
+                        .orderByChild("email")
+                        .equalTo(user.email)
+                        .limitToLast(1)
+                    ref.once("value", function(snapshot) {
+                        key = Object.keys(snapshot.val())
+                        firebase.database().ref().child('Board/' + key)
+                            .update({ todoList: todoList });
+                    });
+
+                    
+                }
+
+            });
+
+        });
+
     }
+
+
 
 }
 
