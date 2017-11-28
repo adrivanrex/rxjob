@@ -37,7 +37,7 @@
  */
 var site = "/rxjob";
 
-function LoginCtrl($window, $scope, $firebaseAuth,$timeout) {
+function LoginCtrl($window, $scope, $firebaseAuth, $timeout) {
     var auth = $firebaseAuth();
     var location = "/rxjob";
     firebase.auth().onAuthStateChanged(function(user) {
@@ -95,33 +95,33 @@ function LoginCtrl($window, $scope, $firebaseAuth,$timeout) {
         }).catch(function(error) {
             $timeout(function() {
                 /*
-            *   Register Validation
-            */
+                 *   Register Validation
+                 */
 
-            console.log(error);
-            if(error.code == "auth/invalid-email"){
-                console.log("compare");
-                document.getElementById("registerEmailError").classList.remove('hide');
-                document.getElementById("registerEmailError").innerHTML = error.message;
-            }
+                console.log(error);
+                if (error.code == "auth/invalid-email") {
+                    console.log("compare");
+                    document.getElementById("registerEmailError").classList.remove('hide');
+                    document.getElementById("registerEmailError").innerHTML = error.message;
+                }
 
-            if(error.code == "auth/argument-error"){
-                document.getElementById("registerPasswordError").classList.remove('hide');
-                document.getElementById("registerPasswordError").innerHTML = error.message;
-            }
-            if(error.code== "auth/weak-password"){
-                
-                document.getElementById("registerPasswordError").classList.remove('hide');
-                document.getElementById("registerPasswordError").innerHTML = error.message;
-            }
+                if (error.code == "auth/argument-error") {
+                    document.getElementById("registerPasswordError").classList.remove('hide');
+                    document.getElementById("registerPasswordError").innerHTML = error.message;
+                }
+                if (error.code == "auth/weak-password") {
+
+                    document.getElementById("registerPasswordError").classList.remove('hide');
+                    document.getElementById("registerPasswordError").innerHTML = error.message;
+                }
             });
 
 
-            
+
 
         });
 
-        
+
 
     }
 
@@ -636,37 +636,37 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             }).then(function() {
                 // Profile updated successfully!
                 // "Jane Q. User"
-                $timeout(function(){
+                $timeout(function() {
                     var displayName = user.displayName;
-                // "https://example.com/jane-q-user/profile.jpg"
-                var photoURL = user.photoURL;
+                    // "https://example.com/jane-q-user/profile.jpg"
+                    var photoURL = user.photoURL;
 
-                firebase.auth().onAuthStateChanged((user) => {
-                console.log("GuestUser", user);
-                let ref = firebase.database().ref("Guest")
-                    .orderByChild("email")
-                    .equalTo(user.email)
-                    .limitToLast(1)
-                ref.once("value", function(snapshot) {
-                    $scope.Guestinfo = snapshot.val();
-                    if ($scope.Guestinfo == null) {
-                        post = firebase.database().ref('Guest/').push({
-                            about: $scope.verifyGuest,
-                            user: user.uid,
-                            picture: user.photoURL,
-                            email: user.email
+                    firebase.auth().onAuthStateChanged((user) => {
+                        console.log("GuestUser", user);
+                        let ref = firebase.database().ref("Guest")
+                            .orderByChild("email")
+                            .equalTo(user.email)
+                            .limitToLast(1)
+                        ref.once("value", function(snapshot) {
+                            $scope.Guestinfo = snapshot.val();
+                            if ($scope.Guestinfo == null) {
+                                post = firebase.database().ref('Guest/').push({
+                                    about: $scope.verifyGuest,
+                                    user: user.uid,
+                                    picture: user.photoURL,
+                                    email: user.email
+                                });
+                            } else {
+
+                            }
                         });
-                    }else{
+                    });
 
-                    }
-                });
-            });
-
-            registerUser();
-            $window.location = site;
+                    registerUser();
+                    $window.location = site;
 
                 });
-                
+
 
             }, function(error) {
                 // An error happened.
@@ -675,14 +675,14 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             /*
              * add as guest
              */
-             
-             
-           
-            
+
+
+
+
 
         });
 
-        
+
     }
 
     $scope.$on('$locationChangeStart', function(event) {
@@ -4037,9 +4037,50 @@ function agileBoard($scope, $firebaseAuth) {
         connectWith: ".connectList"
     };
 
+  
     var auth = $firebaseAuth();
+    firebase.auth().onAuthStateChanged((user) => {
+        let ref = firebase.database().ref("Board")
+            .orderByChild("email")
+            .equalTo(user.email)
+            .limitToLast(1)
+        ref.once("value", function(snapshot) {
+            console.log("Boards", snapshot.val());
+            keys = Object.keys(snapshot.val());
 
-    
+            todoKey = snapshot.val()[keys].todoList;
+            console.log('todoList', todoKey);
+            splitTodo = todoKey.split(/[{}]+/).filter(function(e) { return e; });
+            console.log("todo", splitTodo);
+            for (var i = splitTodo.length - 1; i >= 0; i--) {
+                if(splitTodo[i] == ","){
+                    splitTodo[i] = null;
+                }
+            }
+            filteredTodo = splitTodo.filter(n => n)
+            arr = [];
+
+            err = [];
+            for (var i = filteredTodo.length - 1; i >= 0; i--) {
+                str = "{"+filteredTodo[i]+"}";
+                err.push(JSON.parse(str));
+            }
+
+            console.log("err", err);
+            for (var i = err.length - 1; i >= 0; i--) {
+               $scope.todoList.push(err[i]);
+            }
+
+            console.log("todo",$scope.todoList);
+
+        });
+       
+        
+    });
+
+
+
+
 
     $scope.addTask = function() {
 
@@ -4058,7 +4099,11 @@ function agileBoard($scope, $firebaseAuth) {
         $scope.completedList = $scope.completedList.toString();
         $scope.completedListEncrypted = CryptoJS.AES.encrypt($scope.completedListEncrypted, "Secret Passphrase");
         */
-        todoList = JSON.stringify($scope.todoList); 
+
+        console.log($scope.todoList[0]);
+
+        todoList = JSON.stringify($scope.todoList);
+        todoList = todoList.slice(1, -1);
         var auth = $firebaseAuth();
         firebase.auth().onAuthStateChanged((user) => {
             let ref = firebase.database().ref("Board")
@@ -4084,13 +4129,14 @@ function agileBoard($scope, $firebaseAuth) {
                             .update({ todoList: todoList });
                     });
 
-                    
+
                 }
 
             });
 
         });
 
+        console.log("array", JSON.stringify($scope.todoList));
     }
 
 
