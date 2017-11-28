@@ -4188,10 +4188,12 @@ function agileBoard($scope, $firebaseAuth,$timeout) {
 
 
     $scope.addTask = function() {
-
+        timeInMs = Date.now();
+        UpdatedTime = new Date(timeInMs);
+        humanTime = UpdatedTime.toString();
         var todo = {
             content: $scope.taskText,
-            date: '12.10.2017',
+            date: humanTime,
             tagName: 'remove'
         };
 
