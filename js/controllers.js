@@ -4026,7 +4026,7 @@ function formValidation($scope) {
 /**
  * agileBoard - Controller for agile Board view
  */
-function agileBoard($scope, $firebaseAuth) {
+function agileBoard($scope, $firebaseAuth,$timeout) {
 
 
     $scope.todoList = [];
@@ -4098,7 +4098,8 @@ function agileBoard($scope, $firebaseAuth) {
             .equalTo(user.email)
             .limitToLast(1)
         ref.once("value", function(snapshot) {
-            console.log("Boards", snapshot.val());
+            $timeout(function() {
+                console.log("Boards", snapshot.val());
             keys = Object.keys(snapshot.val());
 
             todoKey = snapshot.val()[keys].todoList;
@@ -4173,6 +4174,9 @@ function agileBoard($scope, $firebaseAuth) {
                     $scope.completedList.push(err[i]);
                 }
             }
+            });
+
+            
 
         });
 
