@@ -4149,6 +4149,31 @@ function agileBoard($scope, $firebaseAuth) {
                     $scope.inProgressList.push(err[i]);
                 }
             }
+
+            if (snapshot.val()[keys].completedList !== null) {
+                todocompletedList = snapshot.val()[keys].completedList;
+                splitcompletedList = todocompletedList.split(/[{}]+/).filter(function(e) { return e; });
+                console.log("todo", splitTodo);
+                for (var i = splitcompletedList.length - 1; i >= 0; i--) {
+                    if (splitcompletedList[i] == ",") {
+                        splitcompletedList[i] = null;
+                    }
+                }
+                filteredcompletedList = splitcompletedList.filter(n => n)
+                arr = [];
+
+                err = [];
+                for (var i = filteredcompletedList.length - 1; i >= 0; i--) {
+                    str = "{" + filteredcompletedList[i] + "}";
+                    err.push(JSON.parse(str));
+                }
+
+                console.log("err", err);
+                for (var i = err.length - 1; i >= 0; i--) {
+                    $scope.completedList.push(err[i]);
+                }
+            }
+
         });
 
 
