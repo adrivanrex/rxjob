@@ -4036,8 +4036,61 @@ function agileBoard($scope, $firebaseAuth) {
     $scope.sortableOptions = {
         connectWith: ".connectList"
     };
+    /* baord inProgress */
+    $scope.$watchCollection('todoList', function() {
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref("Board")
+                .orderByChild("email")
+                .equalTo(user.email)
+                .limitToLast(1)
+            ref.once("value", function(snapshot) {
+                key = Object.keys(snapshot.val())
+                todoList = JSON.stringify($scope.todoList);
+                todoList = todoList.slice(1, -1);
+                firebase.database().ref().child('Board/' + key)
+                    .update({ todoList: todoList });
+            });
+        });
+    });
+    $scope.$watchCollection('inProgressList', function() {
+        console.log($scope.inProgressList);
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref("Board")
+                .orderByChild("email")
+                .equalTo(user.email)
+                .limitToLast(1)
+            ref.once("value", function(snapshot) {
+                console.log(snapshot.val());
+                inProgressList = JSON.stringify($scope.inProgressList);
+                inProgressList = inProgressList.slice(1, -1);
+                key = Object.keys(snapshot.val())
+                firebase.database().ref().child('Board/' + key)
+                    .update({ inProgressList: inProgressList });
+            });
+        });
+    });
 
-  
+    $scope.$watchCollection('completedList', function() {
+        console.log($scope.completedList);
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref("Board")
+                .orderByChild("email")
+                .equalTo(user.email)
+                .limitToLast(1)
+            ref.once("value", function(snapshot) {
+                console.log(snapshot.val());
+                completedList = JSON.stringify($scope.completedList);
+                completedList = completedList.slice(1, -1);
+                key = Object.keys(snapshot.val())
+                firebase.database().ref().child('Board/' + key)
+                    .update({ completedList: completedList });
+            });
+        });
+    });
+
+
+    /* board add task */
+
     var auth = $firebaseAuth();
     firebase.auth().onAuthStateChanged((user) => {
         let ref = firebase.database().ref("Board")
@@ -4053,7 +4106,7 @@ function agileBoard($scope, $firebaseAuth) {
             splitTodo = todoKey.split(/[{}]+/).filter(function(e) { return e; });
             console.log("todo", splitTodo);
             for (var i = splitTodo.length - 1; i >= 0; i--) {
-                if(splitTodo[i] == ","){
+                if (splitTodo[i] == ",") {
                     splitTodo[i] = null;
                 }
             }
@@ -4062,20 +4115,43 @@ function agileBoard($scope, $firebaseAuth) {
 
             err = [];
             for (var i = filteredTodo.length - 1; i >= 0; i--) {
-                str = "{"+filteredTodo[i]+"}";
+                str = "{" + filteredTodo[i] + "}";
                 err.push(JSON.parse(str));
             }
 
             console.log("err", err);
             for (var i = err.length - 1; i >= 0; i--) {
-               $scope.todoList.push(err[i]);
+                $scope.todoList.push(err[i]);
             }
 
-            console.log("todo",$scope.todoList);
+            console.log("todo", $scope.todoList);
 
+            if (snapshot.val()[keys].inProgressList !== null) {
+                todoProgress = snapshot.val()[keys].inProgressList;
+                splitProgress = todoProgress.split(/[{}]+/).filter(function(e) { return e; });
+                console.log("todo", splitTodo);
+                for (var i = splitProgress.length - 1; i >= 0; i--) {
+                    if (splitProgress[i] == ",") {
+                        splitProgress[i] = null;
+                    }
+                }
+                filteredProgress = splitProgress.filter(n => n)
+                arr = [];
+
+                err = [];
+                for (var i = filteredProgress.length - 1; i >= 0; i--) {
+                    str = "{" + filteredProgress[i] + "}";
+                    err.push(JSON.parse(str));
+                }
+
+                console.log("err", err);
+                for (var i = err.length - 1; i >= 0; i--) {
+                    $scope.inProgressList.push(err[i]);
+                }
+            }
         });
-       
-        
+
+
     });
 
 
@@ -4091,14 +4167,7 @@ function agileBoard($scope, $firebaseAuth) {
         };
 
         $scope.todoList.push(todo);
-        /*
-        
-        
-        $scope.inProgressList = $scope.inProgressList.toString();
-        $scope.inProgressListEncrypted = CryptoJS.AES.encrypt($scope.inProgressList, "Secret Passphrase");
-        $scope.completedList = $scope.completedList.toString();
-        $scope.completedListEncrypted = CryptoJS.AES.encrypt($scope.completedListEncrypted, "Secret Passphrase");
-        */
+
 
         console.log($scope.todoList[0]);
 
@@ -4115,7 +4184,8 @@ function agileBoard($scope, $firebaseAuth) {
                     var post = firebase.database().ref('Board/').push({
                         user: user.uid,
                         email: user.email,
-                        todoList: todoList
+                        todoList: todoList,
+                        createdAt: firebase.database.ServerValue.TIMESTAMP
 
                     });
                 } else {
