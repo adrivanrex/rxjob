@@ -624,14 +624,16 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         showUserInfo($location.search().id);
     }
     if ($location.path('/app/profile')) {
-        firebase.auth().onAuthStateChanged((user) => {
-            let ref = firebase.database().ref("Guest")
-                .orderByChild("email")
-                .equalTo(user.email)
-                .limitToLast(1)
-            ref.once("value", function(snapshot) {
-                $scope.userDetails = snapshot.val();
-                 $scope.userDetails = snapshot.val();
+         firebase.auth().onAuthStateChanged((user) => {
+
+                    let ref = firebase.database().ref("Guest")
+                        .orderByChild("email")
+                        .equalTo(user.email)
+                        .limitToLast(1)
+                    ref.once("value", function(snapshot) {
+                        $scope.userDetails = snapshot.val();
+                        //console.log("ABOUT", $scope.userDetails);
+                        
                         userDetails = Object.keys($scope.userDetails);
                         $scope.userKey = userDetails;
                         if ($scope.userDetails[$scope.userKey].about == null) {
@@ -639,8 +641,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         } else {
                             $scope.aboutMeDescription = $scope.userDetails[$scope.userKey].about;
                         }
-            });
-        });
+                    });
+                });
     }
 
 
