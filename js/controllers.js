@@ -61,6 +61,13 @@ function LoginCtrl($window, $scope, $firebaseAuth, $timeout) {
     }
 
     $scope.login = function() {
+        loginEmail = this.loginEmail;
+        console.log(loginEmail);
+        if(typeof loginEmail == "undefined"|| null){
+            document.getElementById("loginAlert").classList.remove('hide');
+            document.getElementById("loginAlert").innerHTML = "invalid login";
+        }
+
         firebase.auth().signInWithEmailAndPassword($scope.loginEmail, $scope.loginPassword).catch(function(error) {
             // Handle Errors here.
             var errorCode = error.code;
@@ -4131,6 +4138,13 @@ function agileBoard($scope, $firebaseAuth, $timeout) {
         ref.once("value", function(snapshot) {
             $timeout(function() {
                 console.log("Boards", snapshot.val());
+                if(snapshot.val() == null){
+                    post = firebase.database().ref('Board/').push({
+                        user: user.uid,
+                        email: user.email
+                    });
+                }
+
                 keys = Object.keys(snapshot.val());
 
                 todoKey = snapshot.val()[keys].todoList;
@@ -4238,9 +4252,7 @@ function agileBoard($scope, $firebaseAuth, $timeout) {
         var auth = $firebaseAuth();
         firebase.auth().onAuthStateChanged((user) => {
             let ref = firebase.database().ref("Board")
-                .limitToLast(1)
             ref.once("value", function(snapshot) {
-                console.log(snapshot.val());
                 if (snapshot.val() == null) {
 
                     var post = firebase.database().ref('Board/').push({
