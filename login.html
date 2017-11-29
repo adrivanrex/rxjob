@@ -20,12 +20,16 @@
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="index.html">FRee</a>
+                    <a class="navbar-brand" href="index.html">Free</a>
                 </div>
                 <div class="navbar-header navLogin pull-right">
                     <form ng-submit="login()" class="navbar-form pull-right">
                         <input ng-model="loginEmail" class="span2 form-control" type="text" placeholder="Email">
                         <input ng-model="loginPassword" class="span2 form-control" type="password" placeholder="Password">
+                        <div  class="m-t-xs">
+                                <small id="loginAlert" class="text-danger hide"></small>
+                                
+                            </div>
                         <button type="submit" class="btn btn-primary">Enter</button>
                     </form>
                 </div>

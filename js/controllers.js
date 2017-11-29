@@ -74,6 +74,8 @@ function LoginCtrl($window, $scope, $firebaseAuth, $timeout) {
             var errorMessage = error.message;
             console.log("Login Error", errorMessage);
             console.log("errorCode", error.code);
+            document.getElementById("loginAlert").classList.remove('hide');
+            document.getElementById("loginAlert").innerHTML = errorMessage;
 
         });
         firebase.auth().onAuthStateChanged(function(user) {
@@ -89,7 +91,7 @@ function LoginCtrl($window, $scope, $firebaseAuth, $timeout) {
     function register(email, password) {
         if(password == null){
             document.getElementById("registerPasswordError").classList.remove('hide');
-                    document.getElementById("registerPasswordError").innerHTML = "enter your password";
+document.getElementById("registerPasswordError").innerHTML = "enter your password";
         }
         console.log(email);
         if (typeof email === 'undefined'){
