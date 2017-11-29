@@ -212,7 +212,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             let ref = firebase.database().ref("Guest")
                 .orderByChild("user")
                 .equalTo(userinfo)
-            ref.on("value", function(snapshot) {
+                .limitToLast(1)
+            ref.once("value", function(snapshot) {
+                console.log("userinfo", userinfo)
                 $timeout(function() {
                     $scope.userDataInfo = snapshot.val();
                     userDataInfoKey = Object.keys($scope.userDataInfo);
@@ -832,6 +834,11 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         $scope.JobPostTitle = this.JobPostTitle;
         $scope.JobPostDescription = this.JobPostDescription;
         $scope.ItemCount = this.JobPostNumberOfItems;
+
+
+        /* Filter */
+        console.log("JOBPOST", this.JobPostTitle);
+        
 
         for (var i = $scope.latlngaddress.length - 1; i >= 0; i--) {
             delete $scope.latlngaddress[i].geometry.location.lat;

@@ -18,12 +18,25 @@
         <div class="col-md-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                About
+                    <h5>Profile Detail</h5>
                 </div>
                 <div>
                     <div class="ibox-content profile-content">
-                        <strong>{{userDataInfo.about}}</strong>
+                        <h5>
+                            About me
+                        </h5>
 
+                        <p>
+                            {{userDataInfo.about}}
+                        </p>
+
+                        <div class="user-button">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-primary btn-sm btn-block"><i class="fa fa-user-plus"></i> Add contact</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
