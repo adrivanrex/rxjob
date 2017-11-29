@@ -629,7 +629,18 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 // Profile updated successfully!
                 // "Jane Q. User"
                 $timeout(function() {
-                    var displayName = user.displayName;
+                    
+                    registerUser();
+                    $window.location = site;
+
+                });
+
+
+            }, function(error) {
+                // An error happened.
+            });
+
+            var displayName = user.displayName;
                     // "https://example.com/jane-q-user/profile.jpg"
                     var photoURL = user.photoURL;
 
@@ -654,15 +665,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         });
                     });
 
-                    registerUser();
-                    $window.location = site;
-
-                });
-
-
-            }, function(error) {
-                // An error happened.
-            });
 
             /*
              * add as guest
