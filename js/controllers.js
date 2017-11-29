@@ -628,24 +628,18 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             }).then(function() {
                 // Profile updated successfully!
                 // "Jane Q. User"
-                $timeout(function() {
-                    
-                    registerUser();
-                    $window.location = site;
-
-                });
+                registerUser()
+                $window.location = site;
 
 
             }, function(error) {
                 // An error happened.
             });
 
-            var displayName = user.displayName;
-                    // "https://example.com/jane-q-user/profile.jpg"
-                    var photoURL = user.photoURL;
 
                     firebase.auth().onAuthStateChanged((user) => {
                         //console.log("GuestUser", user);
+                        if(user.photoURL == null){}
                         let ref = firebase.database().ref("Guest")
                             .orderByChild("email")
                             .equalTo(user.email)
@@ -656,8 +650,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                                 post = firebase.database().ref('Guest/').push({
                                     about: $scope.verifyGuest,
                                     user: user.uid,
-                                    picture: user.photoURL,
-                                    email: user.email
+                                    picture: "img/anonymous.png",
+                                    email: user.email,
+                                    name: $scope.verifyName
                                 });
                             } else {
 
@@ -1038,19 +1033,21 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             if (user) {
                 let ref = firebase.database().ref("Contacts")
                     .orderByChild("user")
-                    .equalTo($scope.contactInfo.userDataInfo.user)
+                    .equalTo(user.uid)
                     .limitToLast(1)
                 ref.once("value", function(snapshot) {
-
-                    if (snapshot.val() == null) {
-                        firebase.database().ref('Contacts/').push({
-                            user: $scope.contactInfo.userDataInfo.user,
+                        if(snapshot.val() == null){
+                            firebase.database().ref('Contacts/').push({
+                            user: user.uid,
                             email: $scope.contactInfo.userDataInfo.email,
                             about: $scope.contactInfo.userDataInfo.about,
                             name: $scope.contactInfo.userDataInfo.name,
                             picture: $scope.contactInfo.userDataInfo.picture
                         });
-                    }
+                        }
+                    
+                        
+                    
 
 
 
@@ -1070,10 +1067,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     function showContacts() {
         firebase.auth().onAuthStateChanged((user) => {
-
-
-
-
             if (user) {
 
                 let ref = firebase.database().ref("Contacts")
@@ -1081,24 +1074,11 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     .equalTo(user.uid)
                     .limitToLast(100)
                 ref.once("value", function(snapshot) {
-
-                    /*
-                     *   update contact info
-                     */
-                    let ref = firebase.database().ref("Guest")
-                        .orderByChild("user")
-                        .equalTo(user.uid)
-                        .limitToLast(1)
-                    ref.once("value", function(snapshot) {
-                        $timeout(function() {
-                            $scope.contacts = snapshot.val();
-                            console.log("contacts", $scope.contacts);
-                        });
-
-
-                    }, function(errorObject) {
-                        console.log("The read failed: " + errorObject.code);
+                    $timeout(function() {
+                      $scope.contacts = snapshot.val();
                     });
+                       
+                    
                 }, function(errorObject) {
                     console.log("The read failed: " + errorObject.code);
                 });
