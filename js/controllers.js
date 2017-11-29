@@ -108,7 +108,11 @@ document.getElementById("registerPasswordError").innerHTML = "enter your passwor
                 /*
                  *   Register Validation
                  */
-
+                 if(error.code == "auth/email-already-in-use"){
+                    document.getElementById("registerEmailError").classList.remove('hide');
+                    document.getElementById("registerEmailError").innerHTML = error.message;
+                 }
+                 
                 console.log(error);
                 if (error.code == "auth/invalid-email") {
                     console.log("compare");
