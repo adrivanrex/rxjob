@@ -63,7 +63,7 @@ function LoginCtrl($window, $scope, $firebaseAuth, $timeout) {
     $scope.login = function() {
         loginEmail = this.loginEmail;
         console.log(loginEmail);
-        if(typeof loginEmail == "undefined"|| null){
+        if (typeof loginEmail == "undefined" || null) {
             document.getElementById("loginAlert").classList.remove('hide');
             document.getElementById("loginAlert").innerHTML = "invalid login";
         }
@@ -301,18 +301,18 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     $scope.submitApply = function() {
         let applyjob = {};
         applyjob.Price = this.applyjob.Price;
-        if(typeof applyjob.Price == "undefined"){
+        if (typeof applyjob.Price == "undefined") {
             document.getElementById("applyjobInputPrice").classList.add('has-error');
-        }else{
+        } else {
             document.getElementById("applyjobInputPrice").classList.remove('has-error');
         }
 
         applyjob.Description = this.applyjob.Description;
 
-        if(typeof applyjob.Description == "undefined"){
-            
+        if (typeof applyjob.Description == "undefined") {
+
             document.getElementById("applyjobInputDescription").classList.add('has-warning');
-        }else{
+        } else {
             document.getElementById("applyjobInputDescription").classList.remove('has-warning');
         }
         firebase.auth().onAuthStateChanged((user) => {
@@ -616,7 +616,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
 
-    
+
 
     $scope.verifySubmit = function() {
         $scope.verifyName = this.verifyName;
@@ -697,15 +697,13 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 showUserInfo($location.search().id);
             case '/app/profile':
                 firebase.auth().onAuthStateChanged((user) => {
-
                     let ref = firebase.database().ref("Guest")
                         .orderByChild("email")
                         .equalTo(user.email)
                         .limitToLast(1)
                     ref.once("value", function(snapshot) {
                         $scope.userDetails = snapshot.val();
-                        //console.log("ABOUT", $scope.userDetails);
-                        
+                        $scope.userDetails = snapshot.val();
                         userDetails = Object.keys($scope.userDetails);
                         $scope.userKey = userDetails;
                         if ($scope.userDetails[$scope.userKey].about == null) {
@@ -713,6 +711,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         } else {
                             $scope.aboutMeDescription = $scope.userDetails[$scope.userKey].about;
                         }
+
+                        console.log("jobTitle", $scope.userDetails[$scope.userKey].jobTitle);
+                        $scope.jobTitle = $scope.userDetails[$scope.userKey].jobTitle;
                     });
                 });
             default:
@@ -764,6 +765,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     if ($location.path('/app/user')) {
         showUserInfo($location.search().id);
     }
+    if ($location.path('/app/contacts')) {
+        showContacts();
+    }
     if ($location.path('/app/profile')) {
         firebase.auth().onAuthStateChanged((user) => {
             let ref = firebase.database().ref("Guest")
@@ -772,15 +776,20 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 .limitToLast(1)
             ref.once("value", function(snapshot) {
                 $scope.userDetails = snapshot.val();
-                 $scope.userDetails = snapshot.val();
-                        userDetails = Object.keys($scope.userDetails);
-                        $scope.userKey = userDetails;
-                        if ($scope.userDetails[$scope.userKey].about == null) {
-                            $scope.aboutMeDescription = "About yourself";
-                        } else {
-                            $scope.aboutMeDescription = $scope.userDetails[$scope.userKey].about;
-                        }
+                $scope.userDetails = snapshot.val();
+                userDetails = Object.keys($scope.userDetails);
+                $scope.userKey = userDetails;
+                if ($scope.userDetails[$scope.userKey].about == null) {
+                    $scope.aboutMeDescription = "About yourself";
+                } else {
+                    $scope.aboutMeDescription = $scope.userDetails[$scope.userKey].about;
+                }
+
+                console.log("jobTitle", $scope.userDetails[$scope.userKey].jobTitle);
+                $scope.jobTitle = $scope.userDetails[$scope.userKey].jobTitle;
             });
+
+
         });
     }
 
@@ -843,7 +852,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
         /* Filter */
         console.log("JOBPOST", this.JobPostTitle);
-        
+
 
         for (var i = $scope.latlngaddress.length - 1; i >= 0; i--) {
             delete $scope.latlngaddress[i].geometry.location.lat;
@@ -1017,12 +1026,12 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
     /**
-    *
-    * Add contacts
-    */
-    $scope.addContact = function(userDataInfo){
+     *
+     * Add contacts
+     */
+    $scope.addContact = function(userDataInfo) {
         $scope.contactInfo = userDataInfo;
-        
+
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 let ref = firebase.database().ref("Contacts")
@@ -1031,17 +1040,17 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     .limitToLast(1)
                 ref.once("value", function(snapshot) {
 
-                        if(snapshot.val() == null){
-                            firebase.database().ref('Contacts/').push({
+                    if (snapshot.val() == null) {
+                        firebase.database().ref('Contacts/').push({
                             user: $scope.contactInfo.userDataInfo.user,
                             email: $scope.contactInfo.userDataInfo.email,
                             about: $scope.contactInfo.userDataInfo.about,
                             name: $scope.contactInfo.userDataInfo.name,
                             picture: $scope.contactInfo.userDataInfo.picture
                         });
-                        }     
-                        
-                        
+                    }
+
+
 
                 }, function(errorObject) {
                     console.log("The read failed: " + errorObject.code);
@@ -1054,19 +1063,40 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     }
 
     /*
-    *   show Contacts
-    */
+     *   show Contacts
+     */
 
-    function showContacts(){
+    function showContacts() {
         firebase.auth().onAuthStateChanged((user) => {
+
+
+
+
             if (user) {
+
                 let ref = firebase.database().ref("Contacts")
                     .orderByChild("user")
                     .equalTo(user.uid)
                     .limitToLast(100)
                 ref.once("value", function(snapshot) {
-                        $scope.contacts = snapshot.val();
-                        console.log("contacts", $scope.contacts);
+
+                    /*
+                     *   update contact info
+                     */
+                    let ref = firebase.database().ref("Guest")
+                        .orderByChild("user")
+                        .equalTo(user.uid)
+                        .limitToLast(1)
+                    ref.once("value", function(snapshot) {
+                        $timeout(function() {
+                            $scope.contacts = snapshot.val();
+                            console.log("contacts", $scope.contacts);
+                        });
+
+
+                    }, function(errorObject) {
+                        console.log("The read failed: " + errorObject.code);
+                    });
                 }, function(errorObject) {
                     console.log("The read failed: " + errorObject.code);
                 });
@@ -1077,6 +1107,21 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         });
     }
 
+    $scope.aboutMeJobTitle = function() {
+        jobTitle = this.jobTitle;
+
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref("Guest")
+                .orderByChild("email")
+                .equalTo(user.email)
+                .limitToLast(1)
+            ref.once("value", function(snapshot) {
+                key = Object.keys(snapshot.val())
+                firebase.database().ref().child('Guest/' + key)
+                    .update({ jobTitle: jobTitle });
+            });
+        });
+    }
 
     /**
      * slideInterval - Interval for bootstrap Carousel, in milliseconds:
@@ -4223,7 +4268,7 @@ function agileBoard($scope, $firebaseAuth, $timeout) {
         ref.once("value", function(snapshot) {
             $timeout(function() {
                 console.log("Boards", snapshot.val());
-                if(snapshot.val() == null){
+                if (snapshot.val() == null) {
                     post = firebase.database().ref('Board/').push({
                         user: user.uid,
                         email: user.email

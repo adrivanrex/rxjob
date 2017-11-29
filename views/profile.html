@@ -19,7 +19,11 @@
             
                 <div>
                     <div class="ibox-content profile-content">
-                        <textarea class="aboutMe" placeholder="about yourself" ng-model="aboutMeDescription" ng-change="aboutMe()"></textarea>
+                    <form role="form">
+                            <div class="form-group"><input ng-model="jobTitle" ng-change="aboutMeJobTitle()" type="text" placeholder="Job Title" class="form-control"></div>
+                            <div class="form-group"><textarea class="aboutMe" placeholder="about yourself" ng-model="aboutMeDescription" ng-change="aboutMe()"></textarea></div>
+                        </form>
+                        
 
                     </div>
                 </div>
