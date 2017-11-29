@@ -1,11 +1,4 @@
 /**
- * INSPINIA - Responsive Admin Theme
- * Copyright 2015 Webapplayers.com
- *
- * Main controller.js file
- * Define controllers with data used in Inspinia theme
- *
- *
  * Functions (controllers)
  *  - MainCtrl
  *  - dashboardFlotOne
@@ -238,7 +231,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 .limitToLast(1)
             ref.once("value", function(snapshot) {
                 $scope.Guestinfo = snapshot.val();
-                console.log("ABOUT GUEST", $scope.Guestinfo);
+                //console.log("ABOUT GUEST", $scope.Guestinfo);
                 if ($scope.Guestinfo == null) {
                     post = firebase.database().ref('Guest/').push({
                         about: about,
@@ -517,7 +510,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 .equalTo(id);
 
             ref.on("value", function(snapshot) {
-                console.log(snapshot.val());
                 $timeout(function() {
                     projectDetail = snapshot.val();
                     keys = Object.keys(projectDetail);
@@ -632,10 +624,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 .limitToLast(1)
             ref.once("value", function(snapshot) {
                 $scope.userDetails = snapshot.val();
-                console.log("ABOUT ME", $scope.userDetails);
                  $scope.userDetails = snapshot.val();
-                        console.log("ABOUT", $scope.userDetails);
-                        
                         userDetails = Object.keys($scope.userDetails);
                         $scope.userKey = userDetails;
                         if ($scope.userDetails[$scope.userKey].about == null) {
@@ -664,7 +653,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     var photoURL = user.photoURL;
 
                     firebase.auth().onAuthStateChanged((user) => {
-                        console.log("GuestUser", user);
+                        //console.log("GuestUser", user);
                         let ref = firebase.database().ref("Guest")
                             .orderByChild("email")
                             .equalTo(user.email)
@@ -718,7 +707,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 getProjects();
                 break
             case '/app/project_detail':
-                console.log('details');
+                //console.log('details');
             case '/dashboards/project_applicants':
                 getProjectApplicants();
             case '/app/user':
@@ -732,7 +721,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         .limitToLast(1)
                     ref.once("value", function(snapshot) {
                         $scope.userDetails = snapshot.val();
-                        console.log("ABOUT", $scope.userDetails);
+                        //console.log("ABOUT", $scope.userDetails);
                         
                         userDetails = Object.keys($scope.userDetails);
                         $scope.userKey = userDetails;
@@ -744,7 +733,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     });
                 });
             default:
-                console.log('routes', $location.path());
+                //console.log('routes', $location.path());
                 firebase.auth().onAuthStateChanged(function(user) {
                     if (user) {
                         console.log("CheckIfVerified", user);
@@ -787,7 +776,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     function registerUser(userId, name, email, imageUrl) {
         firebase.auth().onAuthStateChanged((user) => {
 
-            console.log('userdetails', user);
+            //console.log('userdetails', user);
             firebase.database().ref('users/' + user.uid).set({
                 username: user.displayName,
                 email: user.email,
