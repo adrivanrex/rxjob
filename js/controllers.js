@@ -298,7 +298,20 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     $scope.submitApply = function() {
         let applyjob = {};
         applyjob.Price = this.applyjob.Price;
+        if(typeof applyjob.Price == "undefined"){
+            document.getElementById("applyjobInputPrice").classList.add('has-error');
+        }else{
+            document.getElementById("applyjobInputPrice").classList.remove('has-error');
+        }
+
         applyjob.Description = this.applyjob.Description;
+
+        if(typeof applyjob.Description == "undefined"){
+            
+            document.getElementById("applyjobInputDescription").classList.add('has-warning');
+        }else{
+            document.getElementById("applyjobInputDescription").classList.remove('has-warning');
+        }
         firebase.auth().onAuthStateChanged((user) => {
             let ref = firebase.database().ref('JobPost/' + $scope.projectDetail.Id + '/Applicant')
                 .orderByChild('Applicant')
@@ -624,16 +637,14 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         showUserInfo($location.search().id);
     }
     if ($location.path('/app/profile')) {
-         firebase.auth().onAuthStateChanged((user) => {
-
-                    let ref = firebase.database().ref("Guest")
-                        .orderByChild("email")
-                        .equalTo(user.email)
-                        .limitToLast(1)
-                    ref.once("value", function(snapshot) {
-                        $scope.userDetails = snapshot.val();
-                        //console.log("ABOUT", $scope.userDetails);
-                        
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref("Guest")
+                .orderByChild("email")
+                .equalTo(user.email)
+                .limitToLast(1)
+            ref.once("value", function(snapshot) {
+                $scope.userDetails = snapshot.val();
+                 $scope.userDetails = snapshot.val();
                         userDetails = Object.keys($scope.userDetails);
                         $scope.userKey = userDetails;
                         if ($scope.userDetails[$scope.userKey].about == null) {
@@ -641,8 +652,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         } else {
                             $scope.aboutMeDescription = $scope.userDetails[$scope.userKey].about;
                         }
-                    });
-                });
+            });
+        });
     }
 
 
