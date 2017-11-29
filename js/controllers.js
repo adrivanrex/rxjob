@@ -89,12 +89,12 @@ function LoginCtrl($window, $scope, $firebaseAuth, $timeout) {
     }
 
     function register(email, password) {
-        if(password == null){
+        if (password == null) {
             document.getElementById("registerPasswordError").classList.remove('hide');
-document.getElementById("registerPasswordError").innerHTML = "enter your password";
+            document.getElementById("registerPasswordError").innerHTML = "enter your password";
         }
         console.log(email);
-        if (typeof email === 'undefined'){
+        if (typeof email === 'undefined') {
             document.getElementById("registerEmailError").classList.add('show');
             document.getElementById("registerEmailError").innerHTML = "invalid email address";
         }
@@ -108,11 +108,11 @@ document.getElementById("registerPasswordError").innerHTML = "enter your passwor
                 /*
                  *   Register Validation
                  */
-                 if(error.code == "auth/email-already-in-use"){
+                if (error.code == "auth/email-already-in-use") {
                     document.getElementById("registerEmailError").classList.remove('hide');
                     document.getElementById("registerEmailError").innerHTML = error.message;
-                 }
-                 
+                }
+
                 console.log(error);
                 if (error.code == "auth/invalid-email") {
                     console.log("compare");
@@ -238,6 +238,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 .limitToLast(1)
             ref.once("value", function(snapshot) {
                 $scope.Guestinfo = snapshot.val();
+                console.log("ABOUT GUEST", $scope.Guestinfo);
                 if ($scope.Guestinfo == null) {
                     post = firebase.database().ref('Guest/').push({
                         about: about,
@@ -249,6 +250,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     key = Object.keys(snapshot.val())
                     firebase.database().ref().child('Guest/' + key)
                         .update({ about: about });
+
                 }
             });
         });
@@ -627,8 +629,11 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             let ref = firebase.database().ref("Guest")
                 .orderByChild("email")
                 .equalTo(user.email)
+                .limitToLast(1)
             ref.once("value", function(snapshot) {
                 $scope.userDetails = snapshot.val();
+                console.log("ABOUT ME", $scope.userDetails);
+                /**
                 userDetails = Object.keys($scope.userDetails);
                 $scope.userKey = userDetails;
                 if ($scope.userDetails[$scope.userKey].about == null) {
@@ -636,6 +641,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 } else {
                     $scope.aboutMeDescription = $scope.userDetails[$scope.userKey].about;
                 }
+                **/
             });
         });
     }
@@ -716,6 +722,26 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 getProjectApplicants();
             case '/app/user':
                 showUserInfo($location.search().id);
+            case '/app/profile':
+                firebase.auth().onAuthStateChanged((user) => {
+
+                    let ref = firebase.database().ref("Guest")
+                        .orderByChild("email")
+                        .equalTo(user.email)
+                        .limitToLast(1)
+                    ref.once("value", function(snapshot) {
+                        $scope.userDetails = snapshot.val();
+                        console.log("ABOUT", $scope.userDetails);
+                        
+                        userDetails = Object.keys($scope.userDetails);
+                        $scope.userKey = userDetails;
+                        if ($scope.userDetails[$scope.userKey].about == null) {
+                            $scope.aboutMeDescription = "About yourself";
+                        } else {
+                            $scope.aboutMeDescription = $scope.userDetails[$scope.userKey].about;
+                        }
+                    });
+                });
             default:
                 console.log('routes', $location.path());
                 firebase.auth().onAuthStateChanged(function(user) {
@@ -4041,7 +4067,7 @@ function formValidation($scope) {
 /**
  * agileBoard - Controller for agile Board view
  */
-function agileBoard($scope, $firebaseAuth,$timeout) {
+function agileBoard($scope, $firebaseAuth, $timeout) {
 
 
     $scope.todoList = [];
@@ -4115,83 +4141,83 @@ function agileBoard($scope, $firebaseAuth,$timeout) {
         ref.once("value", function(snapshot) {
             $timeout(function() {
                 console.log("Boards", snapshot.val());
-            keys = Object.keys(snapshot.val());
+                keys = Object.keys(snapshot.val());
 
-            todoKey = snapshot.val()[keys].todoList;
-            console.log('todoList', todoKey);
-            splitTodo = todoKey.split(/[{}]+/).filter(function(e) { return e; });
-            console.log("todo", splitTodo);
-            for (var i = splitTodo.length - 1; i >= 0; i--) {
-                if (splitTodo[i] == ",") {
-                    splitTodo[i] = null;
-                }
-            }
-            filteredTodo = splitTodo.filter(n => n)
-            arr = [];
-
-            err = [];
-            for (var i = filteredTodo.length - 1; i >= 0; i--) {
-                str = "{" + filteredTodo[i] + "}";
-                err.push(JSON.parse(str));
-            }
-
-            console.log("err", err);
-            for (var i = err.length - 1; i >= 0; i--) {
-                $scope.todoList.push(err[i]);
-            }
-
-            console.log("todo", $scope.todoList);
-
-            if (snapshot.val()[keys].inProgressList !== null) {
-                todoProgress = snapshot.val()[keys].inProgressList;
-                splitProgress = todoProgress.split(/[{}]+/).filter(function(e) { return e; });
+                todoKey = snapshot.val()[keys].todoList;
+                console.log('todoList', todoKey);
+                splitTodo = todoKey.split(/[{}]+/).filter(function(e) { return e; });
                 console.log("todo", splitTodo);
-                for (var i = splitProgress.length - 1; i >= 0; i--) {
-                    if (splitProgress[i] == ",") {
-                        splitProgress[i] = null;
+                for (var i = splitTodo.length - 1; i >= 0; i--) {
+                    if (splitTodo[i] == ",") {
+                        splitTodo[i] = null;
                     }
                 }
-                filteredProgress = splitProgress.filter(n => n)
+                filteredTodo = splitTodo.filter(n => n)
                 arr = [];
 
                 err = [];
-                for (var i = filteredProgress.length - 1; i >= 0; i--) {
-                    str = "{" + filteredProgress[i] + "}";
+                for (var i = filteredTodo.length - 1; i >= 0; i--) {
+                    str = "{" + filteredTodo[i] + "}";
                     err.push(JSON.parse(str));
                 }
 
                 console.log("err", err);
                 for (var i = err.length - 1; i >= 0; i--) {
-                    $scope.inProgressList.push(err[i]);
+                    $scope.todoList.push(err[i]);
                 }
-            }
 
-            if (snapshot.val()[keys].completedList !== null) {
-                todocompletedList = snapshot.val()[keys].completedList;
-                splitcompletedList = todocompletedList.split(/[{}]+/).filter(function(e) { return e; });
-                console.log("todo", splitTodo);
-                for (var i = splitcompletedList.length - 1; i >= 0; i--) {
-                    if (splitcompletedList[i] == ",") {
-                        splitcompletedList[i] = null;
+                console.log("todo", $scope.todoList);
+
+                if (snapshot.val()[keys].inProgressList !== null) {
+                    todoProgress = snapshot.val()[keys].inProgressList;
+                    splitProgress = todoProgress.split(/[{}]+/).filter(function(e) { return e; });
+                    console.log("todo", splitTodo);
+                    for (var i = splitProgress.length - 1; i >= 0; i--) {
+                        if (splitProgress[i] == ",") {
+                            splitProgress[i] = null;
+                        }
+                    }
+                    filteredProgress = splitProgress.filter(n => n)
+                    arr = [];
+
+                    err = [];
+                    for (var i = filteredProgress.length - 1; i >= 0; i--) {
+                        str = "{" + filteredProgress[i] + "}";
+                        err.push(JSON.parse(str));
+                    }
+
+                    console.log("err", err);
+                    for (var i = err.length - 1; i >= 0; i--) {
+                        $scope.inProgressList.push(err[i]);
                     }
                 }
-                filteredcompletedList = splitcompletedList.filter(n => n)
-                arr = [];
 
-                err = [];
-                for (var i = filteredcompletedList.length - 1; i >= 0; i--) {
-                    str = "{" + filteredcompletedList[i] + "}";
-                    err.push(JSON.parse(str));
-                }
+                if (snapshot.val()[keys].completedList !== null) {
+                    todocompletedList = snapshot.val()[keys].completedList;
+                    splitcompletedList = todocompletedList.split(/[{}]+/).filter(function(e) { return e; });
+                    console.log("todo", splitTodo);
+                    for (var i = splitcompletedList.length - 1; i >= 0; i--) {
+                        if (splitcompletedList[i] == ",") {
+                            splitcompletedList[i] = null;
+                        }
+                    }
+                    filteredcompletedList = splitcompletedList.filter(n => n)
+                    arr = [];
 
-                console.log("err", err);
-                for (var i = err.length - 1; i >= 0; i--) {
-                    $scope.completedList.push(err[i]);
+                    err = [];
+                    for (var i = filteredcompletedList.length - 1; i >= 0; i--) {
+                        str = "{" + filteredcompletedList[i] + "}";
+                        err.push(JSON.parse(str));
+                    }
+
+                    console.log("err", err);
+                    for (var i = err.length - 1; i >= 0; i--) {
+                        $scope.completedList.push(err[i]);
+                    }
                 }
-            }
             });
 
-            
+
 
         });
 
