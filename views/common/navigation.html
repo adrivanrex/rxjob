@@ -2,9 +2,8 @@
     <div class="sidebar-collapse">
         <ul side-navigation class="nav" id="side-menu">
             <li class="nav-header">
-
                 <div class="dropdown profile-element" dropdown>
-                    <img alt="image" class="img-circle profilepic" src="{{photoURL}}"/>
+                    <img alt="image" class="img-circle profilepic" src="{{photoURL}}" />
                     <a class="dropdown-toggle" dropdown-toggle href>
                             <span class="clear">
                                 <span class="block m-t-xs">
@@ -24,26 +23,25 @@
             <li ng-class="{active: $state.includes('dashboards')}">
                 <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">{{ 'DASHBOARD' | translate }}</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level" ng-class="{in: $state.includes('dashboards')}">
-
                     <li ui-sref-active="active"><a ui-sref="dashboards.dashboard_1">Discover</a></li>
                     <li ui-sref-active="active"><a ui-sref="dashboards.projects">Manage</a></li>
                     <li ui-sref-active="active"><a ui-sref="dashboards.create_jobpost">Create</a></li>
                 </ul>
             </li>
-           
+            <li ng-class="{active: $state.includes('app')}">
+                <a href=""><i class="fa fa-desktop"></i> <span class="nav-label">{{ 'APPVIEWS' | translate }}</span></a>
+                <ul class="nav nav-second-level" ng-class="{in: $state.includes('app')}">
+                    <li ui-sref-active="active"><a ui-sref="app.contacts">Contacts</a></li>
+                    
+                </ul>
+            </li>
             <li ng-class="{active: $state.includes('miscellaneous')}">
                 <a href=""><i class="fa fa-globe"></i> <span class="nav-label">{{ 'MISCELLANEOUS' | translate }}</span> <span class="label label-info pull-right">NEW</span></a>
                 <ul class="nav nav-second-level" ng-class="{in: $state.includes('miscellaneous')}">
                     <li ui-sref-active="active"><a ui-sref="miscellaneous.agile_board">Agile board</a></li>
-                   
                     <!--<li ui-sref-active="active"><a ui-sref="miscellaneous.chat_view">Chat view</a></li>-->
                 </ul>
             </li>
-           
-            
-            
-            
         </ul>
-
     </div>
 </nav>

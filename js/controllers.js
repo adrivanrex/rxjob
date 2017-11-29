@@ -246,7 +246,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         about: about,
                         user: user.uid,
                         picture: user.photoURL,
-                        email: user.email
+                        email: user.email,
+                        name: user.displayName
                     });
                 } else {
                     key = Object.keys(snapshot.val())
@@ -615,49 +616,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
 
-    /** custom functions **/
-
-
-
-    if ($location.path('/dashboards/projects')) {
-        getUserProjects();
-    }
-    if ($location.path('/app/project_detail')) {
-
-        getProjectDetail($location.search().id);
-    }
-    if ($location.path('/dashboards/edit_jobpost')) {
-        propagateEditJobPost($location.search().id);
-    }
-    if ($location.path('/dashboards/dashboard_1')) {
-        getLatestJobPost();
-    }
-    if ($location.path('/app/project_applicants')) {
-        getProjectApplicants();
-    }
-    if ($location.path('/app/user')) {
-        showUserInfo($location.search().id);
-    }
-    if ($location.path('/app/profile')) {
-        firebase.auth().onAuthStateChanged((user) => {
-            let ref = firebase.database().ref("Guest")
-                .orderByChild("email")
-                .equalTo(user.email)
-                .limitToLast(1)
-            ref.once("value", function(snapshot) {
-                $scope.userDetails = snapshot.val();
-                 $scope.userDetails = snapshot.val();
-                        userDetails = Object.keys($scope.userDetails);
-                        $scope.userKey = userDetails;
-                        if ($scope.userDetails[$scope.userKey].about == null) {
-                            $scope.aboutMeDescription = "About yourself";
-                        } else {
-                            $scope.aboutMeDescription = $scope.userDetails[$scope.userKey].about;
-                        }
-            });
-        });
-    }
-
+    
 
     $scope.verifySubmit = function() {
         $scope.verifyName = this.verifyName;
@@ -732,6 +691,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 //console.log('details');
             case '/dashboards/project_applicants':
                 getProjectApplicants();
+            case '/app/contacts':
+                showContacts();
             case '/app/user':
                 showUserInfo($location.search().id);
             case '/app/profile':
@@ -779,6 +740,50 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             event.preventDefault();
         }
     });
+
+    /** custom functions **/
+
+
+
+    if ($location.path('/dashboards/projects')) {
+        getUserProjects();
+    }
+    if ($location.path('/app/project_detail')) {
+
+        getProjectDetail($location.search().id);
+    }
+    if ($location.path('/dashboards/edit_jobpost')) {
+        propagateEditJobPost($location.search().id);
+    }
+    if ($location.path('/dashboards/dashboard_1')) {
+        getLatestJobPost();
+    }
+    if ($location.path('/app/project_applicants')) {
+        getProjectApplicants();
+    }
+    if ($location.path('/app/user')) {
+        showUserInfo($location.search().id);
+    }
+    if ($location.path('/app/profile')) {
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref("Guest")
+                .orderByChild("email")
+                .equalTo(user.email)
+                .limitToLast(1)
+            ref.once("value", function(snapshot) {
+                $scope.userDetails = snapshot.val();
+                 $scope.userDetails = snapshot.val();
+                        userDetails = Object.keys($scope.userDetails);
+                        $scope.userKey = userDetails;
+                        if ($scope.userDetails[$scope.userKey].about == null) {
+                            $scope.aboutMeDescription = "About yourself";
+                        } else {
+                            $scope.aboutMeDescription = $scope.userDetails[$scope.userKey].about;
+                        }
+            });
+        });
+    }
+
 
     $location.path(firstlocation);
 
@@ -1011,6 +1016,66 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     };
 
 
+    /**
+    *
+    * Add contacts
+    */
+    $scope.addContact = function(userDataInfo){
+        $scope.contactInfo = userDataInfo;
+        
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                let ref = firebase.database().ref("Contacts")
+                    .orderByChild("user")
+                    .equalTo($scope.contactInfo.userDataInfo.user)
+                    .limitToLast(1)
+                ref.once("value", function(snapshot) {
+
+                        if(snapshot.val() == null){
+                            firebase.database().ref('Contacts/').push({
+                            user: $scope.contactInfo.userDataInfo.user,
+                            email: $scope.contactInfo.userDataInfo.email,
+                            about: $scope.contactInfo.userDataInfo.about,
+                            name: $scope.contactInfo.userDataInfo.name,
+                            picture: $scope.contactInfo.userDataInfo.picture
+                        });
+                        }     
+                        
+                        
+
+                }, function(errorObject) {
+                    console.log("The read failed: " + errorObject.code);
+                });
+
+
+
+            }
+        });
+    }
+
+    /*
+    *   show Contacts
+    */
+
+    function showContacts(){
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                let ref = firebase.database().ref("Contacts")
+                    .orderByChild("user")
+                    .equalTo(user.uid)
+                    .limitToLast(100)
+                ref.once("value", function(snapshot) {
+                        $scope.contacts = snapshot.val();
+                        console.log("contacts", $scope.contacts);
+                }, function(errorObject) {
+                    console.log("The read failed: " + errorObject.code);
+                });
+
+
+
+            }
+        });
+    }
 
 
     /**
