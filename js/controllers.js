@@ -87,6 +87,15 @@ function LoginCtrl($window, $scope, $firebaseAuth, $timeout) {
     }
 
     function register(email, password) {
+        if(password == null){
+            document.getElementById("registerPasswordError").classList.remove('hide');
+                    document.getElementById("registerPasswordError").innerHTML = "enter your password";
+        }
+        console.log(email);
+        if (typeof email === 'undefined'){
+            document.getElementById("registerEmailError").classList.add('show');
+            document.getElementById("registerEmailError").innerHTML = "invalid email address";
+        }
         document.getElementById("registerEmailError").classList.add('hide');
 
         firebase.auth().createUserWithEmailAndPassword(email, password).then(function(value) {
