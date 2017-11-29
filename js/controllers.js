@@ -633,15 +633,16 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             ref.once("value", function(snapshot) {
                 $scope.userDetails = snapshot.val();
                 console.log("ABOUT ME", $scope.userDetails);
-                /**
-                userDetails = Object.keys($scope.userDetails);
-                $scope.userKey = userDetails;
-                if ($scope.userDetails[$scope.userKey].about == null) {
-                    $scope.aboutMeDescription = "About yourself";
-                } else {
-                    $scope.aboutMeDescription = $scope.userDetails[$scope.userKey].about;
-                }
-                **/
+                 $scope.userDetails = snapshot.val();
+                        console.log("ABOUT", $scope.userDetails);
+                        
+                        userDetails = Object.keys($scope.userDetails);
+                        $scope.userKey = userDetails;
+                        if ($scope.userDetails[$scope.userKey].about == null) {
+                            $scope.aboutMeDescription = "About yourself";
+                        } else {
+                            $scope.aboutMeDescription = $scope.userDetails[$scope.userKey].about;
+                        }
             });
         });
     }
