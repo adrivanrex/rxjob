@@ -1045,6 +1045,17 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             picture: $scope.contactInfo.userDataInfo.picture
                         });
                         }
+                        key = Object.keys(snapshot.val())
+                        sameEmail = snapshot.val()[key].email;
+                        if($scope.contactInfo.userDataInfo.email !== sameEmail){
+                             firebase.database().ref('Contacts/').push({
+                            user: user.uid,
+                            email: $scope.contactInfo.userDataInfo.email,
+                            about: $scope.contactInfo.userDataInfo.about,
+                            name: $scope.contactInfo.userDataInfo.name,
+                            picture: $scope.contactInfo.userDataInfo.picture
+                        });
+                        }
                     
                         
                     
@@ -1105,6 +1116,27 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         });
     }
 
+    function randomContact(){
+        firebase.auth().onAuthStateChanged((user) => {
+            
+            let ref = firebase.database().ref("Contacts")
+                .orderByChild("user")
+                .equalTo(user.uid).limitToLast(100)
+            ref.once("value", function(snapshot) {
+                rand = snapshot.val();
+                console.log("randomContact", snapshot.val());
+                key = Object.keys(snapshot.val());
+                random = Math.floor((Math.random() * key.length) + 1);
+                console.log(key.length);
+
+                $scope.randomContactPage = rand[key[random]];
+
+
+            });
+        });
+    }
+
+    randomContact();
     /**
      * slideInterval - Interval for bootstrap Carousel, in milliseconds:
      */
