@@ -692,6 +692,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 showContacts();
             case '/app/user':
                 showUserInfo($location.search().id);
+            case '/miscellaneous/chat_view':
+                chat($location.search().id);
             case '/app/profile':
                 firebase.auth().onAuthStateChanged((user) => {
                     let ref = firebase.database().ref("Guest")
@@ -788,6 +790,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
         });
+    }
+    if($location.path('/miscellaneous/chat_view')){
+        chat($location.search().id);
     }
 
 
@@ -1136,7 +1141,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         });
     }
 
-    randomContact();
+    randomContact();   
     /**
      * slideInterval - Interval for bootstrap Carousel, in milliseconds:
      */
@@ -3255,6 +3260,85 @@ function sparklineChartCtrl() {
     this.lineCustomOptions = lineCustomOptions;
 }
 
+function ChatCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $timeout, ) {
+        
+        
+
+        
+
+        $scope.chatMessage = function(){
+            chatInput = document.getElementById("chatInput").value;
+            firebase.auth().onAuthStateChanged((user) => {
+             if (user) {
+                    let ref = firebase.database().ref("Chat")
+                        .orderByChild("user")
+                        .equalTo(user.uid)
+                        .limitToLast(1)
+                    ref.once("value", function(snapshot) {
+                        $scope.roomkey = Object.keys(snapshot.val());
+                        console.log("ROOM KEY", $scope.roomkey);
+
+                    
+                    });
+
+                    let def = firebase.database().ref("ChatMessages")
+                        .limitToLast(1)
+                    def.once("value", function(snapshot) {
+                        
+                            var post = firebase.database().ref('ChatMessages/').push({
+                                room: $scope.roomkey[0],
+                                user: user.uid,
+                                name: user.displayName,
+                                email: user.email,
+                                message: chatInput,
+                                createdAt: firebase.database.ServerValue.TIMESTAMP,
+                                picture: user.photoURL
+                            });
+                    
+                    });
+
+
+
+                }
+
+        });
+        }
+
+        firebase.auth().onAuthStateChanged((user) => {
+             if (user) {
+                    let ref = firebase.database().ref("Chat")
+                        .orderByChild("user")
+                        .equalTo(user.uid)
+                        .limitToLast(1)
+                    ref.once("value", function(snapshot) {
+                        $scope.roomkey = Object.keys(snapshot.val());
+                        console.log("ROOM KEY", $scope.roomkey);
+                        let def = firebase.database().ref("ChatMessages")
+                        .orderByChild("room")
+                        .equalTo($scope.roomkey[0])
+                        .limitToLast(100)
+                    def.on("value", function(snapshot) {
+                        $timeout(function() {
+
+                        $scope.chatMessagesArray = snapshot.val();
+                        console.log($scope.chatMessagesArray);
+                        })
+                    });
+                    
+                    });
+
+                    
+
+
+
+                }
+
+        });
+
+
+
+
+    }
 
 /**
  * widgetFlotChart - Data for Flot chart
@@ -4266,6 +4350,7 @@ function agileBoard($scope, $firebaseAuth, $timeout) {
                 key = Object.keys(snapshot.val())
                 firebase.database().ref().child('Board/' + key)
                     .update({ completedList: completedList });
+
             });
         });
     });
@@ -4432,6 +4517,36 @@ function agileBoard($scope, $firebaseAuth, $timeout) {
 }
 
 
+function chat(roomId,userId,$scope,$firebaseAuth){
+
+    firebase.auth().onAuthStateChanged((user) => {
+         if (user) {
+                let ref = firebase.database().ref("Chat")
+                    .limitToLast(1)
+                ref.once("value", function(snapshot) {
+                    if(snapshot.val() == null){
+                        var post = firebase.database().ref('Chat/').push({
+                            creator: user.uid,
+                            user: user.uid,
+                            name: user.displayName,
+                            email: user.email,
+                            createdAt: firebase.database.ServerValue.TIMESTAMP
+                        });
+                    }else{
+                        chatKey = Object.keys(snapshot.val());
+                        console.log(chatKey);
+                    }
+                });
+
+
+
+            }
+
+    });
+}
+
+
+
 
 /**
  * draggablePanels - Controller for draggable panels example
@@ -4478,3 +4593,4 @@ angular
     .controller('formValidation', formValidation)
     .controller('agileBoard', agileBoard)
     .controller('draggablePanels', draggablePanels)
+    .controller('ChatCtrl', ChatCtrl)
