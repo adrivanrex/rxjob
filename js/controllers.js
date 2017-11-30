@@ -3280,6 +3280,7 @@ function ChatCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
                     
                     });
+
                      timeInMs = Date.now();
                     UpdatedTime = new Date(timeInMs);
                     humanTime = UpdatedTime.toString();
@@ -4527,7 +4528,10 @@ function chat(roomId,userId,$scope,$firebaseAuth){
          if (user) {
                 let ref = firebase.database().ref("Chat")
                     .limitToLast(1)
+                    .orderByChild("user")
+                    .equalTo(user.uid)
                 ref.once("value", function(snapshot) {
+                    console.log("CreateChat", snapshot.val());
                     if(snapshot.val() == null){
                         var post = firebase.database().ref('Chat/').push({
                             creator: user.uid,
