@@ -3280,6 +3280,9 @@ function ChatCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
                     
                     });
+                     timeInMs = Date.now();
+                    UpdatedTime = new Date(timeInMs);
+                    humanTime = UpdatedTime.toString();
 
                     let def = firebase.database().ref("ChatMessages")
                         .limitToLast(1)
@@ -3292,6 +3295,7 @@ function ChatCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                                 email: user.email,
                                 message: chatInput,
                                 createdAt: firebase.database.ServerValue.TIMESTAMP,
+                                HumanTime:humanTime,
                                 picture: user.photoURL
                             });
                     
