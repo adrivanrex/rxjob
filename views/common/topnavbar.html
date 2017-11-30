@@ -12,7 +12,7 @@
                     <li  ng-repeat="userNotification in userNotification">
                         <a ui-sref="inbox">
                             <div>
-                                <i class="fa fa-envelope fa-fw"></i> <a href="#!/dashboards/project_applicants?id={{userNotification.jobPostId}}">{{userNotification.sender}}</a> wants to connect
+                                <span class="fa fa-plug fa-3x"><a href="#!/dashboards/project_applicants?id={{userNotification.jobPostId}}">{{userNotification.sender}}</a>is connecting</span>
                             </div>
                         </a>
                     </li>
