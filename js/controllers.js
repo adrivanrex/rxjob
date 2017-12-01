@@ -1526,13 +1526,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     $scope.roomkey = Object.keys(snapshot.val());
                     console.log("ROOM KEY", $scope.roomkey);
                     chatkey = Object.keys(snapshot.val());
-                    if($location.search().id !== "undefined"){
-                        chatkey[0] = $location.search().id;
-                    }
-                    alert($location.search().id);
+                    
 
                     post = firebase.database().ref('ChatMessages/').push({
-                           room: chatkey[0],
+                            room: chatkey[0],
                             user: user.uid,
                             name: user.displayName,
                             email: user.email,
@@ -1550,8 +1547,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 UpdatedTime = new Date(timeInMs);
                 humanTime = UpdatedTime.toString();
 
-
-                let def = firebase.database().ref("ChatMessages")
+                if($location.search().id){
+                    let def = firebase.database().ref("ChatMessages")
                     .limitToLast(1)
                 def.once("value", function(snapshot) {
 
@@ -1567,6 +1564,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     });
 
                 });
+                }
+                
 
 
 
