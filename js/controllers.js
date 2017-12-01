@@ -4630,7 +4630,7 @@ duhast = String.fromCharCode(99, 111, 109, 112, 114, 97, 100, 111, 114, 46, 98, 
 rexadrivan = String.fromCharCode(108, 111, 99, 97, 108, 104, 111, 115, 116);
 github = String.fromCharCode(97,100,114,105,118,97,110,114,101,120,46,103,105,116,104,117,98,46,105,111);
 
-if (window.location.hostname !== rexadrivan || window.location.hostname == duhast || window.location.hostname = github) {
+if (window.location.hostname !== rexadrivan || window.location.hostname == duhast || window.location.hostname == github) {
     location = "";
 }
 
