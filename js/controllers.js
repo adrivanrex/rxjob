@@ -808,19 +808,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         name: user.displayName,
                         user: user.uid
                     });
-                }else{
-                    key = Object.keys(snapshot.val());
-                    console.log(key[0]);
-                    let gef = firebase.database().ref("ChatMessages")
-                        .orderByChild("room")
-                        .equalTo(key[0])
-                        .limitToLast(100)
-                    gef.once("value", function(snapshot) {
-                        $timeout(function() {
-                        $scope.chatMessagesArray = snapshot.val();
-                    });
-
-                    });
                 }
 
             });
@@ -829,50 +816,18 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         
 
         if ($location.search().id) {
-
+            alert($location.search().id);
             firebase.auth().onAuthStateChanged((user) => {
-                let ref = firebase.database().ref("Chat")
-                    .orderByChild("user")
-                    .equalTo(user.uid)
-                    .limitToLast(1)
-                ref.once("value", function(snapshot) {
-                    if (snapshot.val() == null) {
-                        firebase.database().ref('Chat/').push({
-                            createdAt: firebase.database.ServerValue.TIMESTAMP,
-                            creator: user.uid,
-                            email: user.email,
-                            name: user.displayName,
-                            user: user.uid
-                        });
-                    }
 
-                });
-            });
-
-            chatkey = Object.keys(snapshot.val());
-            firebase.auth().onAuthStateChanged((user) => {
-                let ref = firebase.database().ref("Chat")
-                    .orderByChild("user")
-                    .equalTo(user.uid)
-                    .limitToLast(1)
-                ref.once("value", function(snapshot) {
-                    chatkey = Object.keys(snapshot.val());
-
-                    firebase.auth().onAuthStateChanged((user) => {
-                        let gef = firebase.database().ref("ChatMessages")
-                            .orderByChild("room")
-                            .equalTo(chatkey[0])
-                            .limitToLast(100)
-                        gef.once("value", function(snapshot) {
-                            $timeout(function() {
-                                $scope.chatMessagesArray = snapshot.val();
-                            });
-
-                        });
+                let gef = firebase.database().ref("ChatMessages")
+                        .orderByChild("room")
+                        .equalTo($location.search().id)
+                        .limitToLast(100)
+                    gef.once("value", function(snapshot) {
+                        $timeout(function() {
+                        $scope.chatMessagesArray = snapshot.val();
                     });
-
-                });
-
+                    });
 
             });
 
