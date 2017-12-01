@@ -816,7 +816,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         .equalTo(key[0])
                         .limitToLast(100)
                     gef.once("value", function(snapshot) {
+                        $timeout(function() {
                         $scope.chatMessagesArray = snapshot.val();
+                    });
 
                     });
                 }
@@ -1552,8 +1554,20 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 ref.once("value", function(snapshot) {
                     $scope.roomkey = Object.keys(snapshot.val());
                     console.log("ROOM KEY", $scope.roomkey);
+                    chatkey = Object.keys(snapshot.val());
 
+                    firebase.auth().onAuthStateChanged((user) => {
+                        let gef = firebase.database().ref("ChatMessages")
+                            .orderByChild("room")
+                            .equalTo(chatkey[0])
+                            .limitToLast(100)
+                        gef.once("value", function(snapshot) {
+                            $timeout(function() {
+                                $scope.chatMessagesArray = snapshot.val();
+                            });
 
+                        });
+                    });
                 });
 
                 timeInMs = Date.now();
