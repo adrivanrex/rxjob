@@ -793,8 +793,23 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         });
     }
     if ($location.path('/miscellaneous/chat_view')) {
+        if ($location.search().id) {
+            firebase.auth().onAuthStateChanged((user) => {
 
-        firebase.auth().onAuthStateChanged((user) => {
+                let gef = firebase.database().ref("ChatMessages")
+                        .orderByChild("room")
+                        .equalTo($location.search().id)
+                        .limitToLast(100)
+                    gef.on("value", function(snapshot) {
+                        $timeout(function() {
+                        $scope.chatMessagesArray = snapshot.val();
+                    });
+                    });
+
+            });
+
+        }else{
+             firebase.auth().onAuthStateChanged((user) => {
             let ref = firebase.database().ref("Chat")
                 .orderByChild("user")
                 .equalTo(user.uid)
@@ -808,30 +823,31 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         name: user.displayName,
                         user: user.uid
                     });
+                }else{
+                    console.log(snapshot.val());
+                    roomKey = Object.keys(snapshot.val());
+
+                    let gef = firebase.database().ref("ChatMessages")
+                        .orderByChild("room")
+                        .equalTo(roomKey[0])
+                        .limitToLast(100)
+                    gef.on("value", function(snapshot) {
+                        $timeout(function() {
+                        $scope.chatMessagesArray = snapshot.val();
+                        console.log("CHATMESSAGES", $scope.chatMessagesArray);
+                    });
+                    });
                 }
 
             });
         });
+        }
+
+       
 
         
 
-        if ($location.search().id) {
-            alert($location.search().id);
-            firebase.auth().onAuthStateChanged((user) => {
-
-                let gef = firebase.database().ref("ChatMessages")
-                        .orderByChild("room")
-                        .equalTo($location.search().id)
-                        .limitToLast(100)
-                    gef.once("value", function(snapshot) {
-                        $timeout(function() {
-                        $scope.chatMessagesArray = snapshot.val();
-                    });
-                    });
-
-            });
-
-        }
+        
 
 
     }
@@ -1510,31 +1526,37 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     $scope.roomkey = Object.keys(snapshot.val());
                     console.log("ROOM KEY", $scope.roomkey);
                     chatkey = Object.keys(snapshot.val());
+                    if($location.search().id !== "undefined"){
+                        chatkey[0] = $location.search().id;
+                    }
+                    alert($location.search().id);
 
-                    firebase.auth().onAuthStateChanged((user) => {
-                        let gef = firebase.database().ref("ChatMessages")
-                            .orderByChild("room")
-                            .equalTo(chatkey[0])
-                            .limitToLast(100)
-                        gef.once("value", function(snapshot) {
-                            $timeout(function() {
-                                $scope.chatMessagesArray = snapshot.val();
-                            });
-
+                    post = firebase.database().ref('ChatMessages/').push({
+                           room: chatkey[0],
+                            user: user.uid,
+                            name: user.displayName,
+                            email: user.email,
+                            message: chatInput,
+                            createdAt: firebase.database.ServerValue.TIMESTAMP,
+                            HumanTime: humanTime,
+                            picture: user.photoURL
                         });
-                    });
+
+
+                 
                 });
 
                 timeInMs = Date.now();
                 UpdatedTime = new Date(timeInMs);
                 humanTime = UpdatedTime.toString();
 
+
                 let def = firebase.database().ref("ChatMessages")
                     .limitToLast(1)
                 def.once("value", function(snapshot) {
 
                     var post = firebase.database().ref('ChatMessages/').push({
-                        room: $scope.roomkey[0],
+                        room: $location.search().id,
                         user: user.uid,
                         name: user.displayName,
                         email: user.email,
@@ -1548,17 +1570,15 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
 
+
+
             }
 
         });
 
     }
 
-    if ($location.search().id) {
-
-
-
-    }
+   
 
 
 };
