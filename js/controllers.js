@@ -29,6 +29,7 @@
  *
  */
 var site = "/rxjob";
+document.body.classList.add("boxed-layout");
 
 function LoginCtrl($window, $scope, $firebaseAuth, $timeout) {
     var auth = $firebaseAuth();

@@ -1,4 +1,4 @@
-<div id="skin" class="theme-config hide">
+<div id="skin" class="theme-config">
     <div class="theme-config-box">
         <div class="spin-icon">
             <i class="fa fa-cogs fa-spin"></i>
@@ -154,6 +154,7 @@
 
     // Enable/disable boxed layout
     $('#boxedlayout').click(function () {
+         $("body").addClass('boxed-layout');
         if ($('#boxedlayout').is(':checked')) {
             $("body").addClass('boxed-layout');
             $('#fixednavbar').prop('checked', false);
