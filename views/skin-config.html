@@ -125,7 +125,9 @@
             $("body").removeClass('fixed-nav');
         }
     });
-
+    $( "#fixednavbar" ).click(function() {
+      $( "#fixednavbar" ).click();
+    });
     // Enable/disable fixed sidebar
     $('#fixedsidebar').click(function () {
         if ($('#fixedsidebar').is(':checked')) {
@@ -154,7 +156,7 @@
 
     // Enable/disable boxed layout
     $('#boxedlayout').click(function () {
-         $("body").addClass('boxed-layout');
+
         if ($('#boxedlayout').is(':checked')) {
             $("body").addClass('boxed-layout');
             $('#fixednavbar').prop('checked', false);
