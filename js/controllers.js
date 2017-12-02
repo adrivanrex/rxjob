@@ -1304,7 +1304,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             .limitToLast(100)
                             .orderByChild("room")
                             .equalTo(chatKey[0])
-                        vef.once("value", function(snapshot) {
+                        vef.on("value", function(snapshot) {
                             $timeout(function() {
                                 $scope.userStatus = snapshot.val();
                             });
