@@ -383,10 +383,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         });
 
                     });
-
                     notify($location.search().id, user.uid);
                     document.getElementById("applyButton").innerHTML = "Sent";
-                    alert(0);
 
 
 
