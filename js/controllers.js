@@ -622,8 +622,12 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
     $scope.verifySubmit = function() {
-        $scope.verifyName = this.verifyName;
+        $scope.verifyFirstName = this.verifyFirstName;
+        $scope.verifyMiddleName = this.verifyMiddleName;
+        $scope.verifyLastName = this.verifyLastName;
         $scope.verifyGuest = this.verifyAbout;
+
+        $scope.verifyName = ''+$scope.verifyFirstName+' '+$scope.verifyMiddleName+' ' +$scope.verifyLastName;
         firebase.auth().onAuthStateChanged(function(user) {
             user.updateProfile({
                 displayName: $scope.verifyName,
@@ -649,13 +653,14 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     .limitToLast(1)
                 ref.once("value", function(snapshot) {
                     $scope.Guestinfo = snapshot.val();
+                    FullName = ''+$scope.verifyFirstName+' '+$scope.verifyMiddleName+' '+$scope.verifyLastName;
                     if ($scope.Guestinfo == null) {
                         post = firebase.database().ref('Guest/').push({
                             about: $scope.verifyGuest,
                             user: user.uid,
                             picture: "img/anonymous.png",
                             email: user.email,
-                            name: $scope.verifyName
+                            name: FullName, 
                         });
                     } else {
 
