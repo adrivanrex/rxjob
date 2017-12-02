@@ -174,8 +174,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             console.log("CheckIfVerified", user);
+            document.getElementById("skin").classList.add('show');
             if (user.displayName == null) {
                 $window.location = "#!/forms/verifyUser";
+
             }
         }
 
