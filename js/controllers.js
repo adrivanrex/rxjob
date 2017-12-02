@@ -281,7 +281,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         reciever: $scope.notificationReciever[recieverKey].PosterName,
                         link: "#!/dashboards/project_applicants?id=" + $scope.notificationReciever[recieverKey].Id,
                         sender: user.displayName,
-                        createdAt: firebase.database.ServerValue.TIMESTAMP
+                        createdAt: firebase.database.ServerValue.TIMESTAMP,
+                        reason: "management"
                     });
 
 
@@ -1222,7 +1223,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         reciever: a.name,
                         link: "#!/miscellaneous/chat_view?id=" + chatKey,
                         sender: user.displayName,
-                        createdAt: firebase.database.ServerValue.TIMESTAMP
+                        createdAt: firebase.database.ServerValue.TIMESTAMP,
+                        reason: "chat"
                     });
 
                 });
