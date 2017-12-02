@@ -1142,6 +1142,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
             }
         });
+        $window.location = "#!/app/contacts"
     }
 
     /*
