@@ -326,7 +326,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
                 var applicationid = [];
 
-
+                UpdatedTime = new Date();
+                humanTime = UpdatedTime.toString();
 
                 if (snapshot.val() == null) {
                     post = firebase.database().ref('JobPost/' + $scope.projectDetail.Id + '/Applicant').push({
@@ -336,7 +337,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         Price: applyjob.Price,
                         Description: applyjob.Description,
                         CreatedAt: firebase.database.ServerValue.TIMESTAMP,
-                        Updated: firebase.database.ServerValue.TIMESTAMP
+                        Updated: firebase.database.ServerValue.TIMESTAMP,
+                        humanTime: humanTime
                     });
                     var ApplicantID = post.key;
                     applicationid.push(post.key);
