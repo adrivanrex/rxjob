@@ -1222,32 +1222,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 $timeout(function() {
                     chatKey = Object.keys(snapshot.val());
                     firebase.database().ref('Notifications').push({
-                        reciever: user.displayName,
-                        link: "#!/miscellaneous/chat_view?id=" + chatKey,
-                        sender: a.name,
-                        createdAt: firebase.database.ServerValue.TIMESTAMP,
-                        reason: "chat"
-                    });
-
-                });
-
-            }, function(errorObject) {
-                console.log("The read failed: " + errorObject.code);
-            });
-        });
-
-       
-
-        firebase.auth().onAuthStateChanged((user) => {
-
-            let ref = firebase.database().ref("Chat")
-                .orderByChild('user')
-                .equalTo(user.uid)
-                .limitToLast(1)
-            ref.once("value", function(snapshot) {
-                $timeout(function() {
-                    chatKey = Object.keys(snapshot.val());
-                    firebase.database().ref('Notifications').push({
                         reciever: a.name,
                         link: "#!/miscellaneous/chat_view?id=" + chatKey,
                         sender: user.displayName,
@@ -1260,9 +1234,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             }, function(errorObject) {
                 console.log("The read failed: " + errorObject.code);
             });
-
-
+             $window.location = "#!/miscellaneous/chat_view";
         });
+
+ 
 
     };
 
