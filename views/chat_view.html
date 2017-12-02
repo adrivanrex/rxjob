@@ -51,11 +51,11 @@
                         <div class="col-md-3">
                             <div class="chat-users">
 
-                                <div class="users-list">
+                                <div class="users-list" ng-repeat="userStatus in userStatus">
                                     <div class="chat-user">
-                                        <img class="chat-avatar" src="https://lh4.googleusercontent.com/-XLrWb4H0WoA/AAAAAAAAAAI/AAAAAAAAAIg/rigLIdjPGP0/photo.jpg" alt="" >
+                                        <img class="chat-avatar" src="{{userStatus.picture}}" alt="" >
                                         <div class="chat-user-name">
-                                            <a href="#">Rex Adrivan</a>
+                                            <a href="#">{{userStatus.name}}</a>
                                         </div>
                                     </div>
                                   
