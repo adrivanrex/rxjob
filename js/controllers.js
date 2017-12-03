@@ -136,7 +136,9 @@ function LoginCtrl($window, $scope, $firebaseAuth, $timeout) {
 
                 console.log(error);
                 if (error.code == "auth/invalid-email") {
-                    
+                    if(error.message == "The email address is badly formatted."){
+                        error.message = "You are using an invalid character."
+                    }
                     document.getElementById("registerEmailError").classList.remove('hide');
                     document.getElementById("registerEmailError").innerHTML = error.message;
 
