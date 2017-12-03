@@ -27,10 +27,14 @@ function config($translateProvider) {
             LAYOUTS: 'Layouts',
 
             // Define some custom text
-            WELCOME: 'Welcome Amelia',
+            WELCOME: 'Communicate with the world and trade around you on Merkadu',
             MESSAGEINFO: 'You have 42 messages and 6 notifications.',
             SEARCH: 'Search for something...',
 
+        })
+        .translations('bis', {
+            DASHBOARD: 'Kompra',
+            WELCOME: 'Pakighalubilo sa kalibutan og pagutinkay sa Merkadu',
         })
         .translations('es', {
 

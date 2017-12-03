@@ -30,6 +30,19 @@
  */
 var site = "/rxjob";
 
+/**
+ * translateCtrl - Controller for translate
+ */
+function translateCtrl($translate, $scope) {
+    $scope.changeLanguage = function(langKey) {
+        $translate.use(langKey);
+        var langKey = langKey;
+        document.cookie = langKey;
+
+    };
+}
+
+
 
 function LoginCtrl($window, $scope, $firebaseAuth, $timeout) {
     var auth = $firebaseAuth();
@@ -169,7 +182,8 @@ function LoginCtrl($window, $scope, $firebaseAuth, $timeout) {
 
 }
 
-function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $timeout, ) {
+function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $timeout, $translate,) {
+    $translate.use(document.cookie);
     var firstlocation = $location.path();
     console.log('first location', firstlocation);
     firebase.auth().onAuthStateChanged(function(user) {
@@ -4392,14 +4406,7 @@ function notifyCtrl($scope, notify) {
     }
 }
 
-/**
- * translateCtrl - Controller for translate
- */
-function translateCtrl($translate, $scope) {
-    $scope.changeLanguage = function(langKey) {
-        $translate.use(langKey);
-    };
-}
+
 
 /**
  * imageCrop - Controller for image crop functionality

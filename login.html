@@ -40,7 +40,7 @@
     <div class="loginColumns animated fadeInDown">
         <div class="row">
             <div class="col-md-6">
-                <h2 class="font-bold">Communicate with the world and trade around you on Merkadu</h2>
+                <h2 class="font-bold">{{ 'WELCOME' | translate }}</h2>
                 <p>
                 	<strong>Free</strong> to use.<br>
                     <strong>Find</strong> the freshest items.<br>
@@ -76,6 +76,18 @@
         </div>
         <hr/>
         <div class="row">
+            <div class="col-md-6">
+            <li class="dropdown" dropdown>
+                <a class="dropdown-toggle count-info" href dropdown-toggle>
+                    Language
+                </a>
+                <ul class="dropdown-menu animated fadeInRight m-t-xs" ng-controller="translateCtrl">
+                    <li><a ng-click="changeLanguage('en')">English</a></li>
+                    <li><a ng-click="changeLanguage('bis')">Bisaya</a></li>
+                    <li><a ng-click="changeLanguage('es')">Spanish</a></li>
+                </ul>
+            </li>
+            </div>
             <div class="col-md-6">
                 Merkadu
             </div>
