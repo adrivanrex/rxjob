@@ -24,7 +24,7 @@
                 </div>
                 <div class="navbar-header navLogin pull-right">
                     <form ng-submit="login()" class="navbar-form pull-right">
-                        <input ng-model="loginEmail" name="loginEmail" class="span2 form-control" type="text" placeholder="Email">
+                        <input ng-model="loginEmail" name="loginEmail" class="span2 form-control" type="text" placeholder="Ecode">
                         <input ng-model="loginPassword" name="loginPassword" class="span2 form-control" type="password" placeholder="Password">
                         <button type="submit" class="btn btn-primary">Enter</button>
                         <div  class="m-t-xs">
@@ -51,7 +51,8 @@
                 <div class="ibox-content">
                     <form  ng-submit="register()" name="signup_form" novalidate  class="m-t" role="form">
                         <div class="form-group">
-                            <input ng-model="registerEmail" type="email" class="form-control" placeholder="Email" required="">
+                        	<h3>Creat a new Ecode </h3>
+                            <input ng-model="registerEmail" type="text" class="form-control" placeholder="Ecode" required="">
                             <div  class="m-t-xs">
                                 <small id="registerEmailError" class="text-danger hide"></small>
                                 
@@ -60,6 +61,7 @@
                         
 
                         <div class="form-group">
+
                             <input ng-model="registerPassword" type="password" class="form-control" placeholder="Password" required="">
                             <div class="m-t-xs">
                                 <small id="registerPasswordError" class="text-danger hide">Please input a username</small>

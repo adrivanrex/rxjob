@@ -75,18 +75,20 @@ function LoginCtrl($window, $scope, $firebaseAuth, $timeout) {
     }
 
     $scope.login = function() {
-        loginEmail = this.loginEmail;
-        console.log(loginEmail);
+        loginEmail = this.loginEmail+"@merkadu.com";
         if (typeof loginEmail == "undefined" || null) {
             document.getElementById("loginAlert").classList.remove('hide');
             document.getElementById("loginAlert").innerHTML = "invalid login";
         }
 
-        firebase.auth().signInWithEmailAndPassword($scope.loginEmail, $scope.loginPassword).catch(function(error) {
+        firebase.auth().signInWithEmailAndPassword(loginEmail, $scope.loginPassword).catch(function(error) {
             // Handle Errors here.
             var errorCode = error.code;
             var errorMessage = error.message;
-            console.log("Login Error", errorMessage);
+            if(errorMessage == "The email address is badly formatted."){
+                errorMessage = "Your Ecode is not a valid format."
+            }
+
             console.log("errorCode", error.code);
             document.getElementById("loginAlert").classList.remove('hide');
             document.getElementById("loginAlert").innerHTML = errorMessage;
@@ -103,11 +105,12 @@ function LoginCtrl($window, $scope, $firebaseAuth, $timeout) {
     }
 
     function register(email, password) {
+        
         if (password == null) {
             document.getElementById("registerPasswordError").classList.remove('hide');
             document.getElementById("registerPasswordError").innerHTML = "enter your password";
         }
-        console.log(email);
+    
         if (typeof email === 'undefined') {
             document.getElementById("registerEmailError").classList.add('show');
             document.getElementById("registerEmailError").innerHTML = "invalid email address";
@@ -123,15 +126,20 @@ function LoginCtrl($window, $scope, $firebaseAuth, $timeout) {
                  *   Register Validation
                  */
                 if (error.code == "auth/email-already-in-use") {
+                    if(error.message == "The email address is already in use by another account."){
+                        error.message = "The ecode is already in use";
+                    }
+
                     document.getElementById("registerEmailError").classList.remove('hide');
                     document.getElementById("registerEmailError").innerHTML = error.message;
                 }
 
                 console.log(error);
                 if (error.code == "auth/invalid-email") {
-                    console.log("compare");
+                    
                     document.getElementById("registerEmailError").classList.remove('hide');
                     document.getElementById("registerEmailError").innerHTML = error.message;
+
                 }
 
                 if (error.code == "auth/argument-error") {
@@ -156,7 +164,8 @@ function LoginCtrl($window, $scope, $firebaseAuth, $timeout) {
 
 
     $scope.register = function() {
-        register($scope.registerEmail, $scope.registerPassword);
+        ecode = $scope.registerEmail+"@merkadu.com";
+        register(ecode, $scope.registerPassword);
     }
     $scope.googlelogin = function() {
         // login with Google
