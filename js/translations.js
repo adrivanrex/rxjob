@@ -42,7 +42,7 @@ function config($translateProvider) {
             FIND: "Pangita",
             Manage: "Atimana",
             "your tasks with the Merkadu agile Board": "imong mga buluhaton gamit ang merkadu Eagile Boarda.",
-            " the freshest items.": "ang pinaka bag.o nga mga gamit",
+            " the freshest items": "ang pinaka bag.o nga mga gamit",
             "It's Free and forever will be": "Kanunay nga libre",
             FREE: "libre ang pag gamit",
             INTERACT: "lihoka",
