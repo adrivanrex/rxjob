@@ -25,6 +25,10 @@ function config($translateProvider) {
             ANIMATIONS: 'Animations',
             LANDING: 'Landing page',
             LAYOUTS: 'Layouts',
+            FIND: "Find",
+            FREE: "It's Free and forever will be",
+            INTERACT : "Inter act",
+
 
             // Define some custom text
             WELCOME: 'Communicate with the world and trade around you on Merkadu',
@@ -33,8 +37,16 @@ function config($translateProvider) {
 
         })
         .translations('bis', {
-            DASHBOARD: 'Kompra',
-            WELCOME: 'Pakighalubilo sa kalibutan og pagutinkay sa Merkadu',
+            DASHBOARD: 'Palibut',
+            WELCOME: 'Pakighalubilo sa kalibutan og utingakaya ang palibut sa Merkadu.',
+            FIND: "Pangita",
+            Manage: "Atimana",
+            "your tasks with the Merkadu agile Board": "imong mga buluhaton gamit ang merkadu Eagile Boarda.",
+            " the freshest items.": "ang pinaka bag.o nga mga gamit",
+            "It's Free and forever will be": "Kanunay nga libre",
+            FREE: "libre ang pag gamit",
+            INTERACT: "lihoka",
+
         })
         .translations('es', {
 

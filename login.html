@@ -43,16 +43,16 @@
                 <h2 class="font-bold">{{ 'WELCOME' | translate }}</h2>
                 <p>
                 	
-                    <strong>Find</strong> the freshest items.<br>
-                    <strong>Manage</strong> your tasks with the Merkadu agile Board.
+                    <strong>{{ 'FIND' | translate }}</strong> {{ 'the freshest items' | translate }} <br>
+                    <strong>{{ 'Manage' | translate }}</strong> {{ 'your tasks with the Merkadu agile Board' | translate }}
                 </p>
             </div>
             <div class="col-md-6">
                 <div class="ibox-content">
                     <form  ng-submit="register()" name="signup_form" novalidate  class="m-t" role="form">
                         <div class="form-group">
-                        	<h3>Inter act</h3>
-                        	<strong>It's Free and forever will be</strong>
+                        	<h3>{{ 'INTERACT' | translate }}</h3>
+                        	<strong>{{ 'FREE' | translate }}</strong>
                             <input ng-model="registerEmail" type="text" class="form-control" placeholder="Ecode" required="">
                             <div  class="m-t-xs">
                                 <small id="registerEmailError" class="text-danger hide"></small>
