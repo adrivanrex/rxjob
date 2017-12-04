@@ -23,9 +23,9 @@
             <li ng-class="{active: $state.includes('dashboards')}">
                 <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">{{ 'DASHBOARD' | translate }}</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level" ng-class="{in: $state.includes('dashboards')}">
-                    <li ui-sref-active="active"><a ui-sref="dashboards.dashboard_1">Discover</a></li>
-                    <li ui-sref-active="active"><a ui-sref="dashboards.projects">Manage</a></li>
-                    <li ui-sref-active="active"><a ui-sref="dashboards.create_jobpost">Create</a></li>
+                    <li ui-sref-active="active"><a ui-sref="dashboards.dashboard_1">{{ 'DISCOVER' | translate }}</a></li>
+                    <li ui-sref-active="active"><a ui-sref="dashboards.projects">{{ 'Manage' | translate }}</a></li>
+                    <li ui-sref-active="active"><a ui-sref="dashboards.create_jobpost">{{ 'CREATE' | translate }}</a></li>
                 </ul>
             </li>
             <li ng-class="{active: $state.includes('app')}">

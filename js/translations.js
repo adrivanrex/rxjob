@@ -28,8 +28,8 @@ function config($translateProvider) {
             FIND: "Find",
             FREE: "It's Free and forever will be",
             INTERACT : "Inter act",
-
-
+            DISCOVER : "Discover",
+            CREATE : "Create",
             // Define some custom text
             WELCOME: 'Communicate with the world and trade around you on Merkadu',
             MESSAGEINFO: 'You have 42 messages and 6 notifications.',
@@ -42,11 +42,13 @@ function config($translateProvider) {
             FIND: "Pangita",
             Manage: "Atimana",
             "your tasks with the Merkadu agile Board": "imong mga buluhaton gamit ang merkadu Eagile Boarda.",
-            " the freshest items": "ang pinaka bag.o nga mga gamit",
+            "the freshest items": "ang pinaka bag.o nga mga gamit",
             "It's Free and forever will be": "Kanunay nga libre",
             FREE: "libre ang pag gamit",
             INTERACT: "lihoka",
-
+            DISCOVER: "diskubreha",
+            CREATE: "Maghimo",
+            MISCELLANEOUS: "Lahi lahi",
         })
         .translations('es', {
 
