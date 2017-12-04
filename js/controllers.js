@@ -86,7 +86,7 @@ function LoginCtrl($window, $scope, $firebaseAuth, $timeout) {
             var errorCode = error.code;
             var errorMessage = error.message;
             if(errorMessage == "The email address is badly formatted."){
-                errorMessage = "Your Ecode is not a valid format."
+                errorMessage = "Your Ecode is not in a valid format."
             }
 
             console.log("errorCode", error.code);
