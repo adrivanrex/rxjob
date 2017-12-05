@@ -225,6 +225,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 	  alert(error);
 	});
 	*/
+
     $scope.searchQuery = function() {
         $scope.searchText = this.searchText;
         firebase.auth().onAuthStateChanged((user) => {
@@ -1729,9 +1730,13 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
     $scope.chatMessage = function() {
+
         chatInput = document.getElementById("chatInput").value;
         console.log("chatInput", chatInput);
 
+        
+        objDiv = document.getElementById("chat-discussion");
+        objDiv.scrollTop = 99999;
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 let ref = firebase.database().ref("Chat")
