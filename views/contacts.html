@@ -22,12 +22,14 @@
             <div class="ibox">
                 <div class="ibox-content">
                     <h2>Clients</h2>
+                    <form ng-submit="findContacts()">
                     <div class="input-group">
-                        <input type="text" placeholder="Search client " class="input form-control">
+                        <input type="text" ng-model="searchContact" placeholder="Search client " class="input form-control">
                         <span class="input-group-btn">
                                         <button type="button" class="btn btn btn-primary"> <i class="fa fa-search"></i> Search</button>
                                 </span>
                     </div>
+                    </form>
                     <div class="clients-list">
                         <ul class="nav nav-tabs">
                             <li ng-class="{'active' : tab == 1}"><a ng-click="tab = 1" ng-init="tab = 1"><i class="fa fa-user"></i> Contacts</a></li>

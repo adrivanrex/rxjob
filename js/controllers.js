@@ -1273,6 +1273,31 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         notifyInviteChat(a)
     }
 
+    $scope.findContacts = function(){
+        console.log(this.searchContact);
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+
+                let ref = firebase.database().ref("Contacts")
+                    .orderByChild("name")
+                    .equalTo(this.searchContact)
+                    .limitToLast(100)
+                ref.once("value", function(snapshot) {
+                    $timeout(function() {
+                        $scope.contacts = snapshot.val();
+                    });
+
+
+                }, function(errorObject) {
+                    console.log("The read failed: " + errorObject.code);
+                });
+
+
+
+            }
+        });
+    };
+
     /**
      *
      * online users
