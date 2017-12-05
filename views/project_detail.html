@@ -34,7 +34,7 @@
                     <div class="row">
                         <div class="col-lg-5">
                             <dl>
-                                <dt>Title:</dt>
+                                <dt>{{ 'Title' | translate }}:</dt>
                                 <dd>{{projectDetail.Title}}</dd>
                                 <dt>Created by:</dt>
                                 <dd>{{projectDetail.PosterName}}</dd>
@@ -79,11 +79,11 @@
             <div class="row">
                 <form role="form" ng-submit="submitApply()">
                     <div id="applyjobInputPrice" class="form-group">
-                        <label>Price</label>
+                        <label>{{ 'Price' | translate }}</label>
                         <input  ng-model="applyjob.Price" type="number" placeholder="0" value="0" class="form-control">
                     </div>
                     <div id="applyjobInputQuantity" class="form-group">
-                        <label>Quantity</label>
+                        <label>{{ 'Quantity' | translate }}</label>
                         <input  ng-model="applyjob.Quantity" type="number" placeholder="0" value="0" class="form-control">
                     </div>
                     <div id="applyjobInputDescription" class="form-group">

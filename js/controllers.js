@@ -214,6 +214,17 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     $scope.projects = [];
     $scope.searchText = "";
 
+    /*
+    var emailAddress = "botarea@gmail.com";
+
+	firebase.auth().sendPasswordResetEmail(emailAddress).then(function() {
+	  // Email sent.
+	  alert("SENT");
+	}).catch(function(error) {
+	  // An error happened.
+	  alert(error);
+	});
+	*/
     $scope.searchQuery = function() {
         $scope.searchText = this.searchText;
         firebase.auth().onAuthStateChanged((user) => {
@@ -1297,6 +1308,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             }
         });
     };
+
+    $scope.noteChange = function(){
+        console.log($scope.noteDescription);
+    }
 
     /**
      *

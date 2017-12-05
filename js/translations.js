@@ -34,6 +34,11 @@ function config($translateProvider) {
             WELCOME: 'Communicate with the world and trade around you on Merkadu',
             MESSAGEINFO: 'You have 42 messages and 6 notifications.',
             SEARCH: 'Search for something...',
+            Activity: "Activity",
+            TODO: "To-do",
+            Title: "Title",
+            Price: "Price",
+            Quantity: "Quantity",
 
         })
         .translations('bis', {
@@ -49,6 +54,11 @@ function config($translateProvider) {
             DISCOVER: "diskubreha",
             CREATE: "Maghimo",
             MISCELLANEOUS: "Lahi lahi",
+            Activity: "Actibidad",
+            TODO: "Buhatonon",
+            Title: "Titulo",
+            Price: "Presyo",
+            Quantity: "Kadaghanon"
         })
         .translations('es', {
 
