@@ -744,7 +744,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 showUserInfo($location.search().id);
             case '/miscellaneous/chat_view':
 
-                alert($location.search().id, $scope);
                 chatRoom();
                 chat($location.search().id, $scope);
 
