@@ -22,7 +22,6 @@
                 </div>
                 <div class="ibox-content">
                     <div class="row m-b-sm m-t-sm">
-                        
                         <div class="col-md-12">
                             <div class="input-group">
                                 <input type="text" placeholder="Search" class="input-sm form-control"> <span class="input-group-btn">
@@ -30,28 +29,37 @@
                         </div>
                     </div>
                     <div class="row wrapper">
-                    <div class="row wrapper project-list">
-                        <div class="row project-feed" ng-repeat="projectApplicantList in projectApplicantList">
-                            <div class="col-lg-1">
-                                <a href="#!/app/user?id={{projectApplicantList.Applicant}}"><img width="80px" src="{{projectApplicantList.ApplicantPhotoUrl}}"></a>
-                            </div>
-                            <div class="col-lg-11">
-                                
-                                <strong>{{projectApplicantList.Price}}</strong><br>
-                                <strong>{{projectApplicantList.Description}}</strong>
-                                <br/>
-                                <small>{{projectApplicantList.HumanTime}}</small>
+                        <div class="row wrapper project-list">
+                            <div class="row project-feed" ng-repeat="projectApplicantList in projectApplicantList">
+                                <div class="col-lg-12">
+                                    <div class="col-lg-1">
+                                        <a href="#!/app/user?id={{projectApplicantList.Applicant}}"><img width="80px" src="{{projectApplicantList.ApplicantPhotoUrl}}"></a>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        
 
-                            </div>
+                                         <strong>{{projectApplicantList.Price}}</strong>
+                                        <br>
+                                        <strong>{{projectApplicantList.Description}}</strong>
+                                        <br/>
+                                        <small>{{projectApplicantList.HumanTime}}</small>
 
-                            <div class="row wrapper-content project-actions">
-                                <a href="#!/dashboards/edit_jobpost?id={{key}}" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Approve </a>
+                                    </div>
+                                    
+                                </div>
+                                <div class="col-lg-12">
+                                <div class="col-lg-2">
+                                       <button ng-click="addContact({userDataInfo})" type="button" class="btn btn-primary"><i class="fa fa-user-plus"></i> contact</button>
+
+                                    </div>
+                                </div>
+                                <div class="row wrapper-content project-actions">
+                                    <a href="#!/dashboards/edit_jobpost?id={{key}}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Approve </a>
+                                </div>
                             </div>
                         </div>
-                        
-                </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>

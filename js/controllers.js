@@ -1737,6 +1737,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         
         objDiv = document.getElementById("chat-discussion");
         objDiv.scrollTop = 99999;
+
+        
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 let ref = firebase.database().ref("Chat")
