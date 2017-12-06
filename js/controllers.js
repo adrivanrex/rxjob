@@ -373,6 +373,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         ApplicantPhotoUrl: user.photoURL,
                         ApplicantDisplayName: user.displayName,
                         Price: applyjob.Price,
+                        email: user.email,
                         Description: applyjob.Description,
                         CreatedAt: firebase.database.ServerValue.TIMESTAMP,
                         Updated: firebase.database.ServerValue.TIMESTAMP,
@@ -1151,10 +1152,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     if (snapshot.val() == null) {
                         firebase.database().ref('Contacts/').push({
                             user: user.uid,
-                            email: $scope.contactInfo.userDataInfo.email,
-                            about: $scope.contactInfo.userDataInfo.about,
-                            name: $scope.contactInfo.userDataInfo.name,
-                            picture: $scope.contactInfo.userDataInfo.picture
+                            email: $scope.contactInfo.email,
+                            name: $scope.contactInfo.ApplicantDisplayName,
+                            picture: $scope.contactInfo.ApplicantPhotoUrl
                         });
                     }
                     key = Object.keys(snapshot.val())
