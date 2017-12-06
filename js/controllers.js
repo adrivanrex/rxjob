@@ -743,6 +743,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             case '/app/user':
                 showUserInfo($location.search().id);
             case '/miscellaneous/chat_view':
+
+                alert($location.search().id, $scope);
+                chatRoom();
                 chat($location.search().id, $scope);
 
             case '/app/profile':
@@ -843,6 +846,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         });
     }
     if ($location.path('/miscellaneous/chat_view')) {
+
+    	chatRoom();
         if ($location.search().id) {
             firebase.auth().onAuthStateChanged((user) => {
 
@@ -859,6 +864,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             });
 
         } else {
+
             firebase.auth().onAuthStateChanged((user) => {
                 let ref = firebase.database().ref("Chat")
                     .orderByChild("user")
@@ -1392,7 +1398,16 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             }
         } else {
 
-            firebase.auth().onAuthStateChanged((user) => {
+            chatRoom();
+
+
+
+        }
+
+    });
+
+    function chatRoom(){
+    	firebase.auth().onAuthStateChanged((user) => {
 
                 let zef = firebase.database().ref("ChatRooms")
                     .limitToLast(1)
@@ -1484,14 +1499,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 });
 
             });
-
-
-
-        }
-
-    });
-
-
+    }
 
 
 
