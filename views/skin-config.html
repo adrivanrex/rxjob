@@ -6,19 +6,11 @@
         <div class="skin-setttings">
             <div class="title">Notes</div>
             <div class="setings-item">
-                    <span>
-                        Collapse menu
-                    </span>
-
-                <div class="switch">
-                    <div class="onoffswitch">
-                        <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="collapsemenu">
-                        <label class="onoffswitch-label" for="collapsemenu">
-                            <span class="onoffswitch-inner"></span>
-                            <span class="onoffswitch-switch"></span>
-                        </label>
+            	<form>
+                <div id="notes" class="form-group">
+                        <textarea style="margin: 0px -21px 0px 0px; height: 230px; width: 182px;" id="noteID" placeholder="your reminder" onkeyup="checkNote(this)" class="form-control"></textarea> 
                     </div>
-                </div>
+                 </form>
             </div>
             
             <div class="title">Skins</div>
@@ -47,6 +39,7 @@
     </div>
 </div>
 <script>
+
 
     // Config box
     <!-- IMPORTANT -->

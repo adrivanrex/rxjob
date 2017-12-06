@@ -33,6 +33,42 @@ var site = "/rxjob";
 /**
  * translateCtrl - Controller for translate
  */
+function checkNote(a,$scope,$firebaseAuth){
+        note = document.getElementById("noteID").value
+        console.log("note",note);
+        firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            post = firebase.database().ref('Notes/').push({
+                        note: note,
+                        user: user.uid,
+                        picture: user.photoURL,
+                        email: user.email,
+                        name: user.displayName
+                    });
+        }
+
+    });
+    }
+
+function getNotes($scope,$firebaseAuth){
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            let ref = firebase.database().ref('Notes')
+                .orderByChild('user').equalTo(user.uid)
+                .limitToLast(1)
+
+            ref.on("value", function(snapshot) {
+                console.log("NOTES", snapshot.val());
+                key = Object.keys(snapshot.val());
+                val = snapshot.val()[key].note;
+                 document.getElementById("noteID").value = val;
+            });
+        }
+
+    });
+}
+getNotes();
+
 function translateCtrl($translate, $scope) {
     $scope.changeLanguage = function(langKey) {
         $translate.use(langKey);
@@ -911,6 +947,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
     $location.path(firstlocation);
+
+
+    
 
 
     $scope.logout = function() {
