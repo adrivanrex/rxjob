@@ -21,10 +21,10 @@
 <div class="wrapper wrapper-content animated fadeInRight" ng-controller="MainCtrl">
 <div class="container-fluid ">
     <ul class="nav nav-tabs marginBottom" id="myTab">
-        <li class="active roomid"><a href="#home" class="backgroundRed">Your Room </a>
+        <li id="yourRoom" class="active roomid"><a href="#home" class="backgroundRed">Your Room </a>
 
         </li>
-        <li ng-repeat="chatRooms in chatRooms"><a><button class="close closeTab" type="button" onclick="closeRoom()">×</button>{{chatRooms.owner}}</a>
+        <li ng-repeat="chatRooms in chatRooms" id="{{chatRooms}}" ng-click="roomOwner(chatRooms)"><a ><button  class="close closeTab" type="button" ng-click="closeRoom(chatRooms)">×</button>{{chatRooms.owner}}</a>
 
         </li>
     </ul>
