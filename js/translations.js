@@ -39,6 +39,8 @@ function config($translateProvider) {
             Title: "Title",
             Price: "Price",
             Quantity: "Quantity",
+            AGILE: "Agile Board",
+            CHATROOM: "Chat Room",
 
         })
         .translations('bis', {
@@ -58,7 +60,9 @@ function config($translateProvider) {
             TODO: "Buhatonon",
             Title: "Titulo",
             Price: "Presyo",
-            Quantity: "Kadaghanon"
+            Quantity: "Kadaghanon",
+            AGILE: "Eagile Boarda",
+            CHATROOM: "Storyahanan",
         })
         .translations('es', {
 
