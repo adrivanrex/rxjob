@@ -1159,13 +1159,12 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     }
                     key = Object.keys(snapshot.val())
                     sameEmail = snapshot.val()[key].email;
-                    if ($scope.contactInfo.userDataInfo.email !== sameEmail) {
+                    if ($scope.contactInfo.email !== sameEmail) {
                         firebase.database().ref('Contacts/').push({
                             user: user.uid,
-                            email: $scope.contactInfo.userDataInfo.email,
-                            about: $scope.contactInfo.userDataInfo.about,
-                            name: $scope.contactInfo.userDataInfo.name,
-                            picture: $scope.contactInfo.userDataInfo.picture
+                            email: $scope.contactInfo.email,
+                            name: $scope.contactInfo.ApplicantDisplayName,
+                            picture: $scope.contactInfo.ApplicantPhotoUrl
                         });
                     }
 
