@@ -346,6 +346,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                    status: "I'm online."
                 });
                 ref.onDisconnect().update({
+
                   onlineState: false,
                   status: "I'm offline."
                 });
@@ -957,7 +958,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     .limitToLast(1)
                 ref.once("value", function(snapshot) {
                     if (snapshot.val() == null) {
-                        firebase.database().ref('Chat/').push({
+                        post = firebase.database().ref('Chat/').push({
                             createdAt: firebase.database.ServerValue.TIMESTAMP,
                             creator: user.uid,
                             email: user.email,
@@ -965,7 +966,65 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             user: user.uid
 
                         });
-                        chatStatus();
+
+
+                        let vef = firebase.database().ref("ChatUserStatus")
+                                .limitToLast(1)
+                                .orderByChild("user")
+                                .equalTo(user.uid)
+                            vef.once("value", function(snapshot) {
+                                if (snapshot.val() == null) {
+                                    mern = firebase.database().ref('ChatUserStatus/').push({
+                                        room: post.key,
+                                        user: user.uid,
+                                        name: user.displayName,
+                                        email: user.email,
+                                        status: "available",
+                                        createdAt: firebase.database.ServerValue.TIMESTAMP,
+                                        picture: user.photoURL
+                                    });
+
+                                }
+                                let bef = firebase.database().ref("ChatUserStatus")
+                                    .limitToLast(3)
+                                    .orderByChild("user")
+                                    .equalTo(user.uid)
+                                bef.once("value", function(snapshot) {
+                                    chatsk = Object.keys(snapshot.val()).length;
+                                    if (chatsk > 1) {
+                                        let ref = firebase.database().ref('ChatUserStatus');
+                                        ref.orderByChild('user').equalTo(user.uid).limitToFirst(1).once('value', snapshot => {
+                                            let updates = {};
+                                            snapshot.forEach(child => updates[child.key] = null);
+                                            ref.update(updates);
+                                        });
+                                    }
+                                });
+
+                                let vef = firebase.database().ref("ChatUserStatus")
+                                    .limitToLast(100)
+                                    .orderByChild("user")
+                                    .equalTo(user.uid)
+                                vef.on("value", function(snapshot) {
+                                    $timeout(function() {
+                                        $scope.userStatus = snapshot.val();
+                                    });
+
+                                });
+
+                                let gef = firebase.database().ref("ChatMessages")
+                                    .orderByChild("room")
+                                    .equalTo(post.key)
+                                    .limitToLast(100)
+                                gef.on("value", function(snapshot) {
+                                    $timeout(function() {
+                                        $scope.chatMessagesArray = snapshot.val();
+                                        console.log("CHATMESSAGES", $scope.chatMessagesArray);
+                                    });
+                                });
+
+
+                            });
 
 
                     } else {
@@ -985,7 +1044,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     }
 
                 });
+            
+                chatStatus();
             });
+        
         }
 
 
@@ -1574,6 +1636,7 @@ function chatStatus(){
                             if (snapshot.val() == null) {
 
                             }
+
                             console.log("chatinfo",snapshot.val());
                             roomKey = Object.keys(snapshot.val());
                             chatInfo = snapshot.val();
