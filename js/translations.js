@@ -41,6 +41,8 @@ function config($translateProvider) {
             Quantity: "Quantity",
             AGILE: "Agile Board",
             CHATROOM: "Chat Room",
+            "InProgress": "In Progress",
+            "Completed": "Completed",
 
         })
         .translations('bis', {
@@ -57,12 +59,14 @@ function config($translateProvider) {
             CREATE: "Maghimo",
             MISCELLANEOUS: "Lahi lahi",
             Activity: "Actibidad",
-            TODO: "Buhatonon",
+            TODO: "Pangbuhaton",
             Title: "Titulo",
             Price: "Presyo",
             Quantity: "Kadaghanon",
             AGILE: "Eagile Boarda",
             CHATROOM: "Storyahanan",
+            "InProgress": "Buhatonon",
+            "Completed": "Nahuman",
         })
         .translations('es', {
 

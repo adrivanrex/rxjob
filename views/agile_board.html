@@ -51,7 +51,7 @@
         <div class="col-lg-4">
             <div class="ibox">
                 <div class="ibox-content">
-                    <h3>In Progress</h3>
+                    <h3>{{ 'InProgress' | translate }}</h3>
                     <p class="small"><i class="fa fa-hand-o-up"></i> Drag task between list</p>
                     <ul ui-sortable="sortableOptions" class="sortable-list connectList agile-list" ng-model="inProgressList">
                         <li class="{{task.statusClass}}-element" ng-repeat="task in inProgressList">
@@ -68,7 +68,7 @@
         <div class="col-lg-4">
             <div class="ibox">
                 <div class="ibox-content">
-                    <h3>Completed</h3>
+                    <h3>{{ 'Completed' | translate }}</h3>
                     <p class="small"><i class="fa fa-hand-o-up"></i> Drag task between list</p>
                     <ul ui-sortable="sortableOptions" class="sortable-list connectList agile-list" ng-model="completedList">
                         <li class="{{task.statusClass}}-element" ng-repeat="task in completedList">
