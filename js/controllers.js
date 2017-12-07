@@ -414,6 +414,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         } else {
             document.getElementById("applyjobInputPrice").classList.remove('has-error');
         }
+        applyjob.Quantity = this.applyjob.Quantity;
 
         applyjob.Description = this.applyjob.Description;
 
@@ -441,6 +442,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         ApplicantDisplayName: user.displayName,
                         Price: applyjob.Price,
                         email: user.email,
+                        Quantity: applyjob.Quantity,
                         Description: applyjob.Description,
                         CreatedAt: firebase.database.ServerValue.TIMESTAMP,
                         Updated: firebase.database.ServerValue.TIMESTAMP,
@@ -486,6 +488,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             firebase.database().ref().child('JobPost/' + $scope.projectDetail.Id + '/Applicant/' + Object.keys(snapshot.val())[0])
                                 .update({
                                     Price: applyjob.Price,
+                                    Quantity: applyjob.Quantity,
                                     Description: applyjob.Description,
                                     Updated: $scope.UpdatedTime,
                                     HumanTime: $scope.humanTime
