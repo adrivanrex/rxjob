@@ -812,7 +812,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 showUserInfo($location.search().id);
             case '/miscellaneous/chat_view':
                 showMessages($location.search().id);
-                chatRoom();
+                chatRoom($location.search().id);
                 chatStatus($location.search().id);
             case '/app/profile':
                 firebase.auth().onAuthStateChanged((user) => {
@@ -912,9 +912,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         });
     }
     if ($location.path('/miscellaneous/chat_view')) {
-
+        chatRoom($location.search().id);
         chatStatus($location.search().id);
         showMessages($location.search().id);
+        
 
 function chatStatus(zxcv){
         firebase.auth().onAuthStateChanged((user) => {
@@ -1490,8 +1491,9 @@ function chatStatus(zxcv){
     }
     
 
-    function chatRoom(){
-    	firebase.auth().onAuthStateChanged((user) => {
+    function chatRoom(locationID){
+        if(locationID){
+            firebase.auth().onAuthStateChanged((user) => {
 
                 let ref = firebase.database().ref("Chat")
                     .orderByChild("user")
@@ -1534,6 +1536,8 @@ function chatStatus(zxcv){
 
 
             });
+        }
+    	
     }
 
 
