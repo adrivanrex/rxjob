@@ -33,6 +33,8 @@ var site = "/rxjob";
 /**
  * translateCtrl - Controller for translate
  */
+
+
 function checkNote(a,$scope,$firebaseAuth){
         note = document.getElementById("noteID").value
         console.log("note",note);
@@ -67,6 +69,7 @@ function getNotes($scope,$firebaseAuth){
 
     });
 }
+
 getNotes();
 
 function translateCtrl($translate, $scope) {
@@ -262,6 +265,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 	});
 	*/
 
+    
+
+
+
     $scope.searchQuery = function() {
         $scope.searchText = this.searchText;
         firebase.auth().onAuthStateChanged((user) => {
@@ -303,7 +310,28 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     }
 
+    firebase.auth().onAuthStateChanged((user) => {
+        let ief = firebase.database().ref("ChatUserStatus")
+                .orderByChild("user")
+                .equalTo(user.uid)
+                .limitToLast(1)
+            ief.once("value", function(snapshot) {
 
+                key = Object.keys(snapshot.val());
+                var ref = firebase.database().ref("ChatUserStatus/"+key);
+                ref.update({
+                   onlineState: true,
+                   status: "I'm online."
+                });
+                ref.onDisconnect().update({
+                  onlineState: false,
+                  status: "I'm offline."
+                });
+            });
+        
+
+    });
+    
 
     $scope.aboutMe = function() {
         console.log("ONCHANGE", this);
