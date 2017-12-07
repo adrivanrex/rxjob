@@ -915,7 +915,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         chatRoom($location.search().id);
         chatStatus($location.search().id);
         showMessages($location.search().id);
-        
+
 
 function chatStatus(zxcv){
         firebase.auth().onAuthStateChanged((user) => {
@@ -1979,7 +1979,7 @@ $scope.closeRoom = function(ab){
 
 $scope.roomOwner = function(a){
 	 firebase.auth().onAuthStateChanged((user) => {
-
+                
                 let gef = firebase.database().ref("Chat")
                     .orderByChild("email")
                     .equalTo(a.owner)
