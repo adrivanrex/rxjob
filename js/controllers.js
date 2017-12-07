@@ -312,6 +312,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     firebase.auth().onAuthStateChanged((user) => {
 
+
         let ief = firebase.database().ref("ChatUserStatus")
                 .orderByChild("user")
                 .equalTo(user.uid)
@@ -321,7 +322,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 key = Object.keys(snapshot.val());
                 var ref = firebase.database().ref("ChatUserStatus/"+key);
                 ref.update({
-                    room: $location.search().id,
                    onlineState: true,
                    status: "I'm online."
                 });
@@ -791,6 +791,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     }
 
+
     $scope.$on('$locationChangeStart', function(event) {
         switch ($location.path()) {
             case '/app/project_detail':
@@ -810,6 +811,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             case '/app/user':
                 showUserInfo($location.search().id);
             case '/miscellaneous/chat_view':
+                showMessages($location.search().id);
                 chatRoom();
                 chatStatus($location.search().id);
             case '/app/profile':
@@ -910,7 +912,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         });
     }
     if ($location.path('/miscellaneous/chat_view')) {
+
         chatStatus($location.search().id);
+        showMessages($location.search().id);
 
 function chatStatus(zxcv){
         firebase.auth().onAuthStateChanged((user) => {
@@ -943,11 +947,17 @@ function chatStatus(zxcv){
 
                                     let bef = firebase.database().ref("ChatUserStatus")
                                     .limitToLast(3)
-                                    .orderByChild("room")
-                                    .equalTo(zxcv)
+                                    .orderByChild("user")
+                                    .equalTo(user.uid)
                                 bef.once("value", function(snapshot) {
                                     chatsk = Object.keys(snapshot.val()).length;
                                     if (chatsk > 1) {
+                                        if(chatsk == 1){
+                                            chatsk = 2;
+                                        }
+                                        if(chatsk == 0){
+                                            chatsk = 2;
+                                        }
                                         del = chatsk -1;
                                         let ref = firebase.database().ref('ChatUserStatus');
                                         ref.orderByChild('user').equalTo(user.uid).limitToFirst(del).once('value', snapshot => {
@@ -1068,7 +1078,9 @@ function chatStatus(zxcv){
     $location.path(firstlocation);
 
 
-    
+    function showMessages(){
+
+    }
 
 
     $scope.logout = function() {
@@ -1481,24 +1493,25 @@ function chatStatus(zxcv){
     function chatRoom(){
     	firebase.auth().onAuthStateChanged((user) => {
 
-                let zef = firebase.database().ref("Chat")
-                    .limitToLast(1)
+                let ref = firebase.database().ref("Chat")
                     .orderByChild("user")
                     .equalTo(user.uid)
-                zef.once("value", function(snapshot) {
-                    if (snapshot.val() == null) {
-                        let zef = firebase.database().ref("Chat/"+$location.search().id)
+                    .limitToLast(1)
+                ref.once("value", function(snapshot) {
+                    key = Object.keys(snapshot.val());
+
+                    if($location.search().id){
+                        key[0] = $location.search().id;
+                    }
+                     let zef = firebase.database().ref("Chat/"+key)
                             .limitToLast(100)
                         zef.once("value", function(snapshot) {
-                            if (snapshot.val() == null) {
-
-                            }
-
+                           
                             console.log("chatinfo",snapshot.val());
                             roomKey = Object.keys(snapshot.val());
                             chatInfo = snapshot.val();
                             post = firebase.database().ref('ChatRooms/').push({
-                            room: $location.search().id,
+                            room: key[0],
                             user: user.uid,
                             name: user.displayName,
                             email: user.email,
@@ -1509,10 +1522,15 @@ function chatStatus(zxcv){
 
 
                         });
-                    }
 
+
+                }, function(errorObject) {
+                    console.log("The read failed: " + errorObject.code);
                 });
 
+
+
+               
 
 
             });
@@ -1797,6 +1815,52 @@ function chatStatus(zxcv){
 
 
 
+    function showMessages(location){
+        if(location){
+            firebase.auth().onAuthStateChanged((user) => {
+        let ref = firebase.database().ref("Chat")
+                    .orderByChild("user")
+                    .equalTo(user.uid)
+                    .limitToLast(1)
+                ref.once("value", function(snapshot) {
+                    key = Object.keys(snapshot.val());
+                   let ref = firebase.database().ref("ChatMessages")
+                    .orderByChild("room")
+                    .equalTo(location)
+                    .limitToLast(1000)
+                ref.on("value", function(snapshot) {
+                    key = Object.keys(snapshot.val());
+                    $timeout(function() {
+                    $scope.chatMessagesArray = snapshot.val();
+                });
+                });
+                });
+            });
+        }else{
+            firebase.auth().onAuthStateChanged((user) => {
+        let ref = firebase.database().ref("Chat")
+                    .orderByChild("user")
+                    .equalTo(user.uid)
+                    .limitToLast(1)
+                ref.once("value", function(snapshot) {
+                    key = Object.keys(snapshot.val());
+                   let ref = firebase.database().ref("ChatMessages")
+                    .orderByChild("room")
+                    .equalTo(key[0])
+                    .limitToLast(1000)
+                ref.on("value", function(snapshot) {
+                    key = Object.keys(snapshot.val());
+                    $timeout(function() {
+                    $scope.chatMessagesArray = snapshot.val();
+                });
+                });
+                });
+            });
+        }
+        
+    }
+
+    
 
     $scope.chatMessage = function() {
 
@@ -1871,6 +1935,18 @@ function chatStatus(zxcv){
 
 
 
+function showRooms(){
+    firebase.auth().onAuthStateChanged(function(user) {
+        let bef = firebase.database().ref("ChatRooms")
+                                    .limitToLast(100)
+                                    .orderByChild("user")
+                                    .equalTo(user.uid)
+                                bef.on("value", function(snapshot) {
+                                    $scope.chatRooms = snapshot.val();
+                                });
+    });
+}
+showRooms();
 $scope.closeRoom = function(ab){
 	firebase.auth().onAuthStateChanged(function(user) {
 		console.log("x", ab);
