@@ -311,7 +311,29 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     }
 
     firebase.auth().onAuthStateChanged((user) => {
-        let ief = firebase.database().ref("ChatUserStatus")
+
+        if($location.search().id){
+            let ief = firebase.database().ref("ChatUserStatus")
+                .orderByChild("user")
+                .equalTo(user.uid)
+                .limitToLast(1)
+            ief.once("value", function(snapshot) {
+
+                key = Object.keys(snapshot.val());
+                var ref = firebase.database().ref("ChatUserStatus/"+key);
+                ref.update({
+                    room: $location.search().id,
+                   onlineState: true,
+                   status: "I'm online."
+                });
+                ref.onDisconnect().update({
+                  onlineState: false,
+                  status: "I'm offline."
+                });
+            });
+
+        }else{
+            let ief = firebase.database().ref("ChatUserStatus")
                 .orderByChild("user")
                 .equalTo(user.uid)
                 .limitToLast(1)
@@ -328,6 +350,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                   status: "I'm offline."
                 });
             });
+        }
+        
         
 
     });
@@ -809,8 +833,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             case '/miscellaneous/chat_view':
 
                 chatRoom();
-                chat($location.search().id, $scope);
-
             case '/app/profile':
                 firebase.auth().onAuthStateChanged((user) => {
                     let ref = firebase.database().ref("Guest")
@@ -943,6 +965,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             user: user.uid
 
                         });
+                        chatStatus();
+
+
                     } else {
                         console.log(snapshot.val());
                         roomKey = Object.keys(snapshot.val());
@@ -964,7 +989,69 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         }
 
 
+function chatStatus(){
 
+
+                        let ref = firebase.database().ref("Chat")
+                            .limitToLast(1)
+                            .orderByChild("user")
+                            .equalTo(user.uid)
+                        ref.once("value", function(snapshot) {
+                            chatKey = Object.keys(snapshot.val());
+
+                            let vef = firebase.database().ref("ChatUserStatus")
+                                .limitToLast(1)
+                                .orderByChild("user")
+                                .equalTo(user.uid)
+                            vef.once("value", function(snapshot) {
+                                if (snapshot.val() == null) {
+                                    post = firebase.database().ref('ChatUserStatus/').push({
+                                        room: chatKey[0],
+                                        user: user.uid,
+                                        name: user.displayName,
+                                        email: user.email,
+                                        status: "available",
+                                        createdAt: firebase.database.ServerValue.TIMESTAMP,
+                                        picture: user.photoURL
+                                    });
+
+                                }
+
+                                let bef = firebase.database().ref("ChatUserStatus")
+                                    .limitToLast(3)
+                                    .orderByChild("user")
+                                    .equalTo(user.uid)
+                                bef.once("value", function(snapshot) {
+                                    chatsk = Object.keys(snapshot.val()).length;
+                                    if (chatsk > 1) {
+                                        let ref = firebase.database().ref('ChatUserStatus');
+                                        ref.orderByChild('user').equalTo(user.uid).limitToFirst(1).once('value', snapshot => {
+                                            let updates = {};
+                                            snapshot.forEach(child => updates[child.key] = null);
+                                            ref.update(updates);
+                                        });
+                                    }
+                                });
+
+                                let vef = firebase.database().ref("ChatUserStatus")
+                                    .limitToLast(100)
+                                    .orderByChild("room")
+                                    .equalTo(chatKey[0])
+                                vef.on("value", function(snapshot) {
+                                    $timeout(function() {
+                                        $scope.userStatus = snapshot.val();
+                                    });
+
+                                });
+
+                            });
+
+
+
+                        }, function(errorObject) {
+                            console.log("The read failed: " + errorObject.code);
+                        });
+}
 
 
 
