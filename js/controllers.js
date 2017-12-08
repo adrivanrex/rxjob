@@ -972,20 +972,12 @@ ref.once("value", function(snapshot) {
                             
 
                         let bef = firebase.database().ref("ChatUserStatus")
-                            .limitToLast(3)
+                            .limitToLast(100)
                             .orderByChild("user")
                             .equalTo(user.uid)
                         bef.once("value", function(snapshot) {
                                     chatsk = Object.keys(snapshot.val()).length;
-                                    if (chatsk > 1) {
-                                        if (chatsk ==
-
-                                            1) {
-                                            chatsk = 2;
-                                        }
-                                        if (chatsk == 0) {
-                                            chatsk = 2;
-                                        }
+                                        alert(chatsk);
                                         del = chatsk - 1;
                                         let ref = firebase.database().ref('ChatUserStatus');
                                         ref.orderByChild('user').equalTo(user.uid).limitToFirst(del).once('value', snapshot => {
@@ -993,7 +985,7 @@ ref.once("value", function(snapshot) {
                                                     snapshot.forEach(child => updates[child.key] = null);
                                             ref.update(updates);
                                         });
-                                    }
+                                    
                                 });
                                 
 
@@ -1018,8 +1010,6 @@ ref.once("value", function(snapshot) {
                             
 
                         } else{
-
-
 
                              let ref = firebase.database().ref("Chat")
                             .limitToLast(1)
@@ -1051,9 +1041,7 @@ ref.once("value", function(snapshot) {
                                 bef.once("value", function(snapshot) {
                                     chatsk = Object.keys(snapshot.val()).length;
                                     if (chatsk > 1) {
-                                        if(chatsk == 1){
-                                            chatsk = 2;
-                                        }
+                                        
                                         del = chatsk - 1;
                                         let ref = firebase.database().ref('ChatUserStatus');
                                         ref.orderByChild('user').equalTo(user.uid).limitToFirst(del).once('value', snapshot => {
