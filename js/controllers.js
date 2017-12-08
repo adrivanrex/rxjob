@@ -926,7 +926,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
 function chatRoomSplice(bbb){
-    firebase.auth().onAuthStateChanged((user) => {
+
+    if(typeof bbb !== "undefined"){
+        firebase.auth().onAuthStateChanged((user) => {
     let ref = firebase.database().ref("Chat/"+bbb)
                 .limitToLast(100)
                 
@@ -941,6 +943,8 @@ function chatRoomSplice(bbb){
 
             });
         });
+    }
+    
 };
 
 function chatStatus(zxcv){
