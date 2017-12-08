@@ -956,9 +956,6 @@ ref.once("value", function(snapshot) {
                 .orderByChild("user")
                 .equalTo(user.uid)
             vef.once("value", function(snapshot) {
-                        	
-                       
-
                             post = firebase.database().ref('ChatUserStatus/').push({
                                 room: zxcv,
                                 user: user.uid,
@@ -977,7 +974,6 @@ ref.once("value", function(snapshot) {
                             .equalTo(user.uid)
                         bef.once("value", function(snapshot) {
                                     chatsk = Object.keys(snapshot.val()).length;
-                                        alert(chatsk);
                                         del = chatsk - 1;
                                         let ref = firebase.database().ref('ChatUserStatus');
                                         ref.orderByChild('user').equalTo(user.uid).limitToFirst(del).once('value', snapshot => {
@@ -2004,7 +2000,7 @@ $scope.closeRoom = function(ab){
 
 $scope.roomOwner = function(a){
 	 firebase.auth().onAuthStateChanged((user) => {
-                
+                chatStatus(a.room);
                 let gef = firebase.database().ref("Chat")
                     .orderByChild("email")
                     .equalTo(a.owner)
