@@ -814,9 +814,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             case '/app/user':
                 showUserInfo($location.search().id);
             case '/miscellaneous/chat_view':
+            	chatStatus($location.search().id);
                 showMessages($location.search().id);
                 chatRoom($location.search().id);
-                chatStatus($location.search().id);
+                
             case '/app/profile':
                 firebase.auth().onAuthStateChanged((user) => {
                     let ref = firebase.database().ref("Guest")
@@ -915,64 +916,85 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         });
     }
     if ($location.path('/miscellaneous/chat_view')) {
+    	chatStatus($location.search().id);
         chatRoom($location.search().id);
-        chatStatus($location.search().id);
         showMessages($location.search().id);
 
 
 function chatStatus(zxcv){
         firebase.auth().onAuthStateChanged((user) => {
+        	if(typeof zxcv == "undefined"){
+        		let ref = firebase.database().ref("Chat")
+			    .limitToLast(1)
+			    .orderByChild("user")
+			    .equalTo(user.uid)
+			ref.once("value", function(snapshot) {
+				if(snapshot.val() == null){
+					post = firebase.database().ref('Chat').push({
+                                createdAt: firebase.database.ServerValue.TIMESTAMP,
+                                creator: user.uid,
+                                email: user.email,
+                                name: user.displayName,
+                                picture: user.photoURL,
+                                user: user.uid
+                            });
+				}
+			});
+
+        	};
+
             if(zxcv){
+                            let ref = firebase.database().ref("Chat")
+    .limitToLast(1)
+    .orderByChild("user")
+    .equalTo(user.uid)
+ref.once("value", function(snapshot) {
+            chatKey = Object.keys(snapshot.val());
+
+            let vef = firebase.database().ref("ChatUserStatus")
+                .limitToLast(1)
+                .orderByChild("user")
+                .equalTo(user.uid)
+            vef.once("value", function(snapshot) {
+                        	
+                       
+
+                            post = firebase.database().ref('ChatUserStatus/').push({
+                                room: zxcv,
+                                user: user.uid,
+                                name: user.displayName,
+                                email: user.email,
+                                status: "available",
+                                createdAt: firebase.database.ServerValue.TIMESTAMP,
+                                picture: user.photoURL
+                            });
+                        
                             
-                     let ref = firebase.database().ref("Chat")
-                            .limitToLast(1)
+
+                        let bef = firebase.database().ref("ChatUserStatus")
+                            .limitToLast(3)
                             .orderByChild("user")
                             .equalTo(user.uid)
-                        ref.once("value", function(snapshot) {
-                            chatKey = Object.keys(snapshot.val());
-
-                            let vef = firebase.database().ref("ChatUserStatus")
-                                .limitToLast(1)
-                                .orderByChild("user")
-                                .equalTo(user.uid)
-                            vef.once("value", function(snapshot) {
-                                if(snapshot.val() == null){
-                                    post = firebase.database().ref('ChatUserStatus/').push({
-                                        room: zxcv,
-                                        user: user.uid,
-                                        name: user.displayName,
-                                        email: user.email,
-                                        status: "available",
-                                        createdAt: firebase.database.ServerValue.TIMESTAMP,
-                                        picture: user.photoURL
-                                    });
-                                }
-                                
-
-                                    let bef = firebase.database().ref("ChatUserStatus")
-                                    .limitToLast(3)
-                                    .orderByChild("user")
-                                    .equalTo(user.uid)
-                                bef.once("value", function(snapshot) {
+                        bef.once("value", function(snapshot) {
                                     chatsk = Object.keys(snapshot.val()).length;
                                     if (chatsk > 1) {
-                                        if(chatsk == 1){
+                                        if (chatsk ==
+
+                                            1) {
                                             chatsk = 2;
                                         }
-                                        if(chatsk == 0){
+                                        if (chatsk == 0) {
                                             chatsk = 2;
                                         }
-                                        del = chatsk -1;
+                                        del = chatsk - 1;
                                         let ref = firebase.database().ref('ChatUserStatus');
                                         ref.orderByChild('user').equalTo(user.uid).limitToFirst(del).once('value', snapshot => {
-                                            let updates = {};
-                                            snapshot.forEach(child => updates[child.key] = null);
+                                                    let updates = {};
+                                                    snapshot.forEach(child => updates[child.key] = null);
                                             ref.update(updates);
                                         });
                                     }
                                 });
-
-
                                 
 
                                 let vef = firebase.database().ref("ChatUserStatus")
@@ -995,7 +1017,9 @@ function chatStatus(zxcv){
                         });
                             
 
-                        }else{
+                        } else{
+
+
 
                              let ref = firebase.database().ref("Chat")
                             .limitToLast(1)
@@ -1003,7 +1027,7 @@ function chatStatus(zxcv){
                             .equalTo(user.uid)
                         ref.once("value", function(snapshot) {
                             chatKey = Object.keys(snapshot.val());
-
+                            
                             let vef = firebase.database().ref("ChatUserStatus")
                                 .limitToLast(1)
                                 .orderByChild("user")
@@ -1540,7 +1564,17 @@ function chatStatus(zxcv){
 
             });
         }
-    	
+    	else{
+
+    		 firebase.auth().onAuthStateChanged((user) => {
+
+
+               
+
+
+            });
+
+    	}
     }
 
 
