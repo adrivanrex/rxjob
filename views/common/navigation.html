@@ -31,7 +31,7 @@
             <li ng-class="{active: $state.includes('app')}">
                 <a href=""><i class="fa fa-desktop"></i> <span class="nav-label">{{ 'Activity' | translate }}</span></a>
                 <ul class="nav nav-second-level" ng-class="{in: $state.includes('app')}">
-                    <li ui-sref-active="active"><a ui-sref="app.contacts">Contacts</a></li>
+                    <li ui-sref-active="active"><a ui-sref="app.contacts">{{ 'Contacts' | translate }}</a></li>
                     <li ui-sref-active="active"><a ui-sref="miscellaneous.chat_view">{{ 'CHATROOM' | translate }}</a></li>
                     
                 </ul>

@@ -43,6 +43,8 @@ function config($translateProvider) {
             CHATROOM: "Chat Room",
             "InProgress": "In Progress",
             "Completed": "Completed",
+            "Contacts": "Contacts",
+            MISCELLANEOUS: "Miscellaneous",
 
         })
         .translations('bis', {
@@ -67,6 +69,12 @@ function config($translateProvider) {
             CHATROOM: "Storyahanan",
             "InProgress": "Buhatonon",
             "Completed": "Nahuman",
+            "Contacts": "Kaila",
+
+        })
+        .translations('fil', {
+            Contacts: "Kilala"
+
         })
         .translations('es', {
 
