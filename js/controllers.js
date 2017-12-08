@@ -817,6 +817,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             	chatStatus($location.search().id);
                 showMessages($location.search().id);
                 chatRoom($location.search().id);
+                chatRoomSplice($location.search().id);
                 
             case '/app/profile':
                 firebase.auth().onAuthStateChanged((user) => {
@@ -919,7 +920,28 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     	chatStatus($location.search().id);
         chatRoom($location.search().id);
         showMessages($location.search().id);
+        chatRoomSplice($location.search().id);
 
+
+
+
+function chatRoomSplice(bbb){
+    firebase.auth().onAuthStateChanged((user) => {
+    let ref = firebase.database().ref("Chat/"+bbb)
+                .limitToLast(100)
+                
+            ref.once("value", function(snapshot) {
+                console.log("ChatRoom",snapshot.val());
+                let ref = firebase.database().ref('ChatRooms');
+                                        ref.orderByChild('room').equalTo(bbb).limitToFirst(1000).once('value', snapshot => {
+                                                    let updates = {};
+                                                    snapshot.forEach(child => updates[child.key] = null);
+                                            ref.update(updates);
+                                        });
+
+            });
+        });
+};
 
 function chatStatus(zxcv){
         firebase.auth().onAuthStateChanged((user) => {
