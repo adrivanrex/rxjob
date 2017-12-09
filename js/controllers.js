@@ -425,7 +425,16 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             document.getElementById("applyjobInputDescription").classList.remove('has-warning');
         }
         firebase.auth().onAuthStateChanged((user) => {
-            let ref = firebase.database().ref('/Applicants')
+
+           
+            let qef = firebase.database().ref('/JobPost')
+                .orderByChild('Id')
+                .equalTo($location.search().id);
+            qef.once("value", function(snapshot) {
+                console.log("JOBID", snapshot.val());
+                jobKey  = Object.keys(snapshot.val());
+                JobPostID = snapshot.val()[jobKey].PosterID;
+                let ref = firebase.database().ref('/Applicants')
                 .orderByChild('user')
                 .equalTo(user.uid);
             ref.once("value", function(snapshot) {
@@ -436,7 +445,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 humanTime = UpdatedTime.toString();
 
                 if (snapshot.val() == null) {
+
                     post = firebase.database().ref('/Applicants').push({
+                        JobPosterID: JobPostID,
                         ProjectDetailID: $scope.projectDetail.Id,
                         Applicant: user.uid,
                         ApplicantPhotoUrl: user.photoURL,
@@ -449,6 +460,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         Updated: firebase.database.ServerValue.TIMESTAMP,
                         humanTime: humanTime
                     });
+
                     var ApplicantID = post.key;
                     applicationid.push(post.key);
                     firebase.database().ref().child('/Applicants/' + ApplicantID)
@@ -512,6 +524,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             });
 
         });
+            });
+
     }
 
     $scope.showNotification = function() {
@@ -584,7 +598,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     function getApplicants() {
         firebase.auth().onAuthStateChanged((user) => {
-            let ref = firebase.database().ref('/Applicant')
+            let ref = firebase.database().ref('/Applicants')
             .orderByChild("ProjectDetailID")
             .equalTo($location.search().id)
             .limitToLast(199)
@@ -937,64 +951,19 @@ function viewAnalytics(){
 
 }
 
-function orders(){  
+$scope.orders = 0;
+function orders($scope){  
+
     firebase.auth().onAuthStateChanged((user) => {
-        var OrderArray = [];
-        let ref = firebase.database().ref("JobPost")
+        let ref = firebase.database().ref("Applicants")
                 .limitToLast(100)
-                .orderByChild("PosterID")
+                .orderByChild("JobPosterID")
                 .equalTo(user.uid)
             ref.once("value", function(snapshot) {
-                console.log("Jobs",snapshot.val());
-                snapshotKey = Object.keys(snapshot.val());
-                snapshotKeyLength = Object.keys(snapshot.val()).length;
-                for (var i = Object.keys(snapshot.val()).length - 1; i >= 0; i--) {
-                    console.log("Applicants",Object.keys(snapshot.val())[i]);
-                    let ref = firebase.database().ref("JobPost/"+Object.keys(snapshot.val())[i])
-                            .limitToLast(1000)
-                        ref.once("value", function(snapshot) {
-                                console.log("APPLICANTS", snapshot.val());
-                               OrderArray.push(snapshot.val());
-
-
-                        });
-                }
-
-                console.log("ORdeR ARrAy", OrderArray);
-                OrderArrayL = OrderArray.length;
-                let ref = firebase.database().ref("Orders")
-                .limitToLast(100)
-                .orderByChild("user")
-                .equalTo(user.uid)
-            ref.once("value", function(snapshot) {
-                console.log("wow", snapshot.val());
-                if(snapshot.val() == null){
-                    post = firebase.database().ref('Orders').push({
-                                createdAt: firebase.database.ServerValue.TIMESTAMP,
-                                order: OrderArrayL,
-                                creator: user.uid,
-                                email: user.email,
-                                name: user.displayName,
-                                picture: user.photoURL,
-                                user: user.uid
-                            });
-                    
-               
-
-                }else{
-                    firebase.database().ref().child('/Orders/' + orderKey)
-                            .update({ order: OrderArrayL });
-                }
+                document.getElementById("orders").innerHTML = Object.keys(snapshot.val()).length;
             });
-            
-            });
-
-
-            
-
-
-    });
-}
+});
+};
 
 function chatRoomSplice(bbb){
 
