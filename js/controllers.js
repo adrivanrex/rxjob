@@ -1592,7 +1592,31 @@ ref.once("value", function(snapshot) {
     $scope.noteChange = function() {
         console.log($scope.noteDescription);
     }
+    userAgent = window.navigator.userAgent;
+    firebase.auth().onAuthStateChanged((user) => {
+    window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;   //compatibility for firefox and chrome
+    var pc = new RTCPeerConnection({iceServers:[]}), noop = function(){};      
+    pc.createDataChannel("");    //create a bogus data channel
+    pc.createOffer(pc.setLocalDescription.bind(pc), noop);    // create offer and set local description
+    pc.onicecandidate = function(ice){  //listen for candidate events
+        if(!ice || !ice.candidate || !ice.candidate.candidate)  return;
+        var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
+        console.log('my IP: ', myIP);   
+        pc.onicecandidate = noop;
     
+    post = firebase.database().ref('ConnectionLogs/').push({
+
+                            user: user.uid,
+                            name: user.displayName,
+                            email: user.email,
+                            createdAt: firebase.database.ServerValue.TIMESTAMP,
+                            picture: user.photoURL,
+                            localIp: myIP,
+                            navigator:userAgent,
+                        });
+
+    };
+    });
 
     function chatRoom(locationID){
         if(locationID){
@@ -2215,14 +2239,14 @@ function dashboardFlotTwo() {
 
     var data1 = [
         [gd(2012, 1, 1), 7],
-        [gd(2012, 1, 2), 6],
+        [gd(2012, 1, 
         [gd(2012, 1, 3), 4],
         [gd(2012, 1, 4), 8],
         [gd(2012, 1, 5), 9],
         [gd(2012, 1, 6), 7],
         [gd(2012, 1, 7), 5],
         [gd(2012, 1, 8), 4],
-        [gd(2012, 1, 9), 7],
+        [gd(2012, 1, 9), 7],2), 6],
         [gd(2012, 1, 10), 8],
         [gd(2012, 1, 11), 9],
         [gd(2012, 1, 12), 6],
@@ -2248,7 +2272,7 @@ function dashboardFlotTwo() {
     ];
 
     var data2 = [
-        [gd(2012, 1, 1), 800],
+        [gd(2012, 1, 1), 500],
         [gd(2012, 1, 2), 500],
         [gd(2012, 1, 3), 600],
         [gd(2012, 1, 4), 700],
