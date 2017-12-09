@@ -50,10 +50,10 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 }
             }
         })
-        .state('dashboards.dashboard_2', {
-            url: "/dashboard_2",
-            templateUrl: "views/dashboard_2.html",
-            data: { pageTitle: 'Dashboard 2' },
+        .state('dashboards.marketInfo', {
+            url: "/marketInfo",
+            templateUrl: "views/marketInfo.html",
+            data: { pageTitle: 'Market Info' },
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([

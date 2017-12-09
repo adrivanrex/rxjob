@@ -73,7 +73,13 @@ function config($translateProvider) {
 
         })
         .translations('fil', {
-            Contacts: "Kilala"
+            Contacts: "Kilala",
+            WELCOME: "Maligayang pagdating!",
+            FIND: "Maghanap",
+            "the freshest items": "ng pinakabagong mga gamit",
+            
+
+
 
         })
         .translations('es', {
