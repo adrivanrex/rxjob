@@ -21,7 +21,7 @@
         <ul class="nav nav-tabs marginBottom" id="myTab">
             <li id="yourRoom" class="active roomid"><a href="#!/miscellaneous/chat_view" class="backgroundRed">Your Room </a>
             </li>
-            <li ng-repeat="chatRooms in chatRooms" id="{{chatRooms}}" ng-click="roomOwner(chatRooms)">
+            <li ng-class="{'active': active === true}" ng-click="active = !active" ng-repeat="chatRooms in chatRooms" id="{{chatRooms}}" ng-click="roomOwner(chatRooms)">
                 <a>
                     <button class="close closeTab" type="button" ng-click="closeRoom(chatRooms)">×</button>{{chatRooms.owner}}</a>
             </li>
