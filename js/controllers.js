@@ -945,6 +945,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     if($location.path('/dashboards/marketInfo')){
         orders();
+        acceptedOrders();
     }
 
 function viewAnalytics(){
@@ -964,6 +965,31 @@ function orders($scope){
             });
 });
 };
+
+function acceptedOrders(){
+    firebase.auth().onAuthStateChanged((user) => {
+        let ref = firebase.database().ref("Applicants")
+                .limitToLast(100)
+                .orderByChild("status")
+                .equalTo("approve")
+            ref.once("value", function(snapshot) {
+                key = Object.keys(snapshot.val());
+                document.getElementById("acceptedOrders").innerHTML = Object.keys(snapshot.val()).length;
+                
+            });
+});
+}
+
+$scope.approveOrder = function(a){
+    firebase.auth().onAuthStateChanged((user) => {
+    
+    let ref = firebase.database().ref("Applicants").orderByChild("CreatedAt").equalTo(a.CreatedAt)
+        ref.once("child_added", function(snapshot) {
+      snapshot.ref.update({ status: "approve" })
+    });
+});
+};
+
 
 function chatRoomSplice(bbb){
 

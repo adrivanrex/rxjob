@@ -56,7 +56,14 @@
                                     </div>
                                 </div>
                                 <div class="row wrapper-content project-actions">
-                                    <a href="#!/dashboards/edit_jobpost?id={{key}}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Approve </a>
+                                    <a ng-click="approveOrder(projectApplicantList)"  class="btn btn-primary btn-sm">
+                                    <div ng-switch="projectApplicantList.status">
+                                      <div ng-switch-when="approve"><i class="fa fa-check">approved</i></div>
+                                      <div ng-switch-default><i class="fa fa-pencil"></i> Accept </a></div>
+                                    </div>
+                                    
+                                    
+
                                 </div>
                             </div>
                         </div>
