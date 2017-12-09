@@ -77,7 +77,9 @@ function config($translateProvider) {
             WELCOME: "Maligayang pagdating!",
             FIND: "Maghanap",
             "the freshest items": "ng pinakabagong mga gamit",
-            
+            TODO: "Gagawin",
+            "InProgress": "Ginagawa",
+            "Completed": "Nagawa",
 
 
 
