@@ -425,8 +425,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             document.getElementById("applyjobInputDescription").classList.remove('has-warning');
         }
         firebase.auth().onAuthStateChanged((user) => {
-            let ref = firebase.database().ref('JobPost/' + $scope.projectDetail.Id + '/Applicant')
-                .orderByChild('Applicant')
+            let ref = firebase.database().ref('/Applicants')
+                .orderByChild('user')
                 .equalTo(user.uid);
             ref.once("value", function(snapshot) {
 
@@ -436,7 +436,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 humanTime = UpdatedTime.toString();
 
                 if (snapshot.val() == null) {
-                    post = firebase.database().ref('JobPost/' + $scope.projectDetail.Id + '/Applicant').push({
+                    post = firebase.database().ref('/Applicants').push({
+                        ProjectDetailID: $scope.projectDetail.Id,
                         Applicant: user.uid,
                         ApplicantPhotoUrl: user.photoURL,
                         ApplicantDisplayName: user.displayName,
@@ -450,14 +451,14 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     });
                     var ApplicantID = post.key;
                     applicationid.push(post.key);
-                    firebase.database().ref().child('JobPost/' + $scope.projectDetail.Id + '/Applicant/' + ApplicantID)
+                    firebase.database().ref().child('/Applicants/' + ApplicantID)
                         .update({ Id: ApplicantID });
 
                     notify($location.search().id, user.uid);
 
                 } else {
-                    let ref = firebase.database().ref('JobPost/' + $scope.projectDetail.Id + '/Applicant')
-                        .orderByChild('Applicant')
+                    let ref = firebase.database().ref('/Applicants')
+                        .orderByChild('user')
                         .equalTo(user.uid);
                     ref.once("value", function(snapshot) {
 
@@ -468,15 +469,15 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         $scope.UpdatedTime = new Date(updated);
                         $scope.humanTime = $scope.UpdatedTime.toString();
 
-                        firebase.database().ref().child('JobPost/' + $scope.projectDetail.Id + '/Applicant/' + Object.keys(snapshot.val())[0])
+                        firebase.database().ref().child('/Applicants/' + Object.keys(snapshot.val())[0])
                             .update({
                                 Price: applyjob.Price,
                                 Description: applyjob.Description,
                                 HumanTime: $scope.humanTime,
                                 Updated: firebase.database.ServerValue.TIMESTAMP
                             });
-                        let win = firebase.database().ref('JobPost/' + $scope.projectDetail.Id + '/Applicant')
-                            .orderByChild('Applicant')
+                        let win = firebase.database().ref('/Applicants')
+                            .orderByChild('user')
                             .equalTo(user.uid);
 
                         win.once("value", function(snapshot) {
@@ -485,7 +486,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             updated = $scope.timeReadable[key].Updated;
                             $scope.UpdatedTime = new Date(updated);
                             $scope.humanTime = $scope.UpdatedTime.toString();
-                            firebase.database().ref().child('JobPost/' + $scope.projectDetail.Id + '/Applicant/' + Object.keys(snapshot.val())[0])
+                            firebase.database().ref().child('/Applicants/' + Object.keys(snapshot.val())[0])
                                 .update({
                                     Price: applyjob.Price,
                                     Quantity: applyjob.Quantity,
@@ -583,7 +584,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     function getApplicants() {
         firebase.auth().onAuthStateChanged((user) => {
-            let ref = firebase.database().ref('JobPost/' + $location.search().id + '/Applicant')
+            let ref = firebase.database().ref('/Applicant')
+            .orderByChild("ProjectDetailID")
+            .equalTo($location.search().id)
+            .limitToLast(199)
             ref.on("value", function(snapshot) {
                 $timeout(function() {
                     $scope.applicantlist = snapshot.val();
@@ -597,7 +601,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     function getProjectApplicants() {
         firebase.auth().onAuthStateChanged((user) => {
-            let ref = firebase.database().ref('JobPost/' + $location.search().id + '/Applicant')
+            let ref = firebase.database().ref('/Applicants')
+            .orderByChild("ProjectDetailID")
+            .equalTo($location.search().id)
+            .limitToLast(200)
             ref.on("value", function(snapshot) {
                 $timeout(function() {
                     $scope.projectApplicantList = snapshot.val();
@@ -610,9 +617,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     function getApplyDetails() {
         firebase.auth().onAuthStateChanged((user) => {
-            let ref = firebase.database().ref('JobPost/' + $location.search().id + '/Applicant')
-                .orderByChild('Applicant')
-                .equalTo(user.uid);
+            let ref = firebase.database().ref('/Applicants')
+                .orderByChild('ProjectDetailID')
+                .equalTo($location.search().id);
             ref.once("value", function(snapshot) {
 
 
@@ -922,8 +929,72 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         showMessages($location.search().id);
         chatRoomSplice($location.search().id);
 
+    if($location.path('/dashboards/marketInfo')){
+        orders();
+    }
+
+function viewAnalytics(){
+
+}
+
+function orders(){  
+    firebase.auth().onAuthStateChanged((user) => {
+        var OrderArray = [];
+        let ref = firebase.database().ref("JobPost")
+                .limitToLast(100)
+                .orderByChild("PosterID")
+                .equalTo(user.uid)
+            ref.once("value", function(snapshot) {
+                console.log("Jobs",snapshot.val());
+                snapshotKey = Object.keys(snapshot.val());
+                snapshotKeyLength = Object.keys(snapshot.val()).length;
+                for (var i = Object.keys(snapshot.val()).length - 1; i >= 0; i--) {
+                    console.log("Applicants",Object.keys(snapshot.val())[i]);
+                    let ref = firebase.database().ref("JobPost/"+Object.keys(snapshot.val())[i])
+                            .limitToLast(1000)
+                        ref.once("value", function(snapshot) {
+                                console.log("APPLICANTS", snapshot.val());
+                               OrderArray.push(snapshot.val());
 
 
+                        });
+                }
+
+                console.log("ORdeR ARrAy", OrderArray);
+                OrderArrayL = OrderArray.length;
+                let ref = firebase.database().ref("Orders")
+                .limitToLast(100)
+                .orderByChild("user")
+                .equalTo(user.uid)
+            ref.once("value", function(snapshot) {
+                console.log("wow", snapshot.val());
+                if(snapshot.val() == null){
+                    post = firebase.database().ref('Orders').push({
+                                createdAt: firebase.database.ServerValue.TIMESTAMP,
+                                order: OrderArrayL,
+                                creator: user.uid,
+                                email: user.email,
+                                name: user.displayName,
+                                picture: user.photoURL,
+                                user: user.uid
+                            });
+                    
+               
+
+                }else{
+                    firebase.database().ref().child('/Orders/' + orderKey)
+                            .update({ order: OrderArrayL });
+                }
+            });
+            
+            });
+
+
+            
+
+
+    });
+}
 
 function chatRoomSplice(bbb){
 
