@@ -3917,10 +3917,9 @@ body.modal-open {
 }
 /* ERROR & LOGIN & LOCKSCREEN*/
 .middle-box {
-    max-width: 400px;
+    max-width: 1000px;
     z-index: 100;
     margin: 0 auto;
-    padding-top: 40px;
 }
 .lockscreen.middle-box {
     width: 200px;
@@ -3950,7 +3949,7 @@ body.modal-open {
     font-size: 170px;
 }
 .wrapper .middle-box {
-    margin-top: 140px;
+    margin-top: 1px;
 }
 .lock-word {
     z-index: 10;
