@@ -1239,6 +1239,9 @@ ref.once("value", function(snapshot) {
         $scope.JobPostDescription = this.JobPostDescription;
         $scope.ItemCount = this.JobPostNumberOfItems;
         $scope.JobPostPrice = this.JobPostInputPrice;
+        if(typeof $scope.JobPostPrice == "undefined"){
+            $scope.JobPostPrice = 0;
+        }
 
 
         /* Filter */
@@ -2256,7 +2259,7 @@ function dashboardFlotTwo() {
     **/
 
     firebase.auth().onAuthStateChanged((user) => {
-        alert(user.uid);
+        //alert(user.uid);
     });
 
     var data2 = [
