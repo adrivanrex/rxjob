@@ -56,11 +56,11 @@
                                     </div>
                                 </div>
                                 <div class="row wrapper-content project-actions">
-                                    <a ng-click="approveOrder(projectApplicantList)"  class="btn btn-primary btn-sm">
                                     <div ng-switch="projectApplicantList.status">
-                                      <div ng-switch-when="approve"><i class="fa fa-check">approved</i></div>
-                                      <div ng-switch-default><i class="fa fa-pencil"></i> Accept </a></div>
+                                        <button ng-switch-when="approve" class="btn btn-primary btn-sm"><i class="fa fa-check">Approved</i></button>
+                                       <button class="btn btn-primary btn-sm ng-click="approveOrder(projectApplicantList)" ng-switch-default "><i class="fa fa-pencil"></i> Accept </button>
                                     </div>
+                                    </button>
                                     
                                     
 
