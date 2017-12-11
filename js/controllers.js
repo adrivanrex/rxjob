@@ -272,7 +272,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     $scope.searchQuery = function() {
         $scope.searchText = this.searchText;
         firebase.auth().onAuthStateChanged((user) => {
-            let ref = firebase.database().ref('JobPost')
+            if($scope.searchText == ""){
+                getLatestJobPost();
+            }else{
+                let ref = firebase.database().ref('JobPost')
                 .orderByChild('Title').equalTo($scope.searchText)
 
 
@@ -281,10 +284,15 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     $scope.latestJobPost = snapshot.val();
                     console.log($scope.latestJobPost);
                 });
-
+                if(snapshot.val() == null){
+                    $window.location = "#!/dashboards/create_jobpost";
+                };
             }, function(errorObject) {
                 console.log("The read failed: " + errorObject.code);
             });
+            }
+
+            
         });
 
 
@@ -935,8 +943,8 @@ function orders($scope){
                 .orderByChild("JobPosterID")
                 .equalTo(user.uid)
             ref.once("value", function(snapshot) {
-
-                document.getElementById("orders").innerHTML = Object.keys(snapshot.val()).length;
+                orders = Object.keys(snapshot.val()).length;
+                document.getElementById("orders").innerHTML = orders ;
             });
 });
 };
@@ -1403,7 +1411,8 @@ ref.once("value", function(snapshot) {
                             user: user.uid,
                             email: $scope.contactInfo.email,
                             name: $scope.contactInfo.ApplicantDisplayName,
-                            picture: $scope.contactInfo.ApplicantPhotoUrl
+                            picture: $scope.contactInfo.ApplicantPhotoUrl,
+                            createdAt: firebase.database.ServerValue.TIMESTAMP
                         });
                     }
                     key = Object.keys(snapshot.val())
@@ -1413,7 +1422,8 @@ ref.once("value", function(snapshot) {
                             user: user.uid,
                             email: $scope.contactInfo.email,
                             name: $scope.contactInfo.ApplicantDisplayName,
-                            picture: $scope.contactInfo.ApplicantPhotoUrl
+                            picture: $scope.contactInfo.ApplicantPhotoUrl,
+                            createdAt: firebase.database.ServerValue.TIMESTAMP
                         });
                     }
 
@@ -1583,6 +1593,7 @@ ref.once("value", function(snapshot) {
                             localIp: myIP,
                             navigator:userAgent,
                         });
+
 
     };
     });
@@ -4889,7 +4900,7 @@ function agileBoard($scope, $firebaseAuth, $timeout) {
                 todoList = JSON.stringify($scope.todoList);
                 todoList = todoList.slice(1, -1);
                 firebase.database().ref().child('Board/' + key)
-                    .update({ todoList: todoList });
+                    .update({ todoList: todoList, });
             });
         });
     });
@@ -4945,7 +4956,8 @@ function agileBoard($scope, $firebaseAuth, $timeout) {
                 if (snapshot.val() == null) {
                     post = firebase.database().ref('Board/').push({
                         user: user.uid,
-                        email: user.email
+                        email: user.email,
+                        createdAt: firebase.database.ServerValue.TIMESTAMP
                     });
                 }
 
@@ -5074,7 +5086,7 @@ function agileBoard($scope, $firebaseAuth, $timeout) {
                     ref.once("value", function(snapshot) {
                         key = Object.keys(snapshot.val())
                         firebase.database().ref().child('Board/' + key)
-                            .update({ todoList: todoList });
+                            .update({ todoList: todoList,createdAt: firebase.database.ServerValue.TIMESTAMP });
                     });
 
 
