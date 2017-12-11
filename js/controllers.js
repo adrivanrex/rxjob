@@ -1641,9 +1641,12 @@ ref.once("value", function(snapshot) {
                             .equalTo(user.uid)
                         bef.once("value", function(snapshot) {
                                     chatsk = Object.keys(snapshot.val()).length;
+                                        if(chatsk == 1){
+                                            chatsk = 2;
+                                        }
                                         del = chatsk - 1;
                                         let ref = firebase.database().ref('ChatRooms');
-                                        ref.orderByChild('room').equalTo(locationID).limitToFirst(2).once('value', snapshot => {
+                                        ref.orderByChild('room').equalTo(locationID).limitToFirst(del).once('value', snapshot => {
                                                     let updates = {};
                                                     snapshot.forEach(child => updates[child.key] = null);
                                             ref.update(updates);

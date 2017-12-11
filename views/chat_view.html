@@ -18,7 +18,12 @@
 </div>
 <div class="wrapper wrapper-content animated fadeInRight" ng-controller="MainCtrl">
     <div class="container-fluid ">
-        
+        <ul class="nav nav-tabs marginBottom" id="myTab">
+            <li  ng-repeat="chatRooms in chatRooms" id="{{chatRooms}}">
+                <a>
+                    <button class="close closeTab" type="button" ng-click="closeRoom(chatRooms)">×</button>{{chatRooms.owner}}</a>
+            </li>
+        </ul>
         <div class="row-fluid ">
             <div class="row-fluid ">
                 <div class="tab-content span4">
