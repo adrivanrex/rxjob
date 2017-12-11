@@ -2248,7 +2248,7 @@ function dashboardFlotTwo() {
         }
 
     }, {
-        label: "Payments",
+        label: "Incoming",
         grow: { stepMode: "linear" },
         data: data1,
         yaxis: 2,

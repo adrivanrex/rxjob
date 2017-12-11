@@ -18,12 +18,7 @@
 </div>
 <div class="wrapper wrapper-content animated fadeInRight" ng-controller="MainCtrl">
     <div class="container-fluid ">
-        <ul class="nav nav-tabs marginBottom" id="myTab">
-            <li  ng-repeat="chatRooms in chatRooms" id="{{chatRooms}}" ng-click="roomOwner(chatRooms)">
-                <a>
-                    <button class="close closeTab" type="button" ng-click="closeRoom(chatRooms)">×</button>{{chatRooms.owner}}</a>
-            </li>
-        </ul>
+        
         <div class="row-fluid ">
             <div class="row-fluid ">
                 <div class="tab-content span4">
@@ -49,7 +44,7 @@
                                             </div>
                                             <div id="chatOnlineView" class="chatPanel col-md-3">
                                                 
-                                                <div class="chat-users">
+                                                <div class="chat-users" ng-click="roomOwner(chatRooms)">
                                                     <div class="users-list" ng-repeat="userStatus in userStatus">
                                                         <div class="chat-user">
                                                             <span class="pull-right label label-primary">{{userStatus.status}}</span>
