@@ -310,30 +310,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     }
 
-    firebase.auth().onAuthStateChanged((user) => {
-
-
-        let ief = firebase.database().ref("ChatUserStatus")
-                .orderByChild("user")
-                .equalTo(user.uid)
-                .limitToLast(1)
-            ief.once("value", function(snapshot) {
-
-                key = Object.keys(snapshot.val());
-                var ref = firebase.database().ref("ChatUserStatus/"+key);
-                ref.update({
-                   onlineState: true,
-                   status: "I'm online."
-                });
-                ref.onDisconnect().update({
-                  onlineState: false,
-                  status: "I'm offline."
-                });
-            });
-        
-        
-
-    });
+   
     
 
     $scope.aboutMe = function() {
@@ -726,7 +703,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         let ref = firebase.database().ref("Notifications")
             .orderByChild("reciever")
             .equalTo(user.displayName)
-            .limitToLast(10)
+            .limitToLast(7)
 
 
         ref.on("value", function(snapshot) {
@@ -838,8 +815,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             	chatStatus($location.search().id);
                 showMessages($location.search().id);
                 chatRoom($location.search().id);
-                chatRoomSplice($location.search().id);
-                
             case '/app/profile':
                 firebase.auth().onAuthStateChanged((user) => {
                     let ref = firebase.database().ref("Guest")
@@ -941,7 +916,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     	chatStatus($location.search().id);
         chatRoom($location.search().id);
         showMessages($location.search().id);
-        chatRoomSplice($location.search().id);
 
     if($location.path('/dashboards/marketInfo')){
         orders();
@@ -961,6 +935,7 @@ function orders($scope){
                 .orderByChild("JobPosterID")
                 .equalTo(user.uid)
             ref.once("value", function(snapshot) {
+
                 document.getElementById("orders").innerHTML = Object.keys(snapshot.val()).length;
             });
 });
@@ -991,27 +966,7 @@ $scope.approveOrder = function(a){
 };
 
 
-function chatRoomSplice(bbb){
 
-    if(typeof bbb !== "undefined"){
-        firebase.auth().onAuthStateChanged((user) => {
-    let ref = firebase.database().ref("Chat/"+bbb)
-                .limitToLast(100)
-                
-            ref.once("value", function(snapshot) {
-                console.log("ChatRoom",snapshot.val());
-                let ref = firebase.database().ref('ChatRooms');
-                                        ref.orderByChild('room').equalTo(bbb).limitToFirst(1000).once('value', snapshot => {
-                                                    let updates = {};
-                                                    snapshot.forEach(child => updates[child.key] = null);
-                                            ref.update(updates);
-                                        });
-
-            });
-        });
-    }
-    
-};
 
 function chatStatus(zxcv){
         firebase.auth().onAuthStateChanged((user) => {
@@ -1057,7 +1012,14 @@ ref.once("value", function(snapshot) {
                                 createdAt: firebase.database.ServerValue.TIMESTAMP,
                                 picture: user.photoURL
                             });
-                        
+                            post.update({
+                               onlineState: true,
+                               status: "I'm online."
+                            });
+                            post.onDisconnect().update({
+                              onlineState: false,
+                              status: "I'm offline."
+                            });
                             
 
                         let bef = firebase.database().ref("ChatUserStatus")
@@ -1121,6 +1083,9 @@ ref.once("value", function(snapshot) {
                                         createdAt: firebase.database.ServerValue.TIMESTAMP,
                                         picture: user.photoURL
                                     });
+                                   
+
+                            
 
                                     let bef = firebase.database().ref("ChatUserStatus")
                                     .limitToLast(3)
@@ -1142,7 +1107,8 @@ ref.once("value", function(snapshot) {
 
                                 }
 
-                                
+                                alert(chatKey[0]);
+
 
                                 let vef = firebase.database().ref("ChatUserStatus")
                                     .limitToLast(100)
@@ -1269,7 +1235,7 @@ ref.once("value", function(snapshot) {
                         } else {
                             console.log("check", $scope.checkPost);
                             key = Object.keys($scope.checkPost);
-                            $scope.order = $scope.checkPost[key].order + 1;
+                            $scope.order = $scope.checkPost[key].order;
                         }
 
 
@@ -1637,6 +1603,9 @@ ref.once("value", function(snapshot) {
                     if($location.search().id){
                         key[0] = $location.search().id;
                     }
+                    else{
+                        key[0] = locationID;
+                    }
                      let zef = firebase.database().ref("Chat/"+key)
                             .limitToLast(100)
                         zef.once("value", function(snapshot) {
@@ -1644,8 +1613,8 @@ ref.once("value", function(snapshot) {
                             console.log("chatinfo",snapshot.val());
                             roomKey = Object.keys(snapshot.val());
                             chatInfo = snapshot.val();
-                            post = firebase.database().ref('ChatRooms/').push({
-                            room: key[0],
+                           var  post = firebase.database().ref('ChatRooms/').push({
+                            room: locationID,
                             user: user.uid,
                             name: user.displayName,
                             email: user.email,
@@ -1653,6 +1622,22 @@ ref.once("value", function(snapshot) {
                             createdAt: firebase.database.ServerValue.TIMESTAMP,
                             picture: user.photoURL
                         });
+
+                            let bef = firebase.database().ref("ChatRooms")
+                            .limitToLast(100)
+                            .orderByChild("user")
+                            .equalTo(user.uid)
+                        bef.once("value", function(snapshot) {
+                                    chatsk = Object.keys(snapshot.val()).length;
+                                        del = chatsk - 1;
+                                        let ref = firebase.database().ref('ChatRooms');
+                                        ref.orderByChild('room').equalTo(locationID).limitToFirst(2).once('value', snapshot => {
+                                                    let updates = {};
+                                                    snapshot.forEach(child => updates[child.key] = null);
+                                            ref.update(updates);
+                                        });
+                                    
+                                });
 
 
                         });
@@ -2120,28 +2105,9 @@ $scope.closeRoom = function(ab){
 }
 
 $scope.roomOwner = function(a){
+   $window.location = "#!/miscellaneous/chat_view?id="+a.room;
 	 firebase.auth().onAuthStateChanged((user) => {
-                chatStatus(a.room);
-                let gef = firebase.database().ref("Chat")
-                    .orderByChild("email")
-                    .equalTo(a.owner)
-                    .limitToLast(1)
-                gef.on("value", function(snapshot) {
-                    roomKey = Object.keys(snapshot.val());
-                    console.log("R", roomKey[0]);
-                    let gef = firebase.database().ref("ChatMessages")
-                    .orderByChild("room")
-                    .equalTo(roomKey[0])
-                    .limitToLast(100)
-                gef.on("value", function(snapshot) {
-                	console.log("messages", snapshot.val());
-                    $timeout(function() {
-                    	$location.search().id = roomKey[0];
-                        $scope.chatMessagesArray = snapshot.val();
-                    });
-                });
-                });
-
+                
             });
 }
 
