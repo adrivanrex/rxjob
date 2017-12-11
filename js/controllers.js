@@ -1107,8 +1107,6 @@ ref.once("value", function(snapshot) {
 
                                 }
 
-                                alert(chatKey[0]);
-
 
                                 let vef = firebase.database().ref("ChatUserStatus")
                                     .limitToLast(100)
