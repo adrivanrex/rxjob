@@ -779,6 +779,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             picture: "img/anonymous.png",
                             email: user.email,
                             name: FullName,
+                            createdAt: firebase.database.ServerValue.TIMESTAMP,
                         });
                     } else {
 
