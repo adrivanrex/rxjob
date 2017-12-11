@@ -419,8 +419,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 console.log("JOBID", snapshot.val());
                 jobKey  = Object.keys(snapshot.val());
                 JobPostID = snapshot.val()[jobKey].PosterID;
+
                 let ref = firebase.database().ref('/Applicants')
-                .orderByChild('user')
+                .orderByChild('JobPosterID')
                 .equalTo(user.uid);
             ref.once("value", function(snapshot) {
 
@@ -430,7 +431,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 humanTime = UpdatedTime.toString();
 
                 if (snapshot.val() == null) {
-
+                    alert(snapshot.val());
                     post = firebase.database().ref('/Applicants').push({
                         JobPosterID: JobPostID,
                         ProjectDetailID: $scope.projectDetail.Id,
@@ -443,7 +444,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         Description: applyjob.Description,
                         CreatedAt: firebase.database.ServerValue.TIMESTAMP,
                         Updated: firebase.database.ServerValue.TIMESTAMP,
-                        humanTime: humanTime
+                        humanTime: humanTime,
+                        user: user.uid
                     });
 
                     var ApplicantID = post.key;
