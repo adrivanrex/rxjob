@@ -1238,6 +1238,7 @@ ref.once("value", function(snapshot) {
         $scope.JobPostTitle = this.JobPostTitle;
         $scope.JobPostDescription = this.JobPostDescription;
         $scope.ItemCount = this.JobPostNumberOfItems;
+        $scope.JobPostPrice = this.JobPostInputPrice;
 
 
         /* Filter */
@@ -1275,6 +1276,7 @@ ref.once("value", function(snapshot) {
                             PosterID: user.uid,
                             PosterName: user.displayName,
                             Title: $scope.JobPostTitle,
+                            JobPostPrice: $scope.JobPostPrice,
                             Description: $scope.JobPostDescription,
                             Location: $scope.latlngaddress,
                             Status: 'active',
@@ -2236,7 +2238,8 @@ function dashboardFlotOne() {
  * for Flot chart in Dashboard view
  */
 function dashboardFlotTwo() {
-
+    var data1 = [];
+    /**
     var data1 = [
         [gd(2012, 1, 1), 7],
         [gd(2012, 1, 
@@ -2247,63 +2250,22 @@ function dashboardFlotTwo() {
         [gd(2012, 1, 7), 5],
         [gd(2012, 1, 8), 4],
         [gd(2012, 1, 9), 7],2), 6],
-        [gd(2012, 1, 10), 8],
-        [gd(2012, 1, 11), 9],
-        [gd(2012, 1, 12), 6],
-        [gd(2012, 1, 13), 4],
-        [gd(2012, 1, 14), 5],
-        [gd(2012, 1, 15), 11],
-        [gd(2012, 1, 16), 8],
-        [gd(2012, 1, 17), 8],
-        [gd(2012, 1, 18), 11],
-        [gd(2012, 1, 19), 11],
-        [gd(2012, 1, 20), 6],
-        [gd(2012, 1, 21), 6],
-        [gd(2012, 1, 22), 8],
-        [gd(2012, 1, 23), 11],
-        [gd(2012, 1, 24), 13],
-        [gd(2012, 1, 25), 7],
-        [gd(2012, 1, 26), 9],
-        [gd(2012, 1, 27), 9],
-        [gd(2012, 1, 28), 8],
-        [gd(2012, 1, 29), 5],
-        [gd(2012, 1, 30), 8],
-        [gd(2012, 1, 31), 25]
+       
     ];
 
+    **/
+
+    firebase.auth().onAuthStateChanged((user) => {
+        alert(user.uid);
+    });
+
     var data2 = [
-        [gd(2012, 1, 1), 500],
-        [gd(2012, 1, 2), 500],
-        [gd(2012, 1, 3), 600],
-        [gd(2012, 1, 4), 700],
-        [gd(2012, 1, 5), 500],
-        [gd(2012, 1, 6), 456],
-        [gd(2012, 1, 7), 800],
-        [gd(2012, 1, 8), 589],
-        [gd(2012, 1, 9), 467],
-        [gd(2012, 1, 10), 876],
-        [gd(2012, 1, 11), 689],
-        [gd(2012, 1, 12), 700],
-        [gd(2012, 1, 13), 500],
-        [gd(2012, 1, 14), 600],
-        [gd(2012, 1, 15), 700],
-        [gd(2012, 1, 16), 786],
-        [gd(2012, 1, 17), 345],
-        [gd(2012, 1, 18), 888],
-        [gd(2012, 1, 19), 888],
-        [gd(2012, 1, 20), 888],
-        [gd(2012, 1, 21), 987],
-        [gd(2012, 1, 22), 444],
-        [gd(2012, 1, 23), 999],
-        [gd(2012, 1, 24), 567],
-        [gd(2012, 1, 25), 786],
-        [gd(2012, 1, 26), 666],
-        [gd(2012, 1, 27), 888],
-        [gd(2012, 1, 28), 900],
-        [gd(2012, 1, 29), 178],
-        [gd(2012, 1, 30), 555],
-        [gd(2012, 1, 31), 993]
+        [gd(2017, 12, 2), 2],
+        [gd(2017, 12, 11), 600],
+        
     ];
+
+    console.log("Graph", data2);
 
 
     var dataset = [{
