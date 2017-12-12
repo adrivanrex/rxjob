@@ -941,6 +941,7 @@ $scope.orders = 0;
 function orders($scope){  
 
     firebase.auth().onAuthStateChanged((user) => {
+
         let ref = firebase.database().ref("Applicants")
                 .limitToLast(100)
                 .orderByChild("JobPosterID")
@@ -948,8 +949,10 @@ function orders($scope){
             ref.once("value", function(snapshot) {
                 orders = Object.keys(snapshot.val()).length;
                 document.getElementById("orders").innerHTML = orders ;
+                $scope.orders = orders;
             });
 });
+
 };
 
 function acceptedOrders(){
@@ -961,10 +964,38 @@ function acceptedOrders(){
             ref.once("value", function(snapshot) {
                 key = Object.keys(snapshot.val());
                 document.getElementById("acceptedOrders").innerHTML = Object.keys(snapshot.val()).length;
+                $scope.acceptedOrders = Object.keys(snapshot.val()).length;
+            });
+});
+}
+
+function orderPerCent(){
+        firebase.auth().onAuthStateChanged((user) => {
+
+        let ref = firebase.database().ref("Applicants")
+                .limitToLast(100)
+                .orderByChild("JobPosterID")
+                .equalTo(user.uid)
+            ref.once("value", function(snapshot) {
+                orders = Object.keys(snapshot.val()).length;
+                let ief = firebase.database().ref("Applicants")
+                    .limitToLast(100)
+                    .orderByChild("status")
+                    .equalTo("approve")
+                ief.once("value", function(snapshot) {
+                    acceptedOrder = Object.keys(snapshot.val()).length;
+                    percent = Math.floor((acceptedOrder / orders) * 100)+'%';;
+                    document.getElementById("orderPerCent").style.width = percent;
+
+
+                });
                 
             });
 });
 }
+
+orderPerCent();
+
 
 $scope.approveOrder = function(a){
     firebase.auth().onAuthStateChanged((user) => {
@@ -2239,8 +2270,26 @@ function dashboardFlotTwo() {
 
     **/
 
+
     firebase.auth().onAuthStateChanged((user) => {
-         let ref = firebase.database().ref("Applicants")
+
+
+            let ref = firebase.database().ref("Graph")
+                .limitToLast(100)
+                .orderByChild("user")
+                .equalTo(user.uid)
+            ref.once("value", function(snapshot) {
+
+                totalData = Object.keys(snapshot.val()).length;
+                let ref = firebase.database().ref("Applicants")
+                .limitToLast(100)
+                .orderByChild("JobPosterID")
+                .equalTo(user.uid)
+            ref.once("value", function(snapshot) {
+                totalApplicants = Object.keys(snapshot.val()).length;
+
+                if(totalData < totalApplicants){
+                    let ref = firebase.database().ref("Applicants")
                 .limitToLast(100)
                 .orderByChild("JobPosterID")
                 .equalTo(user.uid)
@@ -2255,14 +2304,59 @@ function dashboardFlotTwo() {
                     console.log("applicanti", snapshot.val()[applicants[i]].CreatedAt);
                     applicantDate = new Date(snapshot.val()[applicants[i]].CreatedAt);
                     console.log(applicantDate);
+                    applicantInfo = {};
+                    applicantYear = applicantDate.getFullYear();
+                    applicantDay = applicantDate.getDate();
+                    applicantMonth = applicantDate.getMonth();
+
+
+                    applicantInfo = {
+                        Date: applicantDay,
+                        Month: applicantMonth,
+                        Year: applicantYear,
+                        user: user.uid,
+                        createdAt: firebase.database.ServerValue.TIMESTAMP
+                    }
+
+                    post = firebase.database().ref('Graph/').push(applicantInfo);
 
                 }
+                console.log("rate",applicantRateArray);
+               
+
+
             });
+                }
+            });
+
+
+            });
+
+    
+     let lef = firebase.database().ref("Graph")
+                .limitToLast(100)
+                .orderByChild("user")
+                .equalTo(user.uid)
+            lef.once("value", function(snapshot) {
+                 keys = Object.keys(snapshot.val());
+                 todoKey = snapshot.val();
+                 for (var i = keys.length - 1; i >= 0; i--) {
+                     
+                    console.log(todoKey[keys[i]].Date);
+                    data2.push([gd(todoKey[keys[i]].Year, todoKey[keys[i]].Month +1, todoKey[keys[i]].Date + 1), 600]);
+                 }
+
+                console.log("Graph", data2);
+            });
+
+
     });
 
 
-    var data2 = [
-        [gd(2017, 12, 10), 600],
+
+
+
+    var data2 = [[gd(2017, 12, 10), 60],
         
     ];
 
