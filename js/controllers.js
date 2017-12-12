@@ -2240,12 +2240,29 @@ function dashboardFlotTwo() {
     **/
 
     firebase.auth().onAuthStateChanged((user) => {
-        //alert(user.uid);
+         let ref = firebase.database().ref("Applicants")
+                .limitToLast(100)
+                .orderByChild("JobPosterID")
+                .equalTo(user.uid)
+            ref.once("value", function(snapshot) {
+                console.log("applicantList", snapshot.val());
+                applicants = Object.keys(snapshot.val());
+                console.log(applicants);
+                applicantRateArray = [];
+                
+                for (var i = applicants.length - 1; i >= 0; i--) {
+
+                    console.log("applicanti", snapshot.val()[applicants[i]].CreatedAt);
+                    applicantDate = new Date(snapshot.val()[applicants[i]].CreatedAt);
+                    console.log(applicantDate);
+
+                }
+            });
     });
 
+
     var data2 = [
-        [gd(2017, 12, 2), 2],
-        [gd(2017, 12, 11), 600],
+        [gd(2017, 12, 10), 600],
         
     ];
 
