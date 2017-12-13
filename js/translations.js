@@ -45,6 +45,8 @@ function config($translateProvider) {
             "Completed": "Completed",
             "Contacts": "Contacts",
             MISCELLANEOUS: "Miscellaneous",
+            Orders: "orders",
+            "Total orders": "Total orders",
 
         })
         .translations('bis', {
@@ -70,7 +72,8 @@ function config($translateProvider) {
             "InProgress": "Buhatonon",
             "Completed": "Nahuman",
             "Contacts": "Kaila",
-
+            "Orders": "sugo",
+            "Total orders": "tanan sugo",
         })
         .translations('fil', {
             Contacts: "Kilala",
