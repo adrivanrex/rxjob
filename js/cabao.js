@@ -1,5 +1,5 @@
 /**
- * INSPINIA - Responsive Admin Theme
+ * CABAO - Responsive Panel Theme
  * 2.0
  *
  * Custom scripts

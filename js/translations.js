@@ -1,8 +1,4 @@
-/**
- * INSPINIA - Responsive Admin Theme
- * Copyright 2015 Webapplayers.com
- *
- */
+
 function config($translateProvider) {
 
     $translateProvider
@@ -118,5 +114,5 @@ function config($translateProvider) {
 }
 
 angular
-    .module('inspinia')
+    .module('cabao')
     .config(config)

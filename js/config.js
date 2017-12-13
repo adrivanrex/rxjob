@@ -1,8 +1,8 @@
 /**
- * INSPINIA - Responsive Admin Theme
- * Copyright 2015 Webapplayers.com
+ * CABAO - Responsive Panel Theme
+ * Copyright 2015 Adrisoft
  *
- * Inspinia theme use AngularUI Router to manage routing and views
+ * Cabao theme use AngularUI Router to manage routing and views
  * Each view are defined as state.
  * Initial there are written state for all view in theme.
  *
@@ -967,7 +967,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
         });
 }
 angular
-    .module('inspinia')
+    .module('cabao')
     .config(config)
     .run(function($rootScope, $state) {
         $rootScope.$state = $state;

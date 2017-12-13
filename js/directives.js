@@ -1,26 +1,3 @@
-/**
- * INSPINIA - Responsive Admin Theme
- * Copyright 2015 Webapplayers.com
- *
- * Main directives.js file
- * Define directives for used plugin
- *
- *
- * Functions (directives)
- *  - pageTitle
- *  - sideNavigation
- *  - iboxTools
- *  - minimalizaSidebar
- *  - vectorMap
- *  - sparkline
- *  - icheck
- *  - ionRangeSlider
- *  - dropZone
- *  - responsiveVideo
-
- *
- */
-
 
 /**
  * pageTitle - Directive for set Page title - mata title
@@ -332,7 +309,7 @@ function customValid(){
                 // You can call a $http method here
                 // Or create custom validation
 
-                var validText = "Inspinia";
+                var validText = "cabao";
 
                 if(scope.extras == validText) {
                     c.$setValidity('cvalid', true);
