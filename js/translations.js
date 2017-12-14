@@ -44,6 +44,7 @@ function config($translateProvider) {
             Orders: "orders",
             "Total orders": "Total orders",
             "Statistic": "Statistic",
+            "Accepted Orders": "Accepted Orders"
         })
         .translations('bis', {
             DASHBOARD: 'Palibut',
@@ -71,6 +72,7 @@ function config($translateProvider) {
             "Orders": "sugo",
             "Total orders": "tanan sugo",
             "Statistic": "Transactionsugo",
+            "Accepted Orders": "sugo nga nadawat"
         })
         .translations('fil', {
             Contacts: "Kilala",

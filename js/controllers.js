@@ -1374,6 +1374,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 .limitToLast(1)
             ref.once("value", function(snapshot) {
                 key = Object.keys(snapshot.val());
+                if(key == null){
+                	$scope.qualityCenter = [10.314919285813161, 124.453125];
+                };
+
                 lat = snapshot.val()[key].lot[0];
                 lang = snapshot.val()[key].lot[1];
                 $scope.qualityCenter = [lat, lang];
