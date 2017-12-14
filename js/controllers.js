@@ -2387,12 +2387,13 @@ function dashboardFlotTwo() {
 
 
 
-
+    /**
     var data2 = [
         [gd(2017, 12, 10), 60],
 
     ];
-
+    **/
+    var data2 = [];
     console.log("Graph", data2);
 
 
