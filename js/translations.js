@@ -43,7 +43,7 @@ function config($translateProvider) {
             MISCELLANEOUS: "Miscellaneous",
             Orders: "orders",
             "Total orders": "Total orders",
-
+            "Statistic": "Statistic",
         })
         .translations('bis', {
             DASHBOARD: 'Palibut',
@@ -70,6 +70,7 @@ function config($translateProvider) {
             "Contacts": "Kaila",
             "Orders": "sugo",
             "Total orders": "tanan sugo",
+            "Statistic": "Transactionsugo",
         })
         .translations('fil', {
             Contacts: "Kilala",
