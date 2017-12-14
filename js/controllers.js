@@ -455,7 +455,11 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
                         notify($location.search().id, user.uid);
 
+                        
                         document.getElementById("applyButton").innerHTML = "Sent";
+                        
+                        document.getElementById("submitApplyButton").type = "button";
+                        document.getElementById("applyButton").id = "Sent";
 
                 }, function(errorObject) {
                     console.log("The read failed: " + errorObject.code);
