@@ -1361,6 +1361,49 @@ ref.once("value", function(snapshot) {
         console.log($scope.latlngaddress);
     };
 
+    $scope.changePlace = function(event) {
+
+        $scope.latlng = [event.latLng.lat(), event.latLng.lng()];
+        console.log($scope.latlng);
+
+        var latlng = new google.maps.LatLng($scope.latlng[0], $scope.latlng[1]);
+        // This is making the Geocode request
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'latLng': latlng }, function(results, status) {
+            if (status !== google.maps.GeocoderStatus.OK) {
+                console.log(status);
+            }
+            // This is checking to see if the Geoeode Status is OK before proceeding
+            if (status == google.maps.GeocoderStatus.OK) {
+
+                $timeout(function() {
+                    $scope.latlngaddress = results;
+                });
+                var address = (results[0].formatted_address);
+
+                firebase.auth().onAuthStateChanged((user) => {
+        	firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref("Guest")
+                .orderByChild("email")
+                .equalTo(user.email)
+                .limitToLast(1)
+            ref.once("value", function(snapshot) {
+                key = Object.keys(snapshot.val())
+                firebase.database().ref().child('Guest/' + key)
+                    .update({ place: address });
+            });
+        });
+
+
+        });
+                
+            }
+        });
+        
+
+    };
+
+
     $scope.getposeditjob = function(event) {
 
         $scope.editJobPost.Coordinates = [event.latLng.lat(), event.latLng.lng()];
