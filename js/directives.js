@@ -347,7 +347,7 @@ function fullScroll($timeout){
  */
  
 angular
-    .module('inspinia')
+    .module('cabao')
     .directive('pageTitle', pageTitle)
     .directive('sideNavigation', sideNavigation)
     .directive('iboxTools', iboxTools)
