@@ -35,24 +35,24 @@ var site = "/rxjob";
  */
 
 
-function checkNote(a,$scope,$firebaseAuth){
-        note = document.getElementById("noteID").value
-        console.log("note",note);
-        firebase.auth().onAuthStateChanged(function(user) {
+function checkNote(a, $scope, $firebaseAuth) {
+    note = document.getElementById("noteID").value
+    console.log("note", note);
+    firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             post = firebase.database().ref('Notes/').push({
-                        note: note,
-                        user: user.uid,
-                        picture: user.photoURL,
-                        email: user.email,
-                        name: user.displayName
-                    });
+                note: note,
+                user: user.uid,
+                picture: user.photoURL,
+                email: user.email,
+                name: user.displayName
+            });
         }
 
     });
-    }
+}
 
-function getNotes($scope,$firebaseAuth){
+function getNotes($scope, $firebaseAuth) {
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             let ref = firebase.database().ref('Notes')
@@ -63,7 +63,7 @@ function getNotes($scope,$firebaseAuth){
                 console.log("NOTES", snapshot.val());
                 key = Object.keys(snapshot.val());
                 val = snapshot.val()[key].note;
-                 document.getElementById("noteID").value = val;
+                document.getElementById("noteID").value = val;
             });
         }
 
@@ -233,6 +233,8 @@ function LoginCtrl($window, $scope, $firebaseAuth, $timeout) {
 }
 
 function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $timeout, $translate, ) {
+    var merkadUser = firebase.auth().currentUser;
+
     $translate.use(document.cookie);
     var firstlocation = $location.path();
     console.log('first location', firstlocation);
@@ -265,34 +267,34 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 	});
 	*/
 
-    
+
 
 
 
     $scope.searchQuery = function() {
         $scope.searchText = this.searchText;
         firebase.auth().onAuthStateChanged((user) => {
-            if($scope.searchText == ""){
+            if ($scope.searchText == "") {
                 getLatestJobPost();
-            }else{
+            } else {
                 let ref = firebase.database().ref('JobPost')
-                .orderByChild('Title').equalTo($scope.searchText)
+                    .orderByChild('Title').equalTo($scope.searchText)
 
 
-            ref.on("value", function(snapshot) {
-                $timeout(function() {
-                    $scope.latestJobPost = snapshot.val();
-                    console.log($scope.latestJobPost);
+                ref.on("value", function(snapshot) {
+                    $timeout(function() {
+                        $scope.latestJobPost = snapshot.val();
+                        console.log($scope.latestJobPost);
+                    });
+                    if (snapshot.val() == null) {
+                        $window.location = "#!/dashboards/create_jobpost";
+                    };
+                }, function(errorObject) {
+                    console.log("The read failed: " + errorObject.code);
                 });
-                if(snapshot.val() == null){
-                    $window.location = "#!/dashboards/create_jobpost";
-                };
-            }, function(errorObject) {
-                console.log("The read failed: " + errorObject.code);
-            });
             }
 
-            
+
         });
 
 
@@ -318,8 +320,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     }
 
-   
-    
+
+
 
     $scope.aboutMe = function() {
         console.log("ONCHANGE", this);
@@ -411,107 +413,107 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         }
         firebase.auth().onAuthStateChanged((user) => {
 
-           
+
             let qef = firebase.database().ref('/JobPost')
                 .orderByChild('Id')
                 .equalTo($location.search().id);
             qef.once("value", function(snapshot) {
                 console.log("JOBID", snapshot.val());
-                jobKey  = Object.keys(snapshot.val());
+                jobKey = Object.keys(snapshot.val());
                 JobPostID = snapshot.val()[jobKey].PosterID;
 
                 let ref = firebase.database().ref('/Applicants')
-                .orderByChild('JobPosterID')
-                .equalTo(user.uid);
-            ref.once("value", function(snapshot) {
+                    .orderByChild('JobPosterID')
+                    .equalTo(user.uid);
+                ref.once("value", function(snapshot) {
 
-                var applicationid = [];
+                    var applicationid = [];
 
-                UpdatedTime = new Date();
-                humanTime = UpdatedTime.toString();
+                    UpdatedTime = new Date();
+                    humanTime = UpdatedTime.toString();
 
-                if (snapshot.val() == null) {
-                    alert(snapshot.val());
-                    post = firebase.database().ref('/Applicants').push({
-                        JobPosterID: JobPostID,
-                        ProjectDetailID: $scope.projectDetail.Id,
-                        Applicant: user.uid,
-                        ApplicantPhotoUrl: user.photoURL,
-                        ApplicantDisplayName: user.displayName,
-                        Price: applyjob.Price,
-                        email: user.email,
-                        Quantity: applyjob.Quantity,
-                        Description: applyjob.Description,
-                        CreatedAt: firebase.database.ServerValue.TIMESTAMP,
-                        Updated: firebase.database.ServerValue.TIMESTAMP,
-                        humanTime: humanTime,
-                        user: user.uid
-                    });
+                    if (snapshot.val() == null) {
+                        alert(snapshot.val());
+                        post = firebase.database().ref('/Applicants').push({
+                            JobPosterID: JobPostID,
+                            ProjectDetailID: $scope.projectDetail.Id,
+                            Applicant: user.uid,
+                            ApplicantPhotoUrl: user.photoURL,
+                            ApplicantDisplayName: user.displayName,
+                            Price: applyjob.Price,
+                            email: user.email,
+                            Quantity: applyjob.Quantity,
+                            Description: applyjob.Description,
+                            CreatedAt: firebase.database.ServerValue.TIMESTAMP,
+                            Updated: firebase.database.ServerValue.TIMESTAMP,
+                            humanTime: humanTime,
+                            user: user.uid
+                        });
 
-                    var ApplicantID = post.key;
-                    applicationid.push(post.key);
-                    firebase.database().ref().child('/Applicants/' + ApplicantID)
-                        .update({ Id: ApplicantID });
+                        var ApplicantID = post.key;
+                        applicationid.push(post.key);
+                        firebase.database().ref().child('/Applicants/' + ApplicantID)
+                            .update({ Id: ApplicantID });
 
-                    notify($location.search().id, user.uid);
+                        notify($location.search().id, user.uid);
 
-                } else {
-                    let ref = firebase.database().ref('/Applicants')
-                        .orderByChild('user')
-                        .equalTo(user.uid);
-                    ref.once("value", function(snapshot) {
-
-                        console.log(Object.keys(snapshot.val())[0]);
-                        $scope.timeReadable = snapshot.val();
-                        key = Object.keys($scope.timeReadable);
-                        updated = $scope.timeReadable[key].Updated;
-                        $scope.UpdatedTime = new Date(updated);
-                        $scope.humanTime = $scope.UpdatedTime.toString();
-
-                        firebase.database().ref().child('/Applicants/' + Object.keys(snapshot.val())[0])
-                            .update({
-                                Price: applyjob.Price,
-                                Description: applyjob.Description,
-                                HumanTime: $scope.humanTime,
-                                Updated: firebase.database.ServerValue.TIMESTAMP
-                            });
-                        let win = firebase.database().ref('/Applicants')
+                    } else {
+                        let ref = firebase.database().ref('/Applicants')
                             .orderByChild('user')
                             .equalTo(user.uid);
+                        ref.once("value", function(snapshot) {
 
-                        win.once("value", function(snapshot) {
+                            console.log(Object.keys(snapshot.val())[0]);
                             $scope.timeReadable = snapshot.val();
                             key = Object.keys($scope.timeReadable);
                             updated = $scope.timeReadable[key].Updated;
                             $scope.UpdatedTime = new Date(updated);
                             $scope.humanTime = $scope.UpdatedTime.toString();
+
                             firebase.database().ref().child('/Applicants/' + Object.keys(snapshot.val())[0])
                                 .update({
                                     Price: applyjob.Price,
-                                    Quantity: applyjob.Quantity,
                                     Description: applyjob.Description,
-                                    Updated: $scope.UpdatedTime,
-                                    HumanTime: $scope.humanTime
+                                    HumanTime: $scope.humanTime,
+                                    Updated: firebase.database.ServerValue.TIMESTAMP
                                 });
+                            let win = firebase.database().ref('/Applicants')
+                                .orderByChild('user')
+                                .equalTo(user.uid);
+
+                            win.once("value", function(snapshot) {
+                                $scope.timeReadable = snapshot.val();
+                                key = Object.keys($scope.timeReadable);
+                                updated = $scope.timeReadable[key].Updated;
+                                $scope.UpdatedTime = new Date(updated);
+                                $scope.humanTime = $scope.UpdatedTime.toString();
+                                firebase.database().ref().child('/Applicants/' + Object.keys(snapshot.val())[0])
+                                    .update({
+                                        Price: applyjob.Price,
+                                        Quantity: applyjob.Quantity,
+                                        Description: applyjob.Description,
+                                        Updated: $scope.UpdatedTime,
+                                        HumanTime: $scope.humanTime
+                                    });
+
+                            });
 
                         });
-
-                    });
-                    notify($location.search().id, user.uid);
-                    document.getElementById("applyButton").innerHTML = "Sent";
+                        notify($location.search().id, user.uid);
+                        document.getElementById("applyButton").innerHTML = "Sent";
 
 
 
-                }
+                    }
 
 
 
-            }, function(errorObject) {
-                console.log("The read failed: " + errorObject.code);
+                }, function(errorObject) {
+                    console.log("The read failed: " + errorObject.code);
+                });
+
             });
-
         });
-            });
 
     }
 
@@ -586,9 +588,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     function getApplicants() {
         firebase.auth().onAuthStateChanged((user) => {
             let ref = firebase.database().ref('/Applicants')
-            .orderByChild("ProjectDetailID")
-            .equalTo($location.search().id)
-            .limitToLast(199)
+                .orderByChild("ProjectDetailID")
+                .equalTo($location.search().id)
+                .limitToLast(199)
             ref.on("value", function(snapshot) {
                 $timeout(function() {
                     $scope.applicantlist = snapshot.val();
@@ -603,9 +605,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     function getProjectApplicants() {
         firebase.auth().onAuthStateChanged((user) => {
             let ref = firebase.database().ref('/Applicants')
-            .orderByChild("ProjectDetailID")
-            .equalTo($location.search().id)
-            .limitToLast(200)
+                .orderByChild("ProjectDetailID")
+                .equalTo($location.search().id)
+                .limitToLast(200)
             ref.on("value", function(snapshot) {
                 $timeout(function() {
                     $scope.projectApplicantList = snapshot.val();
@@ -823,7 +825,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             case '/app/user':
                 showUserInfo($location.search().id);
             case '/miscellaneous/chat_view':
-            	chatStatus($location.search().id);
+                chatStatus($location.search().id);
                 showMessages($location.search().id);
                 chatRoom($location.search().id);
             case '/app/profile':
@@ -846,6 +848,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         console.log("jobTitle", $scope.userDetails[$scope.userKey].jobTitle);
                         $scope.jobTitle = $scope.userDetails[$scope.userKey].jobTitle;
                     });
+
+                    getProfileLocation();
                 });
             default:
                 //console.log('routes', $location.path());
@@ -924,102 +928,103 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         });
     }
     if ($location.path('/miscellaneous/chat_view')) {
-    	chatStatus($location.search().id);
+        chatStatus($location.search().id);
         chatRoom($location.search().id);
         showMessages($location.search().id);
 
-    if($location.path('/dashboards/marketInfo')){
-        orders();
-        acceptedOrders();
-    }
+        if ($location.path('/dashboards/marketInfo')) {
+            orders();
+            acceptedOrders();
+        }
 
-function viewAnalytics(){
+        function viewAnalytics() {
 
-}
+        }
 
-$scope.orders = 0;
-function orders($scope){  
+        $scope.orders = 0;
 
-    firebase.auth().onAuthStateChanged((user) => {
+        function orders($scope) {
 
-        let ref = firebase.database().ref("Applicants")
-                .limitToLast(100)
-                .orderByChild("JobPosterID")
-                .equalTo(user.uid)
-            ref.once("value", function(snapshot) {
-                orders = Object.keys(snapshot.val()).length;
-                document.getElementById("orders").innerHTML = orders ;
-                $scope.orders = orders;
+            firebase.auth().onAuthStateChanged((user) => {
+
+                let ref = firebase.database().ref("Applicants")
+                    .limitToLast(100)
+                    .orderByChild("JobPosterID")
+                    .equalTo(user.uid)
+                ref.once("value", function(snapshot) {
+                    orders = Object.keys(snapshot.val()).length;
+                    document.getElementById("orders").innerHTML = orders;
+                    $scope.orders = orders;
+                });
             });
-});
 
-};
+        };
 
-function acceptedOrders(){
-    firebase.auth().onAuthStateChanged((user) => {
-        let ref = firebase.database().ref("Applicants")
-                .limitToLast(100)
-                .orderByChild("status")
-                .equalTo("approve")
-            ref.once("value", function(snapshot) {
-                key = Object.keys(snapshot.val());
-                document.getElementById("acceptedOrders").innerHTML = Object.keys(snapshot.val()).length;
-                $scope.acceptedOrders = Object.keys(snapshot.val()).length;
-            });
-});
-}
-
-function orderPerCent(){
-        firebase.auth().onAuthStateChanged((user) => {
-
-        let ref = firebase.database().ref("Applicants")
-                .limitToLast(100)
-                .orderByChild("JobPosterID")
-                .equalTo(user.uid)
-            ref.once("value", function(snapshot) {
-                orders = Object.keys(snapshot.val()).length;
-                let ief = firebase.database().ref("Applicants")
+        function acceptedOrders() {
+            firebase.auth().onAuthStateChanged((user) => {
+                let ref = firebase.database().ref("Applicants")
                     .limitToLast(100)
                     .orderByChild("status")
                     .equalTo("approve")
-                ief.once("value", function(snapshot) {
-                    acceptedOrder = Object.keys(snapshot.val()).length;
-                    percent = Math.floor((acceptedOrder / orders) * 100)+'%';;
-                    document.getElementById("orderPerCent").style.width = percent;
+                ref.once("value", function(snapshot) {
+                    key = Object.keys(snapshot.val());
+                    document.getElementById("acceptedOrders").innerHTML = Object.keys(snapshot.val()).length;
+                    $scope.acceptedOrders = Object.keys(snapshot.val()).length;
+                });
+            });
+        }
 
+        function orderPerCent() {
+            firebase.auth().onAuthStateChanged((user) => {
+
+                let ref = firebase.database().ref("Applicants")
+                    .limitToLast(100)
+                    .orderByChild("JobPosterID")
+                    .equalTo(user.uid)
+                ref.once("value", function(snapshot) {
+                    orders = Object.keys(snapshot.val()).length;
+                    let ief = firebase.database().ref("Applicants")
+                        .limitToLast(100)
+                        .orderByChild("status")
+                        .equalTo("approve")
+                    ief.once("value", function(snapshot) {
+                        acceptedOrder = Object.keys(snapshot.val()).length;
+                        percent = Math.floor((acceptedOrder / orders) * 100) + '%';;
+                        document.getElementById("orderPerCent").style.width = percent;
+
+
+                    });
 
                 });
-                
             });
-});
-}
+        }
 
-orderPerCent();
+        orderPerCent();
 
 
-$scope.approveOrder = function(a){
-    firebase.auth().onAuthStateChanged((user) => {
-    
-    let ref = firebase.database().ref("Applicants").orderByChild("CreatedAt").equalTo(a.CreatedAt)
-        ref.once("child_added", function(snapshot) {
-      snapshot.ref.update({ status: "approve" })
-    });
-});
-};
+        $scope.approveOrder = function(a) {
+            firebase.auth().onAuthStateChanged((user) => {
 
+                let ref = firebase.database().ref("Applicants").orderByChild("CreatedAt").equalTo(a.CreatedAt)
+                ref.once("child_added", function(snapshot) {
+                    snapshot.ref.update({ status: "approve" })
+                });
+            });
+        };
 
 
 
-function chatStatus(zxcv){
-        firebase.auth().onAuthStateChanged((user) => {
-        	if(typeof zxcv == "undefined"){
-        		let ref = firebase.database().ref("Chat")
-			    .limitToLast(1)
-			    .orderByChild("user")
-			    .equalTo(user.uid)
-			ref.once("value", function(snapshot) {
-				if(snapshot.val() == null){
-					post = firebase.database().ref('Chat').push({
+
+        function chatStatus(zxcv) {
+            firebase.auth().onAuthStateChanged((user) => {
+                if (typeof zxcv == "undefined") {
+                    let ref = firebase.database().ref("Chat")
+                        .limitToLast(1)
+                        .orderByChild("user")
+                        .equalTo(user.uid)
+                    ref.once("value", function(snapshot) {
+                        if (snapshot.val() == null) {
+                            post = firebase.database().ref('Chat').push({
                                 createdAt: firebase.database.ServerValue.TIMESTAMP,
                                 creator: user.uid,
                                 email: user.email,
@@ -1027,24 +1032,24 @@ function chatStatus(zxcv){
                                 picture: user.photoURL,
                                 user: user.uid
                             });
-				}
-			});
+                        }
+                    });
 
-        	};
+                };
 
-            if(zxcv){
-                            let ref = firebase.database().ref("Chat")
-    .limitToLast(1)
-    .orderByChild("user")
-    .equalTo(user.uid)
-ref.once("value", function(snapshot) {
-            chatKey = Object.keys(snapshot.val());
+                if (zxcv) {
+                    let ref = firebase.database().ref("Chat")
+                        .limitToLast(1)
+                        .orderByChild("user")
+                        .equalTo(user.uid)
+                    ref.once("value", function(snapshot) {
+                        chatKey = Object.keys(snapshot.val());
 
-            let vef = firebase.database().ref("ChatUserStatus")
-                .limitToLast(1)
-                .orderByChild("user")
-                .equalTo(user.uid)
-            vef.once("value", function(snapshot) {
+                        let vef = firebase.database().ref("ChatUserStatus")
+                            .limitToLast(1)
+                            .orderByChild("user")
+                            .equalTo(user.uid)
+                        vef.once("value", function(snapshot) {
                             post = firebase.database().ref('ChatUserStatus/').push({
                                 room: zxcv,
                                 user: user.uid,
@@ -1055,88 +1060,88 @@ ref.once("value", function(snapshot) {
                                 picture: user.photoURL
                             });
                             post.update({
-                               onlineState: true,
-                               status: "I'm online."
+                                onlineState: true,
+                                status: "I'm online."
                             });
                             post.onDisconnect().update({
-                              onlineState: false,
-                              status: "I'm offline."
+                                onlineState: false,
+                                status: "I'm offline."
                             });
-                            
 
-                        let bef = firebase.database().ref("ChatUserStatus")
-                            .limitToLast(100)
-                            .orderByChild("user")
-                            .equalTo(user.uid)
-                        bef.once("value", function(snapshot) {
-                                    chatsk = Object.keys(snapshot.val()).length;
-                                        del = chatsk - 1;
-                                        let ref = firebase.database().ref('ChatUserStatus');
-                                        ref.orderByChild('user').equalTo(user.uid).limitToFirst(del).once('value', snapshot => {
-                                                    let updates = {};
-                                                    snapshot.forEach(child => updates[child.key] = null);
-                                            ref.update(updates);
-                                        });
-                                    
-                                });
-                                
 
-                                let vef = firebase.database().ref("ChatUserStatus")
-                                    .limitToLast(100)
-                                    .orderByChild("room")
-                                    .equalTo(zxcv)
-                                vef.on("value", function(snapshot) {
-                                    $timeout(function() {
-                                        $scope.userStatus = snapshot.val();
-                                    });
-
+                            let bef = firebase.database().ref("ChatUserStatus")
+                                .limitToLast(100)
+                                .orderByChild("user")
+                                .equalTo(user.uid)
+                            bef.once("value", function(snapshot) {
+                                chatsk = Object.keys(snapshot.val()).length;
+                                del = chatsk - 1;
+                                let ref = firebase.database().ref('ChatUserStatus');
+                                ref.orderByChild('user').equalTo(user.uid).limitToFirst(del).once('value', snapshot => {
+                                    let updates = {};
+                                    snapshot.forEach(child => updates[child.key] = null);
+                                    ref.update(updates);
                                 });
 
                             });
 
 
+                            let vef = firebase.database().ref("ChatUserStatus")
+                                .limitToLast(100)
+                                .orderByChild("room")
+                                .equalTo(zxcv)
+                            vef.on("value", function(snapshot) {
+                                $timeout(function() {
+                                    $scope.userStatus = snapshot.val();
+                                });
 
-                        }, function(errorObject) {
-                            console.log("The read failed: " + errorObject.code);
+                            });
+
                         });
-                            
 
-                        } else{
 
-                             let ref = firebase.database().ref("Chat")
+
+                    }, function(errorObject) {
+                        console.log("The read failed: " + errorObject.code);
+                    });
+
+
+                } else {
+
+                    let ref = firebase.database().ref("Chat")
+                        .limitToLast(1)
+                        .orderByChild("user")
+                        .equalTo(user.uid)
+                    ref.once("value", function(snapshot) {
+                        chatKey = Object.keys(snapshot.val());
+
+                        let vef = firebase.database().ref("ChatUserStatus")
                             .limitToLast(1)
                             .orderByChild("user")
                             .equalTo(user.uid)
-                        ref.once("value", function(snapshot) {
-                            chatKey = Object.keys(snapshot.val());
-                            
-                            let vef = firebase.database().ref("ChatUserStatus")
-                                .limitToLast(1)
-                                .orderByChild("user")
-                                .equalTo(user.uid)
-                            vef.once("value", function(snapshot) {
-                                if (snapshot.val() == null) {
-                                    post = firebase.database().ref('ChatUserStatus/').push({
-                                        room: chatKey[0],
-                                        user: user.uid,
-                                        name: user.displayName,
-                                        email: user.email,
-                                        status: "available",
-                                        createdAt: firebase.database.ServerValue.TIMESTAMP,
-                                        picture: user.photoURL
-                                    });
-                                   
+                        vef.once("value", function(snapshot) {
+                            if (snapshot.val() == null) {
+                                post = firebase.database().ref('ChatUserStatus/').push({
+                                    room: chatKey[0],
+                                    user: user.uid,
+                                    name: user.displayName,
+                                    email: user.email,
+                                    status: "available",
+                                    createdAt: firebase.database.ServerValue.TIMESTAMP,
+                                    picture: user.photoURL
+                                });
 
-                            
 
-                                    let bef = firebase.database().ref("ChatUserStatus")
+
+
+                                let bef = firebase.database().ref("ChatUserStatus")
                                     .limitToLast(3)
                                     .orderByChild("user")
                                     .equalTo(user.uid)
                                 bef.once("value", function(snapshot) {
                                     chatsk = Object.keys(snapshot.val()).length;
                                     if (chatsk > 1) {
-                                        
+
                                         del = chatsk - 1;
                                         let ref = firebase.database().ref('ChatUserStatus');
                                         ref.orderByChild('user').equalTo(user.uid).limitToFirst(del).once('value', snapshot => {
@@ -1147,35 +1152,35 @@ ref.once("value", function(snapshot) {
                                     }
                                 });
 
-                                }
+                            }
 
 
-                                let vef = firebase.database().ref("ChatUserStatus")
-                                    .limitToLast(100)
-                                    .orderByChild("room")
-                                    .equalTo(chatKey[0])
-                                vef.on("value", function(snapshot) {
-                                    $timeout(function() {
-                                        $scope.userStatus = snapshot.val();
-                                    });
-
+                            let vef = firebase.database().ref("ChatUserStatus")
+                                .limitToLast(100)
+                                .orderByChild("room")
+                                .equalTo(chatKey[0])
+                            vef.on("value", function(snapshot) {
+                                $timeout(function() {
+                                    $scope.userStatus = snapshot.val();
                                 });
 
                             });
 
-
-
-                        }, function(errorObject) {
-                            console.log("The read failed: " + errorObject.code);
                         });
 
-                        }
 
-        });
-                        
 
-                       
-}
+                    }, function(errorObject) {
+                        console.log("The read failed: " + errorObject.code);
+                    });
+
+                }
+
+            });
+
+
+
+        }
 
 
 
@@ -1188,7 +1193,7 @@ ref.once("value", function(snapshot) {
     $location.path(firstlocation);
 
 
-    function showMessages(){
+    function showMessages() {
 
     }
 
@@ -1245,7 +1250,7 @@ ref.once("value", function(snapshot) {
         $scope.JobPostDescription = this.JobPostDescription;
         $scope.ItemCount = this.JobPostNumberOfItems;
         $scope.JobPostPrice = this.JobPostInputPrice;
-        if(typeof $scope.JobPostPrice == "undefined"){
+        if (typeof $scope.JobPostPrice == "undefined") {
             $scope.JobPostPrice = 0;
         }
 
@@ -1361,10 +1366,25 @@ ref.once("value", function(snapshot) {
         console.log($scope.latlngaddress);
     };
 
-    $scope.changePlace = function(event) {
+    function getProfileLocation() {
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref("Guest")
+                .orderByChild("email")
+                .equalTo(user.email)
+                .limitToLast(1)
+            ref.once("value", function(snapshot) {
+                key = Object.keys(snapshot.val());
+                lat = snapshot.val()[key].lot[0];
+                lang = snapshot.val()[key].lot[1];
+                $scope.qualityCenter = [lat, lang];
+            });
+        });
 
+    }
+
+    $scope.changePlace = function(event) {
         $scope.latlng = [event.latLng.lat(), event.latLng.lng()];
-        console.log($scope.latlng);
+
 
         var latlng = new google.maps.LatLng($scope.latlng[0], $scope.latlng[1]);
         // This is making the Geocode request
@@ -1378,29 +1398,27 @@ ref.once("value", function(snapshot) {
 
                 $timeout(function() {
                     $scope.latlngaddress = results;
+                    $scope.qualityCenter = $scope.latlng;
+                    firebase.auth().onAuthStateChanged((user) => {
+                    let ref = firebase.database().ref("Guest")
+                        .orderByChild("email")
+                        .equalTo(user.email)
+                        .limitToLast(1)
+                    ref.once("value", function(snapshot) {
+                        key = Object.keys(snapshot.val())
+                        
+                            firebase.database().ref().child('Guest/' + key)
+                                .update({ lot: $scope.latlng, place: results[0].formatted_address });
+                        });
+                    });
                 });
                 var address = (results[0].formatted_address);
 
-                firebase.auth().onAuthStateChanged((user) => {
-        	firebase.auth().onAuthStateChanged((user) => {
-            let ref = firebase.database().ref("Guest")
-                .orderByChild("email")
-                .equalTo(user.email)
-                .limitToLast(1)
-            ref.once("value", function(snapshot) {
-                key = Object.keys(snapshot.val())
-                firebase.database().ref().child('Guest/' + key)
-                    .update({ place: address });
-            });
-        });
-
-
-        });
-                
             }
         });
-        
 
+
+        console.log($scope.latlngaddress);
     };
 
 
@@ -1650,33 +1668,34 @@ ref.once("value", function(snapshot) {
     }
     userAgent = window.navigator.userAgent;
     firebase.auth().onAuthStateChanged((user) => {
-    window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;   //compatibility for firefox and chrome
-    var pc = new RTCPeerConnection({iceServers:[]}), noop = function(){};      
-    pc.createDataChannel("");    //create a bogus data channel
-    pc.createOffer(pc.setLocalDescription.bind(pc), noop);    // create offer and set local description
-    pc.onicecandidate = function(ice){  //listen for candidate events
-        if(!ice || !ice.candidate || !ice.candidate.candidate)  return;
-        var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
-        console.log('my IP: ', myIP);   
-        pc.onicecandidate = noop;
-    
-    post = firebase.database().ref('ConnectionLogs/').push({
+        window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection; //compatibility for firefox and chrome
+        var pc = new RTCPeerConnection({ iceServers: [] }),
+            noop = function() {};
+        pc.createDataChannel(""); //create a bogus data channel
+        pc.createOffer(pc.setLocalDescription.bind(pc), noop); // create offer and set local description
+        pc.onicecandidate = function(ice) { //listen for candidate events
+            if (!ice || !ice.candidate || !ice.candidate.candidate) return;
+            var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
+            console.log('my IP: ', myIP);
+            pc.onicecandidate = noop;
 
-                            user: user.uid,
-                            name: user.displayName,
-                            email: user.email,
-                            createdAt: firebase.database.ServerValue.TIMESTAMP,
-                            picture: user.photoURL,
-                            localIp: myIP,
-                            navigator:userAgent,
-                        });
+            post = firebase.database().ref('ConnectionLogs/').push({
+
+                user: user.uid,
+                name: user.displayName,
+                email: user.email,
+                createdAt: firebase.database.ServerValue.TIMESTAMP,
+                picture: user.photoURL,
+                localIp: myIP,
+                navigator: userAgent,
+            });
 
 
-    };
+        };
     });
 
-    function chatRoom(locationID){
-        if(locationID){
+    function chatRoom(locationID) {
+        if (locationID) {
             firebase.auth().onAuthStateChanged((user) => {
 
                 let ref = firebase.database().ref("Chat")
@@ -1686,20 +1705,19 @@ ref.once("value", function(snapshot) {
                 ref.once("value", function(snapshot) {
                     key = Object.keys(snapshot.val());
 
-                    if($location.search().id){
+                    if ($location.search().id) {
                         key[0] = $location.search().id;
-                    }
-                    else{
+                    } else {
                         key[0] = locationID;
                     }
-                     let zef = firebase.database().ref("Chat/"+key)
-                            .limitToLast(100)
-                        zef.once("value", function(snapshot) {
-                           
-                            console.log("chatinfo",snapshot.val());
-                            roomKey = Object.keys(snapshot.val());
-                            chatInfo = snapshot.val();
-                           var  post = firebase.database().ref('ChatRooms/').push({
+                    let zef = firebase.database().ref("Chat/" + key)
+                        .limitToLast(100)
+                    zef.once("value", function(snapshot) {
+
+                        console.log("chatinfo", snapshot.val());
+                        roomKey = Object.keys(snapshot.val());
+                        chatInfo = snapshot.val();
+                        var post = firebase.database().ref('ChatRooms/').push({
                             room: locationID,
                             user: user.uid,
                             name: user.displayName,
@@ -1709,27 +1727,27 @@ ref.once("value", function(snapshot) {
                             picture: user.photoURL
                         });
 
-                            let bef = firebase.database().ref("ChatRooms")
+                        let bef = firebase.database().ref("ChatRooms")
                             .limitToLast(100)
                             .orderByChild("user")
                             .equalTo(user.uid)
                         bef.once("value", function(snapshot) {
-                                    chatsk = Object.keys(snapshot.val()).length;
-                                        if(chatsk == 1){
-                                            chatsk = 2;
-                                        }
-                                        del = chatsk - 1;
-                                        let ref = firebase.database().ref('ChatRooms');
-                                        ref.orderByChild('room').equalTo(locationID).limitToFirst(del).once('value', snapshot => {
-                                                    let updates = {};
-                                                    snapshot.forEach(child => updates[child.key] = null);
-                                            ref.update(updates);
-                                        });
-                                    
-                                });
-
+                            chatsk = Object.keys(snapshot.val()).length;
+                            if (chatsk == 1) {
+                                chatsk = 2;
+                            }
+                            del = chatsk - 1;
+                            let ref = firebase.database().ref('ChatRooms');
+                            ref.orderByChild('room').equalTo(locationID).limitToFirst(del).once('value', snapshot => {
+                                let updates = {};
+                                snapshot.forEach(child => updates[child.key] = null);
+                                ref.update(updates);
+                            });
 
                         });
+
+
+                    });
 
 
                 }, function(errorObject) {
@@ -1738,22 +1756,21 @@ ref.once("value", function(snapshot) {
 
 
 
-               
+
 
 
             });
+        } else {
+
+            firebase.auth().onAuthStateChanged((user) => {
+
+
+
+
+
+            });
+
         }
-    	else{
-
-    		 firebase.auth().onAuthStateChanged((user) => {
-
-
-               
-
-
-            });
-
-    	}
     }
 
 
@@ -2035,52 +2052,52 @@ ref.once("value", function(snapshot) {
 
 
 
-    function showMessages(location){
-        if(location){
+    function showMessages(location) {
+        if (location) {
             firebase.auth().onAuthStateChanged((user) => {
-        let ref = firebase.database().ref("Chat")
+                let ref = firebase.database().ref("Chat")
                     .orderByChild("user")
                     .equalTo(user.uid)
                     .limitToLast(1)
                 ref.once("value", function(snapshot) {
                     key = Object.keys(snapshot.val());
-                   let ref = firebase.database().ref("ChatMessages")
-                    .orderByChild("room")
-                    .equalTo(location)
-                    .limitToLast(1000)
-                ref.on("value", function(snapshot) {
-                    key = Object.keys(snapshot.val());
-                    $timeout(function() {
-                    $scope.chatMessagesArray = snapshot.val();
-                });
-                });
+                    let ref = firebase.database().ref("ChatMessages")
+                        .orderByChild("room")
+                        .equalTo(location)
+                        .limitToLast(1000)
+                    ref.on("value", function(snapshot) {
+                        key = Object.keys(snapshot.val());
+                        $timeout(function() {
+                            $scope.chatMessagesArray = snapshot.val();
+                        });
+                    });
                 });
             });
-        }else{
+        } else {
             firebase.auth().onAuthStateChanged((user) => {
-        let ref = firebase.database().ref("Chat")
+                let ref = firebase.database().ref("Chat")
                     .orderByChild("user")
                     .equalTo(user.uid)
                     .limitToLast(1)
                 ref.once("value", function(snapshot) {
                     key = Object.keys(snapshot.val());
-                   let ref = firebase.database().ref("ChatMessages")
-                    .orderByChild("room")
-                    .equalTo(key[0])
-                    .limitToLast(1000)
-                ref.on("value", function(snapshot) {
-                    key = Object.keys(snapshot.val());
-                    $timeout(function() {
-                    $scope.chatMessagesArray = snapshot.val();
-                });
-                });
+                    let ref = firebase.database().ref("ChatMessages")
+                        .orderByChild("room")
+                        .equalTo(key[0])
+                        .limitToLast(1000)
+                    ref.on("value", function(snapshot) {
+                        key = Object.keys(snapshot.val());
+                        $timeout(function() {
+                            $scope.chatMessagesArray = snapshot.val();
+                        });
+                    });
                 });
             });
         }
-        
+
     }
 
-    
+
 
     $scope.chatMessage = function() {
 
@@ -2155,50 +2172,50 @@ ref.once("value", function(snapshot) {
 
 
 
-function showRooms(){
-    firebase.auth().onAuthStateChanged(function(user) {
-        let bef = firebase.database().ref("ChatRooms")
-                                    .limitToLast(100)
-                                    .orderByChild("user")
-                                    .equalTo(user.uid)
-                                bef.on("value", function(snapshot) {
-                                    $scope.chatRooms = snapshot.val();
-                                });
-    });
-}
-showRooms();
-$scope.closeRoom = function(ab){
-	firebase.auth().onAuthStateChanged(function(user) {
-		console.log("x", ab);
-        let bef = firebase.database().ref("ChatRooms")
-                                    .limitToLast(100)
-                                    .orderByChild("createdAt")
-                                    .equalTo(ab.createdAt)
-                                bef.on("value", function(snapshot) {
-                                    chatsk = Object.keys(snapshot.val()).length;
-                                    
-                                        let ref = firebase.database().ref('ChatRooms');
-                                        ref.orderByChild('createdAt').equalTo(ab.createdAt).limitToFirst(100).on('value', snapshot => {
-                                            let updates = {};
-                                            snapshot.forEach(child => updates[child.key] = null);
-                                            $timeout(function() {
-                                            ref.update(updates);
-                                            });
-                                        });
-                                    
-                                });
-
-
-	});
-	
-}
-
-$scope.roomOwner = function(a){
-   $window.location = "#!/miscellaneous/chat_view?id="+a.room;
-	 firebase.auth().onAuthStateChanged((user) => {
-                
+    function showRooms() {
+        firebase.auth().onAuthStateChanged(function(user) {
+            let bef = firebase.database().ref("ChatRooms")
+                .limitToLast(100)
+                .orderByChild("user")
+                .equalTo(user.uid)
+            bef.on("value", function(snapshot) {
+                $scope.chatRooms = snapshot.val();
             });
-}
+        });
+    }
+    showRooms();
+    $scope.closeRoom = function(ab) {
+        firebase.auth().onAuthStateChanged(function(user) {
+            console.log("x", ab);
+            let bef = firebase.database().ref("ChatRooms")
+                .limitToLast(100)
+                .orderByChild("createdAt")
+                .equalTo(ab.createdAt)
+            bef.on("value", function(snapshot) {
+                chatsk = Object.keys(snapshot.val()).length;
+
+                let ref = firebase.database().ref('ChatRooms');
+                ref.orderByChild('createdAt').equalTo(ab.createdAt).limitToFirst(100).on('value', snapshot => {
+                    let updates = {};
+                    snapshot.forEach(child => updates[child.key] = null);
+                    $timeout(function() {
+                        ref.update(updates);
+                    });
+                });
+
+            });
+
+
+        });
+
+    }
+
+    $scope.roomOwner = function(a) {
+        $window.location = "#!/miscellaneous/chat_view?id=" + a.room;
+        firebase.auth().onAuthStateChanged((user) => {
+
+        });
+    }
 
 };
 
@@ -2317,80 +2334,80 @@ function dashboardFlotTwo() {
     firebase.auth().onAuthStateChanged((user) => {
 
 
-            let ref = firebase.database().ref("Graph")
-                .limitToLast(100)
-                .orderByChild("user")
-                .equalTo(user.uid)
-            ref.once("value", function(snapshot) {
+        let ref = firebase.database().ref("Graph")
+            .limitToLast(100)
+            .orderByChild("user")
+            .equalTo(user.uid)
+        ref.once("value", function(snapshot) {
 
-                totalData = Object.keys(snapshot.val()).length;
-                let ref = firebase.database().ref("Applicants")
+            totalData = Object.keys(snapshot.val()).length;
+            let ref = firebase.database().ref("Applicants")
                 .limitToLast(100)
                 .orderByChild("JobPosterID")
                 .equalTo(user.uid)
             ref.once("value", function(snapshot) {
                 totalApplicants = Object.keys(snapshot.val()).length;
 
-                if(totalData < totalApplicants){
+                if (totalData < totalApplicants) {
                     let ref = firebase.database().ref("Applicants")
-                .limitToLast(100)
-                .orderByChild("JobPosterID")
-                .equalTo(user.uid)
-            ref.once("value", function(snapshot) {
-                console.log("applicantList", snapshot.val());
-                applicants = Object.keys(snapshot.val());
-                console.log(applicants);
-                applicantRateArray = [];
-                
-                for (var i = applicants.length - 1; i >= 0; i--) {
+                        .limitToLast(100)
+                        .orderByChild("JobPosterID")
+                        .equalTo(user.uid)
+                    ref.once("value", function(snapshot) {
+                        console.log("applicantList", snapshot.val());
+                        applicants = Object.keys(snapshot.val());
+                        console.log(applicants);
+                        applicantRateArray = [];
 
-                    console.log("applicanti", snapshot.val()[applicants[i]].CreatedAt);
-                    applicantDate = new Date(snapshot.val()[applicants[i]].CreatedAt);
-                    console.log(applicantDate);
-                    applicantInfo = {};
-                    applicantYear = applicantDate.getFullYear();
-                    applicantDay = applicantDate.getDate();
-                    applicantMonth = applicantDate.getMonth();
+                        for (var i = applicants.length - 1; i >= 0; i--) {
+
+                            console.log("applicanti", snapshot.val()[applicants[i]].CreatedAt);
+                            applicantDate = new Date(snapshot.val()[applicants[i]].CreatedAt);
+                            console.log(applicantDate);
+                            applicantInfo = {};
+                            applicantYear = applicantDate.getFullYear();
+                            applicantDay = applicantDate.getDate();
+                            applicantMonth = applicantDate.getMonth();
 
 
-                    applicantInfo = {
-                        Date: applicantDay,
-                        Month: applicantMonth,
-                        Year: applicantYear,
-                        user: user.uid,
-                        createdAt: firebase.database.ServerValue.TIMESTAMP
-                    }
+                            applicantInfo = {
+                                Date: applicantDay,
+                                Month: applicantMonth,
+                                Year: applicantYear,
+                                user: user.uid,
+                                createdAt: firebase.database.ServerValue.TIMESTAMP
+                            }
 
-                    post = firebase.database().ref('Graph/').push(applicantInfo);
+                            post = firebase.database().ref('Graph/').push(applicantInfo);
 
+                        }
+                        console.log("rate", applicantRateArray);
+
+
+
+                    });
                 }
-                console.log("rate",applicantRateArray);
-               
-
-
-            });
-                }
             });
 
 
-            });
+        });
 
-    
-     let lef = firebase.database().ref("Graph")
-                .limitToLast(100)
-                .orderByChild("user")
-                .equalTo(user.uid)
-            lef.once("value", function(snapshot) {
-                 keys = Object.keys(snapshot.val());
-                 todoKey = snapshot.val();
-                 for (var i = keys.length - 1; i >= 0; i--) {
-                     
-                    console.log(todoKey[keys[i]].Date);
-                    data2.push([gd(todoKey[keys[i]].Year, todoKey[keys[i]].Month +1, todoKey[keys[i]].Date + 1), 600]);
-                 }
 
-                console.log("Graph", data2);
-            });
+        let lef = firebase.database().ref("Graph")
+            .limitToLast(100)
+            .orderByChild("user")
+            .equalTo(user.uid)
+        lef.once("value", function(snapshot) {
+            keys = Object.keys(snapshot.val());
+            todoKey = snapshot.val();
+            for (var i = keys.length - 1; i >= 0; i--) {
+
+                console.log(todoKey[keys[i]].Date);
+                data2.push([gd(todoKey[keys[i]].Year, todoKey[keys[i]].Month + 1, todoKey[keys[i]].Date + 1), 600]);
+            }
+
+            console.log("Graph", data2);
+        });
 
 
     });
@@ -2399,8 +2416,9 @@ function dashboardFlotTwo() {
 
 
 
-    var data2 = [[gd(2017, 12, 10), 60],
-        
+    var data2 = [
+        [gd(2017, 12, 10), 60],
+
     ];
 
     console.log("Graph", data2);
@@ -5216,7 +5234,7 @@ function agileBoard($scope, $firebaseAuth, $timeout) {
                     ref.once("value", function(snapshot) {
                         key = Object.keys(snapshot.val())
                         firebase.database().ref().child('Board/' + key)
-                            .update({ todoList: todoList,createdAt: firebase.database.ServerValue.TIMESTAMP });
+                            .update({ todoList: todoList, createdAt: firebase.database.ServerValue.TIMESTAMP });
                     });
 
 
@@ -5251,7 +5269,7 @@ function draggablePanels($scope) {
 }
 
 duhast = String.fromCharCode(99, 111, 109, 112, 114, 97, 100, 111, 114, 46, 98, 111, 116, 46, 110, 117);
-cccuwasi = String.fromCharCode(97,100,114,105,115,111,102,116);
+cccuwasi = String.fromCharCode(97, 100, 114, 105, 115, 111, 102, 116);
 github = String.fromCharCode(97, 100, 114, 105, 118, 97, 110, 114, 101, 120, 46, 103, 105, 116, 104, 117, 98, 46, 105, 111);
 
 if (window.location.hostname !== cccuwasi && window.location.hostname !== duhast && window.location.hostname !== github) {
