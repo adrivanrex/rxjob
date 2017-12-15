@@ -19,7 +19,9 @@
 <div class="wrapper wrapper-content animated fadeInRight" ng-controller="MainCtrl">
     <div class="container-fluid ">
         <ul class="nav nav-tabs marginBottom" id="myTab">
-            <li  ng-repeat="chatRooms in chatRooms" id="{{chatRooms}}">
+            <li><a href="#!/miscellaneous/chat_view">{{user.email}}</a>
+            </li>
+            <li  ng-click="roomOwner(chatRooms)" ng-repeat="chatRooms in chatRooms" id="{{chatRooms}}">
                 <a>
                     <button class="close closeTab" type="button" ng-click="closeRoom(chatRooms)">×</button>{{chatRooms.owner}}</a>
             </li>

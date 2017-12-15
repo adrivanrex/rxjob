@@ -240,6 +240,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     console.log('first location', firstlocation);
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
+        	 $scope.user = user;	
             console.log("CheckIfVerified", user);
             document.getElementById("skin").classList.add('show');
             if (user.displayName == null) {
@@ -2186,7 +2187,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     }
 
-    $scope.roomOwner = function(a) {
+    $scope.roomOwner = function(a) {		
         $window.location = "#!/miscellaneous/chat_view?id=" + a.room;
         firebase.auth().onAuthStateChanged((user) => {
 
