@@ -993,10 +993,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
                 if (zxcv) {	
                 	
-                	/*
-                	*	Under testing
-                	*
-                	*/ 
 
                      firebase.database().ref().child('Chat/' + zxcv)	.update({ key: zxcv });
 					
@@ -1013,7 +1009,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             .limitToLast(1)
                             .orderByChild("email")
                             .equalTo(ecode)
-                        vef.once("value", function(snapshot) {
+                        vef.on("value", function(snapshot) {
                         	$scope.roomUserStatus = snapshot.val();
                         });
                     });
@@ -1119,6 +1115,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
 
+
                                 let bef = firebase.database().ref("ChatUserStatus")
                                     .limitToLast(3)
                                     .orderByChild("user")
@@ -1143,17 +1140,12 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             	
                             	
 
-                            	let lef = firebase.database().ref("ChatUserStatus")
-                                .limitToLast(1)
-                                .orderByChild("user")
-                                .equalTo(user.uid)
-                            lef.on("value", function(snapshot) {
-                                $timeout(function() {
-                                    $scope.userStatus = snapshot.val();
-                                });
-
+                            	let lef = firebase.database().ref("ChatUserStatus/"+key)
+                            	lef.update({ status: "Online" });
+                            	lef.onDisconnect().update({
+                                onlineState: false,
+                                status: "I'm offline."
                             });
-                            //lef.update({ status: "Online" });
 
                             }
 
@@ -1370,7 +1362,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     };
 
     function getProfileLocation() {
-    	$scope.qualityCenter = [10.314919285813161, 124.453125];
         firebase.auth().onAuthStateChanged((user) => {
             let ref = firebase.database().ref("Guest")
                 .orderByChild("email")
@@ -1635,7 +1626,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             }, function(errorObject) {
                 console.log("The read failed: " + errorObject.code);
             });
-            $window.location = "#!/miscellaneous/chat_view";
+            $window.location = "#!/miscellaneous/chat_view?id="+chatKey+"";
         });
 
 
@@ -1770,12 +1761,39 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             });
         } else {
 
-            firebase.auth().onAuthStateChanged((user) => {
+           firebase.auth().onAuthStateChanged((user) => {
 
+                let ref = firebase.database().ref("Chat")
+                    .orderByChild("user")
+                    .equalTo(user.uid)
+                    .limitToLast(1)
+                ref.once("value", function(snapshot) {
+                	chatKey = Object.keys(snapshot.val());
 
+                	/*
+                	*	check if user has room
+                	*/
+                	let ref = firebase.database().ref("ChatRooms")
+	                    .orderByChild("email")
+	                    .equalTo(user.email)
+	                    .limitToLast(1)
+	                ref.once("value", function(snapshot) {
+	                	
+	                	if(snapshot.val() == null){
+	                		var post = firebase.database().ref('ChatRooms/').push({
+                            room: chatKey,
+                            user: user.uid,
+                            name: user.displayName,
+                            email: user.email,
+                            owner: user.uid,
+                            createdAt: firebase.database.ServerValue.TIMESTAMP,
+                            picture: user.photoURL
+                        });
+	                	}
 
+                	});
 
-
+                })
             });
 
         }
