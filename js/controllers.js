@@ -993,6 +993,11 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
                 if (zxcv) {	
                 	
+                	/*
+                	*	Under testing
+                	*
+                	*/ 
+
                      firebase.database().ref().child('Chat/' + zxcv)	.update({ key: zxcv });
 					
 
@@ -1365,6 +1370,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     };
 
     function getProfileLocation() {
+    	$scope.qualityCenter = [10.314919285813161, 124.453125];
         firebase.auth().onAuthStateChanged((user) => {
             let ref = firebase.database().ref("Guest")
                 .orderByChild("email")
