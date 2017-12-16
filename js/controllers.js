@@ -240,7 +240,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     console.log('first location', firstlocation);
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-        	 $scope.user = user;	
+        	 $scope.user = user;		
             console.log("CheckIfVerified", user);
             document.getElementById("skin").classList.add('show');
             if (user.displayName == null) {
@@ -991,7 +991,29 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
                 };
 
-                if (zxcv) {
+                if (zxcv) {	
+                	
+                     firebase.database().ref().child('Chat/' + zxcv)	.update({ key: zxcv });
+					
+
+                     let hef = firebase.database().ref("Chat")
+                        .limitToLast(1)
+                        .orderByChild("key")
+                        .equalTo(zxcv)
+                    hef.once("value", function(snapshot) {
+                    	key = Object.keys(snapshot.val());
+                    	ecode = snapshot.val()[key].email;	
+                    	//$scope.roomUserStatus = snapshot.val();
+                    	let vef = firebase.database().ref("ChatUserStatus")
+                            .limitToLast(1)
+                            .orderByChild("email")
+                            .equalTo(ecode)
+                        vef.once("value", function(snapshot) {
+                        	$scope.roomUserStatus = snapshot.val();
+                        });
+                    });
+
+
                     let ref = firebase.database().ref("Chat")
                         .limitToLast(1)
                         .orderByChild("user")
@@ -1004,6 +1026,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             .orderByChild("user")
                             .equalTo(user.uid)
                         vef.once("value", function(snapshot) {
+
                             post = firebase.database().ref('ChatUserStatus/').push({
                                 room: zxcv,
                                 user: user.uid,
@@ -1013,6 +1036,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                                 createdAt: firebase.database.ServerValue.TIMESTAMP,
                                 picture: user.photoURL
                             });
+
                             post.update({
                                 onlineState: true,
                                 status: "I'm online."
@@ -1021,6 +1045,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                                 onlineState: false,
                                 status: "I'm offline."
                             });
+
 
 
                             let bef = firebase.database().ref("ChatUserStatus")
@@ -2187,7 +2212,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     }
 
-    $scope.roomOwner = function(a) {		
+    $scope.roomOwner = function(a) {	
         $window.location = "#!/miscellaneous/chat_view?id=" + a.room;
         firebase.auth().onAuthStateChanged((user) => {
 
