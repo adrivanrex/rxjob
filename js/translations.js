@@ -22,7 +22,7 @@ function config($translateProvider) {
             LANDING: 'Landing page',
             LAYOUTS: 'Layouts',
             FIND: "Find",
-            FREE: "It's Free and forever will be",
+            FREE: "It's Free",
             INTERACT : "Inter act",
             DISCOVER : "Discover",
             CREATE : "Create",
@@ -54,8 +54,8 @@ function config($translateProvider) {
             Manage: "Atimana",
             "your tasks with the Merkadu agile Board": "imong mga buluhaton gamit ang merkadu Agila Board.",
             "the latest items": "ang pinaka bag.o nga mga gamit",
-            "It's Free and forever will be": "Kanunay nga libre",
-            FREE: "libre ang pag gamit",
+            "It's Free": "Kanunay nga libre",
+            FREE: "libre ni",
             INTERACT: "lihoka",
             DISCOVER: "diskubreha",
             CREATE: "Maghimo",
@@ -74,7 +74,8 @@ function config($translateProvider) {
             "Total orders": "tanan sugo",
             "Statistic": "Transactionsugo",
             "Accepted Orders": "sugo nga nadawat",
-            "Manage": "Dumala"
+            "Manage": "Dumala",
+            ""
         })
         .translations('fil', {
             Contacts: "Kilala",
@@ -86,7 +87,9 @@ function config($translateProvider) {
             "Completed": "Nagawa",
             Discover: "Alamin",
             Manage: "Patakbuhin",
-            "your tasks with the Merkadu agile Board": "ang mga alituntunin gamit ang Merkadu Agile Board"
+            "your tasks with the Merkadu agile Board": "ang mga alituntunin gamit ang Merkadu Agile Board",
+            FREE: "Ito ay libre."
+
 
 
 
