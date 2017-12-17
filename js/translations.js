@@ -84,11 +84,17 @@ function config($translateProvider) {
             TODO: "Gagawin",
             "InProgress": "Ginagawa",
             "Completed": "Nagawa",
-            Discover: "Alamin",
+            DISCOVER: "Alamin",
             Manage: "Patakbuhin",
             "your tasks with the Merkadu agile Board": "ang mga alituntunin gamit ang Merkadu Agile Board",
             FREE: "Ito ay libre.",
             INTERACT: "Makipag-ugnayan",
+            CREATE: "Gawa",	
+            Statistic: "Istatistika",
+            AGILE: "Agila",
+            MISCELLANEOUS: "Sari-sari",	
+            Activity: "Aktibidad",
+            CHATROOM: "Silid pang-usap",	
 
 
 
