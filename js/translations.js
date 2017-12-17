@@ -75,7 +75,6 @@ function config($translateProvider) {
             "Statistic": "Transactionsugo",
             "Accepted Orders": "sugo nga nadawat",
             "Manage": "Dumala",
-            ""
         })
         .translations('fil', {
             Contacts: "Kilala",
@@ -88,7 +87,7 @@ function config($translateProvider) {
             Discover: "Alamin",
             Manage: "Patakbuhin",
             "your tasks with the Merkadu agile Board": "ang mga alituntunin gamit ang Merkadu Agile Board",
-            FREE: "Ito ay libre."
+            FREE: "Ito ay libre.",
 
 
 
