@@ -44,7 +44,8 @@ function config($translateProvider) {
             Orders: "orders",
             "Total orders": "Total orders",
             "Statistic": "Statistic",
-            "Accepted Orders": "Accepted Orders"
+            "Accepted Orders": "Accepted Orders",
+            "Manage": "Manage",
         })
         .translations('bis', {
             DASHBOARD: 'Palibut',
@@ -72,16 +73,20 @@ function config($translateProvider) {
             "Orders": "sugo",
             "Total orders": "tanan sugo",
             "Statistic": "Transactionsugo",
-            "Accepted Orders": "sugo nga nadawat"
+            "Accepted Orders": "sugo nga nadawat",
+            "Manage": "Dumala"
         })
         .translations('fil', {
             Contacts: "Kilala",
             WELCOME: "Maligayang pagdating!",
             FIND: "Maghanap",
-            "the latest items": "ng pinakabagong mga gamit",
+            "the latest items": "ang pinakabagong mga gamit",
             TODO: "Gagawin",
             "InProgress": "Ginagawa",
             "Completed": "Nagawa",
+            Discover: "Alamin",
+            Manage: "Patakbuhin",
+            "your tasks with the Merkadu agile Board": "ang mga alituntunin gamit ang Merkadu Agile Board"
 
 
 
