@@ -380,7 +380,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         reason: "management"
                     });
 
-
                 });
 
             }, function(errorObject) {
@@ -392,6 +391,36 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     };
 
+     /*
+     *   Notify User
+     */
+
+    firebase.auth().onAuthStateChanged((user) => {
+        let ref = firebase.database().ref("Notifications")
+            .orderByChild("reciever")
+            .equalTo(user.displayName)
+            .limitToLast(7)
+        ref.on("value", function(snapshot) {
+            $timeout(function() {
+                $scope.userNotification = snapshot.val();
+                console.log("notific",snapshot.val());
+
+                $scope.notificationShow = "show";
+                if ($scope.notificationCount == null) {
+                    $scope.notificationCount = 0;
+                    $scope.notificationShow = "hide";
+                } else {
+                    $scope.notificationCount = $scope.notificationCount + 1;
+                }
+
+            });
+
+        }, function(errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
+
+
+    });
 
 
     $scope.submitApply = function() {
@@ -661,36 +690,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
 
-    /*
-     *   Notify User
-     */
-
-    firebase.auth().onAuthStateChanged((user) => {
-        let ref = firebase.database().ref("Notifications")
-            .orderByChild("reciever")
-            .equalTo(user.displayName)
-            .limitToLast(7)
-
-
-        ref.on("value", function(snapshot) {
-            $timeout(function() {
-                $scope.userNotification = snapshot.val();
-                $scope.notificationShow = "show";
-                if ($scope.notificationCount == null) {
-                    $scope.notificationCount = 0;
-                    $scope.notificationShow = "hide";
-                } else {
-                    $scope.notificationCount = $scope.notificationCount + 1;
-                }
-
-            });
-
-        }, function(errorObject) {
-            console.log("The read failed: " + errorObject.code);
-        });
-
-
-    });
+   
 
 
 
@@ -712,7 +712,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 // Profile updated successfully!
                 // "Jane Q. User"
                 registerUser()
-                $window.location = site;
+                //$window.location = site;
 
 
             }, function(error) {
@@ -742,6 +742,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     } else {
 
                     }
+
+                    $window.location = "#!/app/profile";
                 });
             });
 
