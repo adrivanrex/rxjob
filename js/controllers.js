@@ -712,7 +712,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 // Profile updated successfully!
                 // "Jane Q. User"
                 registerUser()
-                //$window.location = site;
+                $window.location = "#!/app/profile";
 
 
             }, function(error) {
