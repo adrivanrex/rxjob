@@ -27,8 +27,6 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-
-                        <th>#</th>
                         <th>Project </th>
                         <th>Name </th>
                         <th>Company </th>
@@ -39,11 +37,10 @@
                     <tbody>
                     <tr ng-repeat="applicantView in applicantView">
 
-                        <td>1</td>
                         <td>{{applicantView.ProjectDetailID}}<small>{{ApplicantView}}</small></td>
                         <td>{{applicantView.ApplicantDisplayName}}</td>
                         <td>{{applicantView.email}}</td>
-                        <td>Jul 14, 2013</td>
+                        <td>{{applicantView.humanTime}}</td>
                         <td>{{applicantView.status}}</td>
                     </tr>
                  
