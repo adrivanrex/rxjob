@@ -37,7 +37,7 @@
                     <tbody>
                     <tr ng-repeat="applicantView in applicantView">
 
-                        <td>{{applicantView.ProjectDetailID}}<small>{{ApplicantView}}</small></td>
+                        <td><a href="#!/app/project_detail?id={{applicantView.ProjectDetailID}}">{{applicantView.ProjectDetailID}}</a><small>{{ApplicantView}}</small></td>
                         <td>{{applicantView.ApplicantDisplayName}}</td>
                         <td>{{applicantView.email}}</td>
                         <td>{{applicantView.humanTime}}</td>
