@@ -26,6 +26,7 @@
                     <li ui-sref-active="active"><a ui-sref="dashboards.dashboard_1">{{ 'DISCOVER' | translate }}</a></li>
                     <li ui-sref-active="active"><a ui-sref="dashboards.projects">{{ 'Manage' | translate }}</a></li>
                     <li ui-sref-active="active"><a ui-sref="dashboards.create_jobpost">{{ 'CREATE' | translate }}</a></li>
+                    <li ui-sref-active="active"><a ui-sref="dashboards.dashboard_4_1">Applications</a></li>
                 </ul>
             </li>
             <li ng-class="{active: $state.includes('app')}">
@@ -33,7 +34,8 @@
                 <ul class="nav nav-second-level" ng-class="{in: $state.includes('app')}">
                     <li ui-sref-active="active"><a ui-sref="app.contacts">{{ 'Contacts' | translate }}</a></li>
                     <li ui-sref-active="active"><a ui-sref="miscellaneous.chat_view">{{ 'CHATROOM' | translate }}</a></li>
-                      <li ui-sref-active="active"><a ui-sref="dashboards.marketInfo">{{ 'Statistic' | translate }}</a></li>
+                    <li ui-sref-active="active"><a ui-sref="dashboards.marketInfo">{{ 'Statistic' | translate }}</a></li>
+
                 </ul>
             </li>
             <li ng-class="{active: $state.includes('miscellaneous')}">

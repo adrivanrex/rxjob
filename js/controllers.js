@@ -475,7 +475,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             CreatedAt: firebase.database.ServerValue.TIMESTAMP,
                             Updated: firebase.database.ServerValue.TIMESTAMP,
                             humanTime: humanTime,
-                            user: user.uid
+                            user: user.uid,
+                            status: "pending"
                         });
 
                         var ApplicantID = post.key;
@@ -761,6 +762,21 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     }
 
+    function applications(){
+    	firebase.auth().onAuthStateChanged((user) => {
+    		let ref = firebase.database().ref("Applicants")
+                    .orderByChild("user")
+                    .equalTo(user.uid)
+                    .limitToLast(100)
+                ref.once("value", function(snapshot) {
+                	$scope.applicantView = snapshot.val();
+                });
+
+    	});
+
+    }
+
+    applications();
 
     $scope.$on('$locationChangeStart', function(event) {
         switch ($location.path()) {
