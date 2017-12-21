@@ -520,10 +520,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     };
 
 
-    function applyjobpost() {
-
-    }
-
+    
     function getUserProjects() {
         firebase.auth().onAuthStateChanged((user) => {
             let ref = firebase.database().ref("JobPost")
@@ -768,7 +765,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     .orderByChild("user")
                     .equalTo(user.uid)
                     .limitToLast(100)
-                ref.once("value", function(snapshot) {
+                ref.on("value", function(snapshot) {
                 	$scope.applicantView = snapshot.val();
                 });
 
