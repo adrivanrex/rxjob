@@ -973,11 +973,12 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
         $scope.approveOrder = function(a) {
             firebase.auth().onAuthStateChanged((user) => {
-
+            	console.log("approve order",a);
                 let ref = firebase.database().ref("Applicants").orderByChild("CreatedAt").equalTo(a.CreatedAt)
                 ref.once("child_added", function(snapshot) {
                     snapshot.ref.update({ status: "approve" })
                 });
+
             });
         };
 
@@ -1415,6 +1416,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     $scope.latlngaddress = results;
                     $scope.qualityCenter = $scope.latlng;
                     firebase.auth().onAuthStateChanged((user) => {
+
                     let ref = firebase.database().ref("Guest")
                         .orderByChild("email")
                         .equalTo(user.email)
