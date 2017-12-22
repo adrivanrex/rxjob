@@ -46,6 +46,7 @@ function config($translateProvider) {
             "Statistic": "Statistic",
             "Accepted Orders": "Accepted Orders",
             "Manage": "Manage",
+            "Using the merkadu GPS tracker,": "Using the merkadu GPS tracker,"
         })
         .translations('bis', {
             DASHBOARD: 'Palibut',
@@ -75,6 +76,8 @@ function config($translateProvider) {
             "Statistic": "Transactionsugo",
             "Accepted Orders": "sugo nga nadawat",
             "Manage": "Dumala",
+            "Using the merkadu GPS tracker,": "Gamit ang Merkadu GPS tracker,",
+            "track client locations and deliver your products instantly.": "hibaloa ang dalan sa imong cliente ug ideliver imong mga produckto nga paspas",
         })
         .translations('fil', {
             Contacts: "Kilala",
@@ -94,7 +97,9 @@ function config($translateProvider) {
             AGILE: "Agila",
             MISCELLANEOUS: "Sari-sari",	
             Activity: "Aktibidad",
-            CHATROOM: "Silid pang-usap",	
+            CHATROOM: "Silid pang-usap",
+            "Using the merkadu GPS tracker,": "Gamitin ang Merkadu GPS tracker",
+            "track client locations and deliver your products instantly.": "subaybayan ang mga lokasyon ng kliyente at agad na ihatid ang iyong mga produkto."
 
 
 
