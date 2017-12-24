@@ -46,7 +46,7 @@ function config($translateProvider) {
             "Statistic": "Statistic",
             "Accepted Orders": "Accepted Orders",
             "Manage": "Manage",
-            "Using the merkadu GPS tracker,": "Using the merkadu GPS tracker,"
+            "Using the merkadu GPS tracker,": "Using the merkadu GPS tracker,",
             "SignUP": "Sign-Up",
         })
         .translations('bis', {
@@ -101,10 +101,8 @@ function config($translateProvider) {
             Activity: "Aktibidad",
             CHATROOM: "Silid pang-usap",
             "Using the merkadu GPS tracker,": "Gamitin ang Merkadu GPS tracker",
-            "track client locations and deliver your products instantly.": "subaybayan ang mga lokasyon ng kliyente at agad na ihatid ang iyong mga produkto."
+            "track client locations and deliver your products instantly.": "subaybayan ang mga lokasyon ng kliyente at agad na ihatid ang iyong mga produkto.",
             SignUP: "Mag Lagda",
-
-
 
 
         })
