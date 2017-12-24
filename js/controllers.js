@@ -2465,6 +2465,7 @@ function dashboardFlotTwo() {
 
     ];
     **/
+    
     var data2 = [];
     console.log("Graph", data2);
 

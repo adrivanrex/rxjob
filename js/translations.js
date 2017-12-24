@@ -92,7 +92,7 @@ function config($translateProvider) {
             "your tasks with the Merkadu agile Board": "ang mga alituntunin gamit ang Merkadu Agile Board",
             FREE: "Ito ay libre.",
             INTERACT: "Makipag-ugnayan",
-            CREATE: "Gawa",	
+            CREATE: "Gumawa",	
             Statistic: "Istatistika",
             AGILE: "Agila",
             MISCELLANEOUS: "Sari-sari",	
