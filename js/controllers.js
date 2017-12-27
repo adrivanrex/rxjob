@@ -232,7 +232,7 @@ function LoginCtrl($window, $scope, $firebaseAuth, $timeout) {
 
 }
 
-function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $timeout, $translate, ) {
+function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $timeout, $translate) {
     var merkadUser = firebase.auth().currentUser;
 
     $translate.use(document.cookie);
