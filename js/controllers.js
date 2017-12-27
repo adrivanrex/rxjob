@@ -933,12 +933,22 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             firebase.auth().onAuthStateChanged((user) => {
                 let ref = firebase.database().ref("Applicants")
                     .limitToLast(100)
-                    .orderByChild("status")
-                    .equalTo("approve")
+                    .orderByChild("JobPosterID")
+                    .equalTo(user.uid)
                 ref.once("value", function(snapshot) {
                     key = Object.keys(snapshot.val());
-                    document.getElementById("acceptedOrders").innerHTML = Object.keys(snapshot.val()).length;
-                    $scope.acceptedOrders = Object.keys(snapshot.val()).length;
+                    statusArray = [];
+
+                    
+                    for (var i = key.length - 1; i >= 0; i--) {
+                    	if(snapshot.val()[key[i]].status == "approve"){
+                    		statusArray.push(snapshot.val()[key[i]].status);
+                    	}
+                    }
+
+                    document.getElementById("acceptedOrders").innerHTML = Object.keys(statusArray).length;
+                    $scope.acceptedOrders = Object.keys(statusArray).length;
+                   
                 });
             });
         }
@@ -2386,7 +2396,6 @@ function dashboardFlotTwo() {
 
 
     firebase.auth().onAuthStateChanged((user) => {
-
 
         let ref = firebase.database().ref("Graph")
             .limitToLast(100)
