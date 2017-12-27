@@ -234,7 +234,6 @@ function LoginCtrl($window, $scope, $firebaseAuth, $timeout) {
 
 function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $timeout, $translate) {
     var merkadUser = firebase.auth().currentUser;
-
     $translate.use(document.cookie);
     var firstlocation = $location.path();
     console.log('first location', firstlocation);
@@ -4167,7 +4166,7 @@ function sparklineChartCtrl() {
     this.lineCustomOptions = lineCustomOptions;
 }
 
-function ChatCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $timeout, ) {
+function ChatCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $timeout) {
 
 
 
