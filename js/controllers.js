@@ -1072,7 +1072,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         showMessages($location.search().id);
 
         if ($location.path('/dashboards/marketInfo')) {
-        	showGraph();
             orders();
             acceptedOrders();
         }
