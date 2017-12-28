@@ -16,8 +16,11 @@
                <div class="feed-activity-list">
                   <div class="feed-element" ng-repeat="latestJobPost in latestJobPost">
                      <div>
+
                         <a href="#!/app/project_detail?id={{latestJobPost.Id}}"><strong>{{latestJobPost.Title}}</strong></a>
                         <div>{{latestJobPost.Description}}</div>
+                        <div>{{latestJobPost.Location[0].formatted_address}}</div>
+                        <div><strong>Price:</strong> {{latestJobPost.JobPostPrice}}</div>
                      </div>
                   </div>
                </div>
