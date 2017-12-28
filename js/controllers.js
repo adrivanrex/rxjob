@@ -938,26 +938,26 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     key = Object.keys(snapshot.val());
                     statusArray = [];
 
-                    
+
                     for (var i = key.length - 1; i >= 0; i--) {
-                    	if(snapshot.val()[key[i]].status == "approve"){
-                    		statusArray.push(snapshot.val()[key[i]].status);
-                    	}
+                        if (snapshot.val()[key[i]].status == "approve") {
+                            statusArray.push(snapshot.val()[key[i]].status);
+                        }
                     }
 
                     priceArray = []
                     for (var i = key.length - 1; i >= 0; i--) {
-                    	if(snapshot.val()[key[i]].status == "approve"){
-                    		priceArray.push(snapshot.val()[key[i]].Price);
-                    	}
+                        if (snapshot.val()[key[i]].status == "approve") {
+                            priceArray.push(snapshot.val()[key[i]].Price);
+                        }
                     }
                     var sum = priceArray.reduce((a, b) => a + b, 0);
-					$scope.totalPriceOrder = sum;
-					
-					document.getElementById("totalPriceOrders").innerHTML = sum;
+                    $scope.totalPriceOrder = sum;
+
+                    document.getElementById("totalPriceOrders").innerHTML = sum;
                     document.getElementById("acceptedOrders").innerHTML = Object.keys(statusArray).length;
                     $scope.acceptedOrders = Object.keys(statusArray).length;
-                   
+
                 });
             });
         }
@@ -2411,17 +2411,61 @@ function dashboardFlotTwo() {
             .orderByChild("user")
             .equalTo(user.uid)
         ref.once("value", function(snapshot) {
+            if (snapshot.val() == null) {
 
-            totalData = Object.keys(snapshot.val()).length;
-            let ref = firebase.database().ref("Applicants")
-                .limitToLast(100)
-                .orderByChild("JobPosterID")
-                .equalTo(user.uid)
-            ref.once("value", function(snapshot) {
-                totalApplicants = Object.keys(snapshot.val()).length;
+                let ref = firebase.database().ref("Applicants")
+                    .limitToLast(100)
+                    .orderByChild("JobPosterID")
+                    .equalTo(user.uid)
+                ref.once("value", function(snapshot) {
+                    console.log("ApplicantJobs", snapshot.val());
+                    totalApplicants = Object.keys(snapshot.val()).length;
+                    applicants = Object.keys(snapshot.val());
+                    console.log("applicantList", snapshot.val());
+                    applicants = Object.keys(snapshot.val());
+                    console.log(applicants);
+                    applicantRateArray = [];
 
-                if (totalData < totalApplicants) {
-                    let ref = firebase.database().ref("Applicants")
+                    for (var i = applicants.length - 1; i >= 0; i--) {
+
+                        console.log("applicanti", snapshot.val()[applicants[i]].CreatedAt);
+                        applicantDate = new Date(snapshot.val()[applicants[i]].CreatedAt);
+                        console.log(applicantDate);
+                        applicantInfo = {};
+                        applicantYear = applicantDate.getFullYear();
+                        applicantDay = applicantDate.getDate();
+                        applicantMonth = applicantDate.getMonth();
+
+
+                        applicantInfo = {
+                            Date: applicantDay,
+                            Month: applicantMonth,
+                            Year: applicantYear,
+                            user: user.uid,
+                            createdAt: firebase.database.ServerValue.TIMESTAMP
+                        }
+
+
+                        post = firebase.database().ref('Graph/').push(applicantInfo);
+
+                    }
+
+
+                });
+
+
+
+            }else{
+            	totalData = snapshot.val().length;
+
+            	let ref = firebase.database().ref("Applicants")
+                    .limitToLast(100)
+                    .orderByChild("JobPosterID")
+                    .equalTo(user.uid)
+                ref.once("value", function(snapshot) {
+                	totalApplicants = snapshot.val().length;
+                	if (totalData < totalApplicants) {
+                		let ref = firebase.database().ref("Applicants")
                         .limitToLast(100)
                         .orderByChild("JobPosterID")
                         .equalTo(user.uid)
@@ -2450,17 +2494,21 @@ function dashboardFlotTwo() {
                                 createdAt: firebase.database.ServerValue.TIMESTAMP
                             }
 
+
                             post = firebase.database().ref('Graph/').push(applicantInfo);
 
                         }
-                        console.log("rate", applicantRateArray);
 
 
 
                     });
-                }
-            });
+                	};
 
+                });
+
+            }
+
+            
 
         });
 
@@ -2472,13 +2520,52 @@ function dashboardFlotTwo() {
         lef.once("value", function(snapshot) {
             keys = Object.keys(snapshot.val());
             todoKey = snapshot.val();
+            console.log("GRAPH KEys", snapshot.val());
+
+            dates = [];
             for (var i = keys.length - 1; i >= 0; i--) {
-
-                console.log(todoKey[keys[i]].Date);
-                data2.push([gd(todoKey[keys[i]].Year, todoKey[keys[i]].Month + 1, todoKey[keys[i]].Date + 1), 600]);
+            		dates.push(snapshot.val()[keys[i]].Date)
             }
+            var uniq = dates
+			  .map((name) => {
+			    return {count: 1, name: name}
+			  })
+			  .reduce((a, b) => {
+			    a[b.name] = (a[b.name] || 0) + b.count
+			    return a
+			  }, {})
 
-            console.log("Graph", data2);
+			var sorted = Object.keys(uniq).sort((a, b) => uniq[a] < uniq[b])
+
+			console.log("dates", sorted);
+
+			for (var i = sorted.length - 1; i >= 0; i--) {
+				
+				let lef = firebase.database().ref("Graph")
+		            .limitToLast(100)
+		            .orderByChild("Date")
+		            .equalTo(parseInt(sorted[i]))
+		        lef.once("value", function(snapshot) {
+		        	dataKey = Object.keys(snapshot.val());
+		        	dataLength = Object.keys(snapshot.val()).length;
+		        	keyData = snapshot.val()[dataKey];
+
+		        	console.log("DATA LENGTH", dataLength);
+		        	if(dataKey){
+		        		console.log('year', );
+		        		data2.push([gd(snapshot.val()[dataKey[0]].Year, snapshot.val()[dataKey[0]].Month + 1, snapshot.val()[dataKey[0]].Date + 1), dataLength +600]);
+		        	}
+		        	
+		        });
+
+
+
+			}
+
+
+
+            
+
         });
 
 
@@ -2495,7 +2582,7 @@ function dashboardFlotTwo() {
     **/
 
     var data2 = [];
-    console.log("Graph", data2);
+    console.log("DATA",data2);
 
 
     var dataset = [{
