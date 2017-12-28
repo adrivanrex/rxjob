@@ -773,6 +773,175 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     }
 
     applications();
+    function showGraph(){
+    	firebase.auth().onAuthStateChanged((user) => {
+
+        let ref = firebase.database().ref("Graph")
+            .limitToLast(100)
+            .orderByChild("user")
+            .equalTo(user.uid)
+        ref.once("value", function(snapshot) {
+        	console.log("hello");
+            if (snapshot.val() == null) {
+
+                let ref = firebase.database().ref("Applicants")
+                    .limitToLast(100)
+                    .orderByChild("JobPosterID")
+                    .equalTo(user.uid)
+                ref.once("value", function(snapshot) {
+                    console.log("ApplicantJobs", snapshot.val());
+                    totalApplicants = Object.keys(snapshot.val()).length;
+                    applicants = Object.keys(snapshot.val());
+                    console.log("applicantList", snapshot.val());
+                    applicants = Object.keys(snapshot.val());
+                    console.log(applicants);
+                    applicantRateArray = [];
+
+                    for (var i = applicants.length - 1; i >= 0; i--) {
+
+                        console.log("applicanti", snapshot.val()[applicants[i]].CreatedAt);
+                        applicantDate = new Date(snapshot.val()[applicants[i]].CreatedAt);
+                        console.log(applicantDate);
+                        applicantInfo = {};
+                        applicantYear = applicantDate.getFullYear();
+                        applicantDay = applicantDate.getDate();
+                        applicantMonth = applicantDate.getMonth();
+
+
+                        applicantInfo = {
+                            Date: applicantDay,
+                            Month: applicantMonth,
+                            Year: applicantYear,
+                            user: user.uid,
+                            createdAt: firebase.database.ServerValue.TIMESTAMP
+                        }
+
+
+                        post = firebase.database().ref('Graph/').push(applicantInfo);
+
+                    }
+
+
+                });
+
+
+
+            }else{
+            	totalData = snapshot.val().length;
+
+            	let ref = firebase.database().ref("Applicants")
+                    .limitToLast(100)
+                    .orderByChild("JobPosterID")
+                    .equalTo(user.uid)
+                ref.once("value", function(snapshot) {
+                	totalApplicants = snapshot.val().length;
+                	if (totalData < totalApplicants) {
+                		let ref = firebase.database().ref("Applicants")
+                        .limitToLast(100)
+                        .orderByChild("JobPosterID")
+                        .equalTo(user.uid)
+                    ref.once("value", function(snapshot) {
+                        console.log("applicantList", snapshot.val());
+                        applicants = Object.keys(snapshot.val());
+                        console.log(applicants);
+                        applicantRateArray = [];
+
+                        for (var i = applicants.length - 1; i >= 0; i--) {
+
+                            console.log("applicanti", snapshot.val()[applicants[i]].CreatedAt);
+                            applicantDate = new Date(snapshot.val()[applicants[i]].CreatedAt);
+                            console.log(applicantDate);
+                            applicantInfo = {};
+                            applicantYear = applicantDate.getFullYear();
+                            applicantDay = applicantDate.getDate();
+                            applicantMonth = applicantDate.getMonth();
+
+
+                            applicantInfo = {
+                                Date: applicantDay,
+                                Month: applicantMonth,
+                                Year: applicantYear,
+                                user: user.uid,
+                                createdAt: firebase.database.ServerValue.TIMESTAMP
+                            }
+
+
+                            post = firebase.database().ref('Graph/').push(applicantInfo);
+
+                        }
+
+
+
+                    });
+                	};
+
+                });
+
+            }
+
+            
+
+        });
+
+
+        let lef = firebase.database().ref("Graph")
+            .limitToLast(100)
+            .orderByChild("user")
+            .equalTo(user.uid)
+        lef.once("value", function(snapshot) {
+            keys = Object.keys(snapshot.val());
+            todoKey = snapshot.val();
+            console.log("GRAPH KEys", snapshot.val());
+
+            dates = [];
+            for (var i = keys.length - 1; i >= 0; i--) {
+            		dates.push(snapshot.val()[keys[i]].Date)
+            }
+            var uniq = dates
+			  .map((name) => {
+			    return {count: 1, name: name}
+			  })
+			  .reduce((a, b) => {
+			    a[b.name] = (a[b.name] || 0) + b.count
+			    return a
+			  }, {})
+
+			var sorted = Object.keys(uniq).sort((a, b) => uniq[a] < uniq[b])
+
+			console.log("dates", sorted);
+
+			for (var i = sorted.length - 1; i >= 0; i--) {
+				
+				let lef = firebase.database().ref("Graph")
+		            .limitToLast(100)
+		            .orderByChild("Date")
+		            .equalTo(parseInt(sorted[i]))
+		        lef.once("value", function(snapshot) {
+		        	dataKey = Object.keys(snapshot.val());
+		        	dataLength = Object.keys(snapshot.val()).length;
+		        	keyData = snapshot.val()[dataKey];
+
+		        	console.log("DATA LENGTH", dataLength);
+		        	if(dataKey){
+		        		console.log('year', );
+		        		data2.push([gd(snapshot.val()[dataKey[0]].Year, snapshot.val()[dataKey[0]].Month + 1, snapshot.val()[dataKey[0]].Date + 1), dataLength +600]);
+		        	}
+		        	
+		        });
+
+
+
+			}
+
+
+
+            
+
+        });
+
+
+    });
+    };
 
     $scope.$on('$locationChangeStart', function(event) {
         switch ($location.path()) {
@@ -790,6 +959,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 getProjectApplicants();
             case '/app/contacts':
                 showContacts();
+            case '/dashboards/marketInfo':
+            	showGraph();
             case '/app/user':
                 showUserInfo($location.search().id);
             case '/miscellaneous/chat_view':
@@ -2403,7 +2574,7 @@ function dashboardFlotTwo() {
 
     **/
 
-
+    
     firebase.auth().onAuthStateChanged((user) => {
 
         let ref = firebase.database().ref("Graph")
