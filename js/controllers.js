@@ -460,6 +460,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
                     UpdatedTime = new Date();
                     humanTime = UpdatedTime.toString();
+                    totalPrice = applyjob.Price * applyjob.Quantity;
 
                     post = firebase.database().ref('/Applicants').push({
                         JobPosterID: JobPostID,
@@ -475,7 +476,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         Updated: firebase.database.ServerValue.TIMESTAMP,
                         humanTime: humanTime,
                         user: user.uid,
-                        status: "pending"
+                        status: "pending",
+                        TotalPrice: totalPrice,
                     });
 
                     var ApplicantID = post.key;
@@ -2578,7 +2580,7 @@ function dashboardFlotTwo() {
     firebase.auth().onAuthStateChanged((user) => {
 
         let ref = firebase.database().ref("Graph")
-            .limitToLast(100)
+            .limitToLast(1000)
             .orderByChild("user")
             .equalTo(user.uid)
         ref.once("value", function(snapshot) {
