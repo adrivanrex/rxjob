@@ -945,6 +945,16 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     	}
                     }
 
+                    priceArray = []
+                    for (var i = key.length - 1; i >= 0; i--) {
+                    	if(snapshot.val()[key[i]].status == "approve"){
+                    		priceArray.push(snapshot.val()[key[i]].Price);
+                    	}
+                    }
+                    var sum = priceArray.reduce((a, b) => a + b, 0);
+					$scope.totalPriceOrder = sum;
+					
+					document.getElementById("totalPriceOrders").innerHTML = sum;
                     document.getElementById("acceptedOrders").innerHTML = Object.keys(statusArray).length;
                     $scope.acceptedOrders = Object.keys(statusArray).length;
                    
