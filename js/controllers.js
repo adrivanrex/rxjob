@@ -2340,10 +2340,6 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         console.log("chatInput", chatInput);
 
 
-        objDiv = document.getElementById("chat-discussion");
-        objDiv.scrollTop = 99999;
-
-
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 let ref = firebase.database().ref("Chat")
@@ -2389,6 +2385,12 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
         });
 
+    setTimeout(function(){ 
+        objDiv = document.getElementById("chat-discussion");
+        objDiv.scrollTop = 99999;
+    }, 1000);
+
+     
     }
 
 
