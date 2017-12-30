@@ -1938,7 +1938,21 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             picture: user.photoURL
                         });
 
-                        
+                        let bef = firebase.database().ref("ChatRooms")
+                            .limitToLast(100)
+                            .orderByChild("user")
+                            .equalTo(user.uid)
+                        bef.once("value", function(snapshot) {
+                            chatsk = Object.keys(snapshot.val()).length;
+                            
+                            let ref = firebase.database().ref('ChatRooms');
+                            ref.orderByChild('room').equalTo(locationID).limitToFirst(2).once('value', snapshot => {
+                                let updates = {};
+                                snapshot.forEach(child => updates[child.key] = null);
+                                ref.update(updates);
+                            });
+
+                        });
 
 
                     });
