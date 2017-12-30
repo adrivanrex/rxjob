@@ -1938,24 +1938,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             picture: user.photoURL
                         });
 
-                        let bef = firebase.database().ref("ChatRooms")
-                            .limitToLast(100)
-                            .orderByChild("user")
-                            .equalTo(user.uid)
-                        bef.once("value", function(snapshot) {
-                            chatsk = Object.keys(snapshot.val()).length;
-                            if (chatsk == 1) {
-                                chatsk = 2;
-                            }
-                            del = chatsk - 1;
-                            let ref = firebase.database().ref('ChatRooms');
-                            ref.orderByChild('room').equalTo(locationID).limitToFirst(del).once('value', snapshot => {
-                                let updates = {};
-                                snapshot.forEach(child => updates[child.key] = null);
-                                ref.update(updates);
-                            });
-
-                        });
+                        
 
 
                     });
@@ -2407,6 +2390,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             });
         });
     }
+
     showRooms();
     $scope.closeRoom = function(ab) {
         firebase.auth().onAuthStateChanged(function(user) {
