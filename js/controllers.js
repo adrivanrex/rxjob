@@ -1905,6 +1905,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     });
 
     function chatRoom(locationID) {
+
         if (locationID) {
             firebase.auth().onAuthStateChanged((user) => {
 
@@ -1996,7 +1997,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                                 user: user.uid,
                                 name: user.displayName,
                                 email: user.email,
-                                owner: user.uid,
+                                owner: user.email,
                                 createdAt: firebase.database.ServerValue.TIMESTAMP,
                                 picture: user.photoURL
                             });
