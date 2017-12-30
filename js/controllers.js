@@ -2334,6 +2334,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     }
 
+
+
     $scope.chatMessage = function() {
 
         chatInput = document.getElementById("chatInput").value;
@@ -2351,32 +2353,13 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     .equalTo(user.uid)
                     .limitToLast(1)
                 ref.once("value", function(snapshot) {
-
-                    if ($location.search().id) {
-                    let def = firebase.database().ref("ChatMessages")
-                        .limitToLast(1)
-                    def.once("value", function(snapshot) {
-                        timeInMs = Date.now();
-                        UpdatedTime = new Date(timeInMs);
-                        humanTime = UpdatedTime.toString();
-                        
-                        var post = firebase.database().ref('ChatMessages/').push({
-                            room: $location.search().id,
-                            user: user.uid,
-                            name: user.displayName,
-                            email: user.email,
-                            message: chatInput,
-                            createdAt: firebase.database.ServerValue.TIMESTAMP,
-                            HumanTime: humanTime,
-                            picture: user.photoURL
-                        });
-
-                    });
-                }else{
                     $scope.roomkey = Object.keys(snapshot.val());
                     console.log("ROOM KEY", $scope.roomkey);
                     chatkey = Object.keys(snapshot.val());
 
+                    if ($location.search().id) {
+                        chatkey[0] = $location.search().id;
+                    }
 
                     post = firebase.database().ref('ChatMessages/').push({
                         room: chatkey[0],
@@ -2389,16 +2372,15 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         picture: user.photoURL
                     });
 
-                }
-
-                    
 
 
                 });
 
+                timeInMs = Date.now();
+                UpdatedTime = new Date(timeInMs);
+                humanTime = UpdatedTime.toString();
+
                 
-
-
 
 
 
