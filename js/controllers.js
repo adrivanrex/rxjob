@@ -2433,6 +2433,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     }
 
     $scope.roomOwner = function(a) {
+        console.log(a);
         $window.location = "#!/miscellaneous/chat_view?id=" + a.room;
         firebase.auth().onAuthStateChanged((user) => {
 
