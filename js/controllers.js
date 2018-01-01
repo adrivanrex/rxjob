@@ -2713,7 +2713,6 @@ function dashboardFlotTwo() {
 
 		        	console.log("DATA LENGTH", dataLength);
 		        	if(dataKey){
-		        		console.log('year', );
 		        		data2.push([gd(snapshot.val()[dataKey[0]].Year, snapshot.val()[dataKey[0]].Month + 1, snapshot.val()[dataKey[0]].Date + 1), dataLength +600]);
 		        	}
 		        	
