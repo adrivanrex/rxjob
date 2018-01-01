@@ -925,9 +925,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 		        	console.log("DATA LENGTH", dataLength);
 		        	if(dataKey){
-		        		console.log('year', );
 		        		data2.push([gd(snapshot.val()[dataKey[0]].Year, snapshot.val()[dataKey[0]].Month + 1, snapshot.val()[dataKey[0]].Date + 1), dataLength +600]);
-		        	}
+		        	};
 		        	
 		        });
 
@@ -1070,8 +1069,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     }
     if ($location.path('/miscellaneous/chat_view')) {
         chatStatus($location.search().id);
-        chatRoom($location.search().id);
         showMessages($location.search().id);
+        chatRoom($location.search().id);
 
         if ($location.path('/dashboards/marketInfo')) {
             orders();
