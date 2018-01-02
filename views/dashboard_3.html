@@ -1,37 +1,36 @@
 <div class="wrapper sidebar-content wrapper-content">
     <div class="row">
-
         <div class="col-lg-5" ng-repeat="advertisment in advertisment">
-        <span ng-click="closeAdvert(advertisment)" class="pull-right fa fa-close m-r-xs"></span>
-                <form ng-submit="submitEditAdvert()"mclass="form-horizontal">
+        <div class="row">
+        <form ng-submit="submitEditAdvert()" class="form-horizontal">
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Title</label>
                         <div class="col-lg-10">
-                            <input type="text" ng-model="advertTitle" placeholder="{{advertisment.title}}" value = "{{advertisment.title}}"class="form-control">
+                            <input type="text" ng-model="advertTitle" placeholder="{{advertisment.title}}" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Email</label>
                         <div class="col-lg-10">
-                            <input type="email" ng-model="advertEmail" placeholder="{{advertisment.email}}" value = "{{advertisment.email}}"class="form-control">
+                            <input type="email" ng-model="advertEmail" placeholder="{{advertisment.email}}" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Logo Link</label>
                         <div class="col-lg-10">
-                            <input type="link" ng-model="advertLogoLink" placeholder="{{advertisment.logoLink}}" value="{{advertisment.logoLink}}" class="form-control">
+                            <input type="link" ng-model="advertLogoLink" placeholder="{{advertisment.logoLink}}" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Adress</label>
                         <div class="col-lg-10">
-                            <input type="adress" ng-model="advertAddress" placeholder="{{advertisment.Address}}" value="{{advertisment.Address}}" class="form-control">
+                            <input type="adress" ng-model="advertAddress" placeholder="{{advertisment.Address}}" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Contact</label>
                         <div class="col-lg-10">
-                            <input type="text" ng-model="advertContact" placeholder="{{advertisment.Contact}}" value="{{advertisment.Contact}}" class="form-control">
+                            <input type="text" placeholder="{{advertisment.Contact}}" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
@@ -40,38 +39,40 @@
                         </div>
                     </div>
                 </form>
-                <div class="widget lazur-bg">
-                    <img width="300" height="200" src="{{advertisment.logoLink}}"></img>
-                    <br>
-                    <h2>
+        </div>
+            <span ng-click="closeAdvert(advertisment)" class="pull-right fa fa-close m-r-xs"></span>
+            <div class="widget lazur-bg">
+                <img width="300" height="200" src="{{advertisment.logoLink}}"></img>
+                <br>
+                <h2>
                 {{advertisment.title}}
             </h2>
-                    <ul class="list-unstyled m-t-md">
-                        <li>
-                            <span class="fa fa-envelope m-r-xs"></span>
-                            <label>Email:</label>
-                            {{advertisment.email}}
-                        </li>
-                        <li>
-                            <span class="fa fa-home m-r-xs"></span>
-                            <label>Address:</label>
-                            {{advertisment.Address}}
-                        </li>
-                        <li>
-                            <span class="fa fa-phone m-r-xs"></span>
-                            <label>Contact:</label>
-                            {{advertisment.Contact}}
-                        </li>
-                    </ul>
-                </div>
+                <ul class="list-unstyled m-t-md">
+                    <li>
+                        <span class="fa fa-envelope m-r-xs"></span>
+                        <label>Email:</label>
+                        {{advertisment.email}}
+                    </li>
+                    <li>
+                        <span class="fa fa-home m-r-xs"></span>
+                        <label>Address:</label>
+                        {{advertisment.Address}}
+                    </li>
+                    <li>
+                        <span class="fa fa-phone m-r-xs"></span>
+                        <label>Contact:</label>
+                        {{advertisment.Contact}}
+                    </li>
+                </ul>
             </div>
-            <div ng-click="addmoreAdveritesement()" class="col-lg-5 widget red-bg p-lg text-center">
-                <div class="m-b-md">
-                    <i class="fa fa-plus fa-4x"></i>
-                    <h3 class="font-bold no-margins">
+        </div>
+        <div ng-click="addmoreAdveritesement()" class="col-lg-5 widget red-bg p-lg text-center">
+            <div class="m-b-md">
+                <i class="fa fa-plus fa-4x"></i>
+                <h3 class="font-bold no-margins">
                     Add More Advertisements
                 </h3>
-                </div>
             </div>
         </div>
     </div>
+</div>

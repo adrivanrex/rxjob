@@ -1887,6 +1887,15 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         });
     }
 
+    function showdashboardAds(){
+        firebase.auth().onAuthStateChanged((user) => {
+             let ref = firebase.database().ref("Advertisement")
+             ref.on("child_added", function(snapshot) {
+                    console.log("ads", snapshot.val());
+                    });
+        });
+    }
+    showdashboardAds();
     function notifyInviteChat(a) {
         console.log("Notify", a);
         firebase.auth().onAuthStateChanged((user) => {
