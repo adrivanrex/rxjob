@@ -1902,7 +1902,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
                     console.log("rand", $scope.advertRandKey);
                     let dsd = firebase.database().ref("Advertisement/"+randomkey)
-                    dsd.once("value", function(snapshot) {
+                    dsd.on("value", function(snapshot) {
                         console.log("RADN", snapshot.val());
                         $scope.advertDashboard = snapshot.val();
                     });
