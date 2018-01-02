@@ -1813,6 +1813,80 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     randomContact();
 
+    $scope.addWebsite = function(){
+         $window.location = "#!/dashboards/dashboard_3";
+
+    };
+
+    $scope.addmoreAdveritesement = function(){
+        firebase.auth().onAuthStateChanged((user) => {
+
+            firebase.database().ref('Advertisement').push({
+                        title: "title",
+                        email: "email",
+                        logoLink: "logoLink",
+                        createdAt: firebase.database.ServerValue.TIMESTAMP,
+                        Address: "Adress",
+                        Contact: "Contact",
+                        user: user.uid,
+                    });
+        });
+
+    };
+
+    firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref("Advertisement")
+                .orderByChild('user')
+                .equalTo(user.uid)
+                .limitToLast(100)
+            ref.on("value", function(snapshot) {
+                $timeout(function() {
+                $scope.advertisment = snapshot.val();
+                });
+            });
+
+            
+        });
+
+
+    $scope.closeAdvert = function(a){
+        console.log("advert",a);
+        firebase.auth().onAuthStateChanged((user) => {
+        let ref = firebase.database().ref('Advertisement');
+                            ref.orderByChild('createdAt').equalTo(a.createdAt).limitToFirst(1).once('value', snapshot => {
+                                let updates = {};
+                                snapshot.forEach(child => updates[child.key] = null);
+                                ref.update(updates);
+                            });
+                        });
+    }
+
+    
+    $scope.submitEditAdvert = function (){
+        var a = this;
+        if(!a.advertTitle){
+            a.advertTitle = this.advertisment.title;
+        }
+        if(!a.advertEmail){
+            a.advertEmail = this.advertisment.Email;
+        }
+        if(!a.advertLogoLink){
+            a.advertLogoLink = this.advertisment.logoLink;
+        }
+        if(!a.advertContact){
+            a.advertContact = this.advertisment.Contact;
+        }
+        if(!a.advertAddress){
+             a.advertAddress = this.advertisment.Address;
+        }
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref("Advertisement").orderByChild("createdAt").equalTo(this.advertisment.createdAt)
+                ref.once("child_added", function(snapshot) {
+                    snapshot.ref.update({ title: a.advertTitle,Email: a.advertEmail, logoLink:a.advertLogoLink, Contact:a.advertContact,Address: a.advertAddress});
+                });
+        });
+    }
+
     function notifyInviteChat(a) {
         console.log("Notify", a);
         firebase.auth().onAuthStateChanged((user) => {
