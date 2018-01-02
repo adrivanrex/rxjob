@@ -2,6 +2,7 @@
     <div class="row">
         <div class="col-lg-5" ng-repeat="advertisment in advertisment">
         <div class="row">
+        <span ng-click="closeAdvert(advertisment)" class="pull-right fa fa-close m-r-xs"></span>
         <form ng-submit="submitEditAdvert()" class="form-horizontal">
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Title</label>
@@ -40,7 +41,7 @@
                     </div>
                 </form>
         </div>
-            <span ng-click="closeAdvert(advertisment)" class="pull-right fa fa-close m-r-xs"></span>
+            
             <div class="widget lazur-bg">
                 <img width="300" height="200" src="{{advertisment.logoLink}}"></img>
                 <br>

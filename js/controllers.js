@@ -1890,12 +1890,32 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     function showdashboardAds(){
         firebase.auth().onAuthStateChanged((user) => {
              let ref = firebase.database().ref("Advertisement")
-             ref.on("child_added", function(snapshot) {
-                    console.log("ads", snapshot.val());
+                .orderByChild("createdAt")
+                .limitToLast(100)
+             ref.once("value", function(snapshot) {
+                    console.log("ads", Object.keys(snapshot.val()));
+                    keys = Object.keys(snapshot.val());
+                    keyLength = Object.keys(snapshot.val()).length;
+                    random = Math.floor(Math.random() * keyLength);
+                    randomkey = Object.keys(snapshot.val())[random];
+                    $scope.advertRandKey = randomkey;
+
+                    console.log("rand", $scope.advertRandKey);
+                    let dsd = firebase.database().ref("Advertisement/"+randomkey)
+                    dsd.once("value", function(snapshot) {
+                        console.log("RADN", snapshot.val());
+                        $scope.advertDashboard = snapshot.val();
                     });
+
+                    
+            });
         });
     }
+
     showdashboardAds();
+
+
+
     function notifyInviteChat(a) {
         console.log("Notify", a);
         firebase.auth().onAuthStateChanged((user) => {
