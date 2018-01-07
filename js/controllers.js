@@ -491,6 +491,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             if (status == google.maps.GeocoderStatus.OK) {
 
                 $timeout(function() {
+
                     $scope.latlngaddress = results;
                     $scope.qualityCenter = $scope.latlng;
                     firebase.auth().onAuthStateChanged((user) => {
@@ -501,11 +502,12 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             .limitToLast(1)
                         ref.once("value", function(snapshot) {
                             key = Object.keys(snapshot.val())
-
+                             $scope.qualityCenter = $scope.latlng;
                             firebase.database().ref().child('Guest/' + key)
                                 .update({ lot: $scope.latlng, place: results[0].formatted_address });
                         });
                     });
+                    
                 });
                 var address = (results[0].formatted_address);
 
