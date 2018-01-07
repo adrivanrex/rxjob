@@ -479,7 +479,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         $scope.qualityCenter = ""+position.coords.latitude+","+position.coords.longitude+"";
         console.log("Position", $scope.qualityCenter);
         $scope.zoomMap = 10;
-
+        $scope.latlng = [];
+        $scope.laltlng.push(position.coords.latitude);
+        $scope.laltlng.push(position.coords.longitude);
         var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         // This is making the Geocode request
         var geocoder = new google.maps.Geocoder();
@@ -493,7 +495,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 $timeout(function() {
 
                     $scope.latlngaddress = results;
-                    $scope.qualityCenter = $scope.latlng;
+                    $scope.qualityCenter = $scope.laltlng;
                     firebase.auth().onAuthStateChanged((user) => {
 
                         let ref = firebase.database().ref("Guest")
@@ -502,9 +504,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             .limitToLast(1)
                         ref.once("value", function(snapshot) {
                             key = Object.keys(snapshot.val())
-                            $scope.qualityCenter = latlng;
+                            $scope.qualityCenter = $scope.laltlng;
                             firebase.database().ref().child('Guest/' + key)
-                                .update({ lot: latlng, place: results[0].formatted_address });
+                                .update({ lot: $scope.laltlng, place: results[0].formatted_address });
                         });
                     });
                     
