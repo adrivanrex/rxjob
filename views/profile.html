@@ -18,7 +18,7 @@
             <div class="ibox-content profile-content">
                 <div class="row">
                     <section id="map">
-                        <ng-map center="{{qualityCenter}}" zoom="5" on-click="changePlace($event)" map-type-id="HYBRID">
+                        <ng-map center="{{qualityCenter}}" zoom="{{zoomMap}}" on-click="changePlace($event)" map-type-id="HYBRID">
                             <marker position="{{qualityCenter}}" title="Hello World!" on-dragend="changePlace($event)" animation="Animation.BOUNCE" animation="DROP" draggable="true"></marker>
                         </ng-map>
                     </section>
