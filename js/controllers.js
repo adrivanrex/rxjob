@@ -502,9 +502,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             .limitToLast(1)
                         ref.once("value", function(snapshot) {
                             key = Object.keys(snapshot.val())
-                             $scope.qualityCenter = $scope.latlng;
+                            $scope.qualityCenter = latlng;
                             firebase.database().ref().child('Guest/' + key)
-                                .update({ lot: $scope.latlng, place: results[0].formatted_address });
+                                .update({ lot: latlng, place: results[0].formatted_address });
                         });
                     });
                     
