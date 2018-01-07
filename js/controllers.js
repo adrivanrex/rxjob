@@ -439,6 +439,25 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         $scope.latlng.push(position.coords.longitude);
         console.log("Position", $scope.latlng);
         $scope.zoomMap = 10;
+        var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        // This is making the Geocode request
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'latLng': latlng }, function(results, status) {
+            if (status !== google.maps.GeocoderStatus.OK) {
+                console.log(status);
+            }
+            // This is checking to see if the Geoeode Status is OK before proceeding
+            if (status == google.maps.GeocoderStatus.OK) {
+
+                $timeout(function() {
+                    $scope.latlngaddress = results;
+                });
+                var address = (results[0].formatted_address);
+                $scope.JobPostAddress = address;
+
+            }
+        });
+
 
     }
 
@@ -1585,6 +1604,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
     $scope.latlng = [10.314919285813161, 124.453125];
+
     $scope.getpos = function(event) {
 
         $scope.latlng = [event.latLng.lat(), event.latLng.lng()];
