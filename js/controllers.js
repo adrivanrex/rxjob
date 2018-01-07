@@ -436,6 +436,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         $scope.latlng = [];
         $scope.latlng.push(position.coords.latitude);
         $scope.latlng.push(position.coords.longitude);
+        console.log("Position", $scope.latlng);
 
     }
 
