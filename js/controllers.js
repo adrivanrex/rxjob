@@ -479,6 +479,39 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         $scope.qualityCenter = ""+position.coords.latitude+","+position.coords.longitude+"";
         console.log("Position", $scope.qualityCenter);
         $scope.zoomMap = 10;
+        
+        var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        // This is making the Geocode request
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'latLng': latlng }, function(results, status) {
+            if (status !== google.maps.GeocoderStatus.OK) {
+                console.log(status);
+            }
+            // This is checking to see if the Geoeode Status is OK before proceeding
+            if (status == google.maps.GeocoderStatus.OK) {
+
+                $timeout(function() {
+                    $scope.latlngaddress = results;
+                    $scope.qualityCenter = $scope.latlng;
+                    firebase.auth().onAuthStateChanged((user) => {
+
+                        let ref = firebase.database().ref("Guest")
+                            .orderByChild("email")
+                            .equalTo(user.email)
+                            .limitToLast(1)
+                        ref.once("value", function(snapshot) {
+                            key = Object.keys(snapshot.val())
+
+                            firebase.database().ref().child('Guest/' + key)
+                                .update({ lot: $scope.latlng, place: results[0].formatted_address });
+                        });
+                    });
+                });
+                var address = (results[0].formatted_address);
+
+            }
+        });
+
 
     }
 
