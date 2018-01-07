@@ -438,7 +438,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         $scope.latlng.push(position.coords.latitude);
         $scope.latlng.push(position.coords.longitude);
         console.log("Position", $scope.latlng);
-        $scope.zoomMap = 2;
+        $scope.zoomMap = 10;
 
     }
 
@@ -459,9 +459,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         console.log("POSITION", position);
         $scope.qualityCenter = ""+position.coords.latitude+","+position.coords.longitude+"";
         console.log("Position", $scope.qualityCenter);
-        $scope.zoomMap = 2;
+        $scope.zoomMap = 10;
 
     }
+
 
     $scope.submitApply = function() {
         let applyjob = {};
