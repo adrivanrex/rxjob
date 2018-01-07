@@ -432,8 +432,14 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     }
     function showPosition(position) {
         console.log("POSITION", position);
+        $scope.centerMap = ""+position.coords.latitude+","+position.coords.longitude+"";
+        $scope.latlng = [];
+        $scope.latlng.push(position.coords.latitude);
+        $scope.latlng.push(position.coords.longitude);
+
     }
 
+    $scope.centerMap = "10.314919285813161,124.453125";
 
     $scope.submitApply = function() {
         let applyjob = {};
