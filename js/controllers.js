@@ -479,7 +479,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         $scope.qualityCenter = ""+position.coords.latitude+","+position.coords.longitude+"";
         console.log("Position", $scope.qualityCenter);
         $scope.zoomMap = 10;
-        
+
         var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         // This is making the Geocode request
         var geocoder = new google.maps.Geocoder();
@@ -1654,9 +1654,11 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             if (status == google.maps.GeocoderStatus.OK) {
 
                 $timeout(function() {
+                    var address = (results[0].formatted_address);
                     $scope.latlngaddress = results;
+                    $scope.JobPostAddress = address;
                 });
-                var address = (results[0].formatted_address);
+                
 
             }
         });
