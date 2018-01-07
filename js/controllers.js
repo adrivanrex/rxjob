@@ -437,10 +437,12 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         $scope.latlng.push(position.coords.latitude);
         $scope.latlng.push(position.coords.longitude);
         console.log("Position", $scope.latlng);
+        $scope.zoomMap = 2;
 
     }
 
     $scope.centerMap = "10.314919285813161,124.453125";
+    $scope.zoomMap = 5;
 
     $scope.submitApply = function() {
         let applyjob = {};
