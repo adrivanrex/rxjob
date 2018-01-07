@@ -510,7 +510,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             $scope.qualityCenter = $scope.laltlng;
                             console.log("zlat", zlat);
                             firebase.database().ref().child('Guest/' + key)
-                                .update({ lot: $scope.laltlng, place: results[0].formatted_address });
+                                .update({ lot: zlat, place: results[0].formatted_address });
                         });
                     });
                     
