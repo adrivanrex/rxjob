@@ -258,14 +258,14 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     /*
     var emailAddress = "botarea@gmail.com";
 
-	firebase.auth().sendPasswordResetEmail(emailAddress).then(function() {
-	  // Email sent.
-	  alert("SENT");
-	}).catch(function(error) {
-	  // An error happened.
-	  alert(error);
-	});
-	*/
+    firebase.auth().sendPasswordResetEmail(emailAddress).then(function() {
+      // Email sent.
+      alert("SENT");
+    }).catch(function(error) {
+      // An error happened.
+      alert(error);
+    });
+    */
 
 
 
@@ -420,6 +420,19 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
     });
+
+
+    $scope.getLocation = function() {
+        if (navigator.geolocation) {
+            
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+    function showPosition(position) {
+        console.log("POSITION", position);
+    }
 
 
     $scope.submitApply = function() {
@@ -775,74 +788,26 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     }
 
     applications();
-    function showGraph(){
-    	firebase.auth().onAuthStateChanged((user) => {
 
-        let ref = firebase.database().ref("Graph")
-            .limitToLast(100)
-            .orderByChild("user")
-            .equalTo(user.uid)
-        ref.once("value", function(snapshot) {
-        	console.log("hello");
-            if (snapshot.val() == null) {
+    function showGraph() {
+        firebase.auth().onAuthStateChanged((user) => {
 
-                let ref = firebase.database().ref("Applicants")
-                    .limitToLast(100)
-                    .orderByChild("JobPosterID")
-                    .equalTo(user.uid)
-                ref.once("value", function(snapshot) {
-                    console.log("ApplicantJobs", snapshot.val());
-                    totalApplicants = Object.keys(snapshot.val()).length;
-                    applicants = Object.keys(snapshot.val());
-                    console.log("applicantList", snapshot.val());
-                    applicants = Object.keys(snapshot.val());
-                    console.log(applicants);
-                    applicantRateArray = [];
+            let ref = firebase.database().ref("Graph")
+                .limitToLast(100)
+                .orderByChild("user")
+                .equalTo(user.uid)
+            ref.once("value", function(snapshot) {
+                console.log("hello");
+                if (snapshot.val() == null) {
 
-                    for (var i = applicants.length - 1; i >= 0; i--) {
-
-                        console.log("applicanti", snapshot.val()[applicants[i]].CreatedAt);
-                        applicantDate = new Date(snapshot.val()[applicants[i]].CreatedAt);
-                        console.log(applicantDate);
-                        applicantInfo = {};
-                        applicantYear = applicantDate.getFullYear();
-                        applicantDay = applicantDate.getDate();
-                        applicantMonth = applicantDate.getMonth();
-
-
-                        applicantInfo = {
-                            Date: applicantDay,
-                            Month: applicantMonth,
-                            Year: applicantYear,
-                            user: user.uid,
-                            createdAt: firebase.database.ServerValue.TIMESTAMP
-                        }
-
-
-                        post = firebase.database().ref('Graph/').push(applicantInfo);
-
-                    }
-
-
-                });
-
-
-
-            }else{
-            	totalData = snapshot.val().length;
-
-            	let ref = firebase.database().ref("Applicants")
-                    .limitToLast(100)
-                    .orderByChild("JobPosterID")
-                    .equalTo(user.uid)
-                ref.once("value", function(snapshot) {
-                	totalApplicants = snapshot.val().length;
-                	if (totalData < totalApplicants) {
-                		let ref = firebase.database().ref("Applicants")
+                    let ref = firebase.database().ref("Applicants")
                         .limitToLast(100)
                         .orderByChild("JobPosterID")
                         .equalTo(user.uid)
                     ref.once("value", function(snapshot) {
+                        console.log("ApplicantJobs", snapshot.val());
+                        totalApplicants = Object.keys(snapshot.val()).length;
+                        applicants = Object.keys(snapshot.val());
                         console.log("applicantList", snapshot.val());
                         applicants = Object.keys(snapshot.val());
                         console.log(applicants);
@@ -873,75 +838,124 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         }
 
 
+                    });
+
+
+
+                } else {
+                    totalData = snapshot.val().length;
+
+                    let ref = firebase.database().ref("Applicants")
+                        .limitToLast(100)
+                        .orderByChild("JobPosterID")
+                        .equalTo(user.uid)
+                    ref.once("value", function(snapshot) {
+                        totalApplicants = snapshot.val().length;
+                        if (totalData < totalApplicants) {
+                            let ref = firebase.database().ref("Applicants")
+                                .limitToLast(100)
+                                .orderByChild("JobPosterID")
+                                .equalTo(user.uid)
+                            ref.once("value", function(snapshot) {
+                                console.log("applicantList", snapshot.val());
+                                applicants = Object.keys(snapshot.val());
+                                console.log(applicants);
+                                applicantRateArray = [];
+
+                                for (var i = applicants.length - 1; i >= 0; i--) {
+
+                                    console.log("applicanti", snapshot.val()[applicants[i]].CreatedAt);
+                                    applicantDate = new Date(snapshot.val()[applicants[i]].CreatedAt);
+                                    console.log(applicantDate);
+                                    applicantInfo = {};
+                                    applicantYear = applicantDate.getFullYear();
+                                    applicantDay = applicantDate.getDate();
+                                    applicantMonth = applicantDate.getMonth();
+
+
+                                    applicantInfo = {
+                                        Date: applicantDay,
+                                        Month: applicantMonth,
+                                        Year: applicantYear,
+                                        user: user.uid,
+                                        createdAt: firebase.database.ServerValue.TIMESTAMP
+                                    }
+
+
+                                    post = firebase.database().ref('Graph/').push(applicantInfo);
+
+                                }
+
+
+
+                            });
+                        };
 
                     });
-                	};
 
-                });
+                }
 
-            }
 
-            
+
+            });
+
+
+            let lef = firebase.database().ref("Graph")
+                .limitToLast(100)
+                .orderByChild("user")
+                .equalTo(user.uid)
+            lef.once("value", function(snapshot) {
+                keys = Object.keys(snapshot.val());
+                todoKey = snapshot.val();
+                console.log("GRAPH KEys", snapshot.val());
+
+                dates = [];
+                for (var i = keys.length - 1; i >= 0; i--) {
+                    dates.push(snapshot.val()[keys[i]].Date)
+                }
+                var uniq = dates
+                    .map((name) => {
+                        return { count: 1, name: name }
+                    })
+                    .reduce((a, b) => {
+                        a[b.name] = (a[b.name] || 0) + b.count
+                        return a
+                    }, {})
+
+                var sorted = Object.keys(uniq).sort((a, b) => uniq[a] < uniq[b])
+
+                console.log("dates", sorted);
+
+                for (var i = sorted.length - 1; i >= 0; i--) {
+
+                    let lef = firebase.database().ref("Graph")
+                        .limitToLast(100)
+                        .orderByChild("Date")
+                        .equalTo(parseInt(sorted[i]))
+                    lef.once("value", function(snapshot) {
+                        dataKey = Object.keys(snapshot.val());
+                        dataLength = Object.keys(snapshot.val()).length;
+                        keyData = snapshot.val()[dataKey];
+
+                        console.log("DATA LENGTH", dataLength);
+                        if (dataKey) {
+                            data2.push([gd(snapshot.val()[dataKey[0]].Year, snapshot.val()[dataKey[0]].Month + 1, snapshot.val()[dataKey[0]].Date + 1), dataLength + 600]);
+                        };
+
+                    });
+
+
+
+                }
+
+
+
+
+
+            });
+
 
         });
-
-
-        let lef = firebase.database().ref("Graph")
-            .limitToLast(100)
-            .orderByChild("user")
-            .equalTo(user.uid)
-        lef.once("value", function(snapshot) {
-            keys = Object.keys(snapshot.val());
-            todoKey = snapshot.val();
-            console.log("GRAPH KEys", snapshot.val());
-
-            dates = [];
-            for (var i = keys.length - 1; i >= 0; i--) {
-            		dates.push(snapshot.val()[keys[i]].Date)
-            }
-            var uniq = dates
-			  .map((name) => {
-			    return {count: 1, name: name}
-			  })
-			  .reduce((a, b) => {
-			    a[b.name] = (a[b.name] || 0) + b.count
-			    return a
-			  }, {})
-
-			var sorted = Object.keys(uniq).sort((a, b) => uniq[a] < uniq[b])
-
-			console.log("dates", sorted);
-
-			for (var i = sorted.length - 1; i >= 0; i--) {
-				
-				let lef = firebase.database().ref("Graph")
-		            .limitToLast(100)
-		            .orderByChild("Date")
-		            .equalTo(parseInt(sorted[i]))
-		        lef.once("value", function(snapshot) {
-		        	dataKey = Object.keys(snapshot.val());
-		        	dataLength = Object.keys(snapshot.val()).length;
-		        	keyData = snapshot.val()[dataKey];
-
-		        	console.log("DATA LENGTH", dataLength);
-		        	if(dataKey){
-		        		data2.push([gd(snapshot.val()[dataKey[0]].Year, snapshot.val()[dataKey[0]].Month + 1, snapshot.val()[dataKey[0]].Date + 1), dataLength +600]);
-		        	};
-		        	
-		        });
-
-
-
-			}
-
-
-
-            
-
-        });
-
-
-    });
     };
 
     $scope.$on('$locationChangeStart', function(event) {
@@ -961,7 +975,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             case '/app/contacts':
                 showContacts();
             case '/dashboards/marketInfo':
-            	showGraph();
+                showGraph();
             case '/app/user':
                 showUserInfo($location.search().id);
             case '/miscellaneous/chat_view':
@@ -1813,101 +1827,101 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     randomContact();
 
-    $scope.addWebsite = function(){
-         $window.location = "#!/dashboards/dashboard_3";
+    $scope.addWebsite = function() {
+        $window.location = "#!/dashboards/dashboard_3";
 
     };
 
-    $scope.addmoreAdveritesement = function(){
+    $scope.addmoreAdveritesement = function() {
         firebase.auth().onAuthStateChanged((user) => {
 
             firebase.database().ref('Advertisement').push({
-                        title: "title",
-                        email: "email",
-                        logoLink: "logoLink",
-                        createdAt: firebase.database.ServerValue.TIMESTAMP,
-                        Address: "Adress",
-                        Contact: "Contact",
-                        user: user.uid,
-                    });
+                title: "title",
+                email: "email",
+                logoLink: "logoLink",
+                createdAt: firebase.database.ServerValue.TIMESTAMP,
+                Address: "Adress",
+                Contact: "Contact",
+                user: user.uid,
+            });
         });
 
     };
 
     firebase.auth().onAuthStateChanged((user) => {
-            let ref = firebase.database().ref("Advertisement")
-                .orderByChild('user')
-                .equalTo(user.uid)
-                .limitToLast(100)
-            ref.on("value", function(snapshot) {
-                $timeout(function() {
+        let ref = firebase.database().ref("Advertisement")
+            .orderByChild('user')
+            .equalTo(user.uid)
+            .limitToLast(100)
+        ref.on("value", function(snapshot) {
+            $timeout(function() {
                 $scope.advertisment = snapshot.val();
-                });
             });
-
-            
         });
 
 
-    $scope.closeAdvert = function(a){
-        console.log("advert",a);
+    });
+
+
+    $scope.closeAdvert = function(a) {
+        console.log("advert", a);
         firebase.auth().onAuthStateChanged((user) => {
-        let ref = firebase.database().ref('Advertisement');
-                            ref.orderByChild('createdAt').equalTo(a.createdAt).limitToFirst(1).once('value', snapshot => {
-                                let updates = {};
-                                snapshot.forEach(child => updates[child.key] = null);
-                                ref.update(updates);
-                            });
-                        });
+            let ref = firebase.database().ref('Advertisement');
+            ref.orderByChild('createdAt').equalTo(a.createdAt).limitToFirst(1).once('value', snapshot => {
+                let updates = {};
+                snapshot.forEach(child => updates[child.key] = null);
+                ref.update(updates);
+            });
+        });
     }
 
-    
-    $scope.submitEditAdvert = function (){
+
+    $scope.submitEditAdvert = function() {
         var a = this;
-        if(!a.advertTitle){
+        if (!a.advertTitle) {
             a.advertTitle = this.advertisment.title;
         }
-        if(!a.advertEmail){
+        if (!a.advertEmail) {
             a.advertEmail = this.advertisment.Email;
         }
-        if(!a.advertLogoLink){
+        if (!a.advertLogoLink) {
             a.advertLogoLink = this.advertisment.logoLink;
         }
-        if(!a.advertContact){
+        if (!a.advertContact) {
             a.advertContact = this.advertisment.Contact;
         }
-        if(!a.advertAddress){
-             a.advertAddress = this.advertisment.Address;
+        if (!a.advertAddress) {
+            a.advertAddress = this.advertisment.Address;
         }
         firebase.auth().onAuthStateChanged((user) => {
             let ref = firebase.database().ref("Advertisement").orderByChild("createdAt").equalTo(this.advertisment.createdAt)
-                ref.once("child_added", function(snapshot) {
-                    snapshot.ref.update({ title: a.advertTitle,Email: a.advertEmail, logoLink:a.advertLogoLink, Contact:a.advertContact,Address: a.advertAddress});
-                });
+            ref.once("child_added", function(snapshot) {
+                snapshot.ref.update({ title: a.advertTitle, Email: a.advertEmail, logoLink: a.advertLogoLink, Contact: a.advertContact, Address: a.advertAddress });
+            });
         });
     }
 
-    function showdashboardAds(){
+    function showdashboardAds() {
         firebase.auth().onAuthStateChanged((user) => {
-             let ref = firebase.database().ref("Advertisement")
+            let ref = firebase.database().ref("Advertisement")
                 .orderByChild("createdAt")
                 .limitToLast(100)
-             ref.once("value", function(snapshot) {
-                    console.log("ads", Object.keys(snapshot.val()));
-                    keys = Object.keys(snapshot.val());
-                    keyLength = Object.keys(snapshot.val()).length;
-                    random = Math.floor(Math.random() * keyLength);
-                    randomkey = Object.keys(snapshot.val())[random];
-                    $scope.advertRandKey = randomkey;
+            ref.once("value", function(snapshot) {
+                console.log("ads", Object.keys(snapshot.val()));
+                keys = Object.keys(snapshot.val());
+                keyLength = Object.keys(snapshot.val()).length;
+                random = Math.floor(Math.random() * keyLength);
+                randomkey = Object.keys(snapshot.val())[random];
+                $scope.advertRandKey = randomkey;
 
-                    console.log("rand", $scope.advertRandKey);
-                    let dsd = firebase.database().ref("Advertisement/"+randomkey)
-                    dsd.on("value", function(snapshot) {
-                        console.log("RADN", snapshot.val());
-                        $scope.advertDashboard = snapshot.val();
-                    });
+                console.log("rand", $scope.advertRandKey);
+                let dsd = firebase.database().ref("Advertisement/" + randomkey)
+                dsd.on("value", function(snapshot) {
+                    console.log("RADN", snapshot.val());
+                    $scope.advertDashboard = snapshot.val();
+                });
 
-                    
+
             });
         });
     }
@@ -2046,7 +2060,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                             .equalTo(user.uid)
                         bef.once("value", function(snapshot) {
                             chatsk = Object.keys(snapshot.val()).length;
-                            
+
                             let ref = firebase.database().ref('ChatRooms');
                             ref.orderByChild('room').equalTo(locationID).limitToFirst(2).once('value', snapshot => {
                                 let updates = {};
@@ -2082,7 +2096,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     chatKey = Object.keys(snapshot.val());
 
                     /*
-                     *	check if user has room
+                     *  check if user has room
                      */
                     let ref = firebase.database().ref("ChatRooms")
                         .orderByChild("email")
@@ -2476,7 +2490,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 UpdatedTime = new Date(timeInMs);
                 humanTime = UpdatedTime.toString();
 
-                
+
 
 
 
@@ -2487,12 +2501,12 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
         });
 
-    setTimeout(function(){ 
-        objDiv = document.getElementById("chat-discussion");
-        objDiv.scrollTop = 99999;
-    }, 1000);
+        setTimeout(function() {
+            objDiv = document.getElementById("chat-discussion");
+            objDiv.scrollTop = 99999;
+        }, 1000);
 
-     
+
     }
 
 
@@ -2667,7 +2681,7 @@ function dashboardFlotTwo() {
 
     **/
 
-    
+
     firebase.auth().onAuthStateChanged((user) => {
 
         let ref = firebase.database().ref("Graph")
@@ -2719,60 +2733,60 @@ function dashboardFlotTwo() {
 
 
 
-            }else{
-            	totalData = snapshot.val().length;
+            } else {
+                totalData = snapshot.val().length;
 
-            	let ref = firebase.database().ref("Applicants")
+                let ref = firebase.database().ref("Applicants")
                     .limitToLast(100)
                     .orderByChild("JobPosterID")
                     .equalTo(user.uid)
                 ref.once("value", function(snapshot) {
-                	totalApplicants = snapshot.val().length;
-                	if (totalData < totalApplicants) {
-                		let ref = firebase.database().ref("Applicants")
-                        .limitToLast(100)
-                        .orderByChild("JobPosterID")
-                        .equalTo(user.uid)
-                    ref.once("value", function(snapshot) {
-                        console.log("applicantList", snapshot.val());
-                        applicants = Object.keys(snapshot.val());
-                        console.log(applicants);
-                        applicantRateArray = [];
+                    totalApplicants = snapshot.val().length;
+                    if (totalData < totalApplicants) {
+                        let ref = firebase.database().ref("Applicants")
+                            .limitToLast(100)
+                            .orderByChild("JobPosterID")
+                            .equalTo(user.uid)
+                        ref.once("value", function(snapshot) {
+                            console.log("applicantList", snapshot.val());
+                            applicants = Object.keys(snapshot.val());
+                            console.log(applicants);
+                            applicantRateArray = [];
 
-                        for (var i = applicants.length - 1; i >= 0; i--) {
+                            for (var i = applicants.length - 1; i >= 0; i--) {
 
-                            console.log("applicanti", snapshot.val()[applicants[i]].CreatedAt);
-                            applicantDate = new Date(snapshot.val()[applicants[i]].CreatedAt);
-                            console.log(applicantDate);
-                            applicantInfo = {};
-                            applicantYear = applicantDate.getFullYear();
-                            applicantDay = applicantDate.getDate();
-                            applicantMonth = applicantDate.getMonth();
+                                console.log("applicanti", snapshot.val()[applicants[i]].CreatedAt);
+                                applicantDate = new Date(snapshot.val()[applicants[i]].CreatedAt);
+                                console.log(applicantDate);
+                                applicantInfo = {};
+                                applicantYear = applicantDate.getFullYear();
+                                applicantDay = applicantDate.getDate();
+                                applicantMonth = applicantDate.getMonth();
 
 
-                            applicantInfo = {
-                                Date: applicantDay,
-                                Month: applicantMonth,
-                                Year: applicantYear,
-                                user: user.uid,
-                                createdAt: firebase.database.ServerValue.TIMESTAMP
+                                applicantInfo = {
+                                    Date: applicantDay,
+                                    Month: applicantMonth,
+                                    Year: applicantYear,
+                                    user: user.uid,
+                                    createdAt: firebase.database.ServerValue.TIMESTAMP
+                                }
+
+
+                                post = firebase.database().ref('Graph/').push(applicantInfo);
+
                             }
 
 
-                            post = firebase.database().ref('Graph/').push(applicantInfo);
 
-                        }
-
-
-
-                    });
-                	};
+                        });
+                    };
 
                 });
 
             }
 
-            
+
 
         });
 
@@ -2788,46 +2802,46 @@ function dashboardFlotTwo() {
 
             dates = [];
             for (var i = keys.length - 1; i >= 0; i--) {
-            		dates.push(snapshot.val()[keys[i]].Date)
+                dates.push(snapshot.val()[keys[i]].Date)
             }
             var uniq = dates
-			  .map((name) => {
-			    return {count: 1, name: name}
-			  })
-			  .reduce((a, b) => {
-			    a[b.name] = (a[b.name] || 0) + b.count
-			    return a
-			  }, {})
+                .map((name) => {
+                    return { count: 1, name: name }
+                })
+                .reduce((a, b) => {
+                    a[b.name] = (a[b.name] || 0) + b.count
+                    return a
+                }, {})
 
-			var sorted = Object.keys(uniq).sort((a, b) => uniq[a] < uniq[b])
+            var sorted = Object.keys(uniq).sort((a, b) => uniq[a] < uniq[b])
 
-			console.log("dates", sorted);
+            console.log("dates", sorted);
 
-			for (var i = sorted.length - 1; i >= 0; i--) {
-				
-				let lef = firebase.database().ref("Graph")
-		            .limitToLast(100)
-		            .orderByChild("Date")
-		            .equalTo(parseInt(sorted[i]))
-		        lef.once("value", function(snapshot) {
-		        	dataKey = Object.keys(snapshot.val());
-		        	dataLength = Object.keys(snapshot.val()).length;
-		        	keyData = snapshot.val()[dataKey];
+            for (var i = sorted.length - 1; i >= 0; i--) {
 
-		        	console.log("DATA LENGTH", dataLength);
-		        	if(dataKey){
-		        		data2.push([gd(snapshot.val()[dataKey[0]].Year, snapshot.val()[dataKey[0]].Month + 1, snapshot.val()[dataKey[0]].Date + 1), dataLength +600]);
-		        	}
-		        	
-		        });
+                let lef = firebase.database().ref("Graph")
+                    .limitToLast(100)
+                    .orderByChild("Date")
+                    .equalTo(parseInt(sorted[i]))
+                lef.once("value", function(snapshot) {
+                    dataKey = Object.keys(snapshot.val());
+                    dataLength = Object.keys(snapshot.val()).length;
+                    keyData = snapshot.val()[dataKey];
 
+                    console.log("DATA LENGTH", dataLength);
+                    if (dataKey) {
+                        data2.push([gd(snapshot.val()[dataKey[0]].Year, snapshot.val()[dataKey[0]].Month + 1, snapshot.val()[dataKey[0]].Date + 1), dataLength + 600]);
+                    }
 
-
-			}
+                });
 
 
 
-            
+            }
+
+
+
+
 
         });
 
@@ -2845,7 +2859,7 @@ function dashboardFlotTwo() {
     **/
 
     var data2 = [];
-    console.log("DATA",data2);
+    console.log("DATA", data2);
 
 
     var dataset = [{
