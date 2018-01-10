@@ -254,6 +254,45 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     var database = firebase.database();
     $scope.projects = [];
     $scope.searchText = "";
+    window.onload = function(e) {
+        uploader = document.getElementById('uploader');
+        fileButton = document.getElementById("fileButton");
+        fileButton.addEventListener('change', function(e) {
+            var file = e.target.files[0];
+            var storageRef = firebase.storage().ref('img/' + file.name);
+            var task = storageRef.put(file);
+            task.on('state_changed', function progress(snapshot) {
+                var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                uploader.value = percentage;
+
+            }, function error(err) {
+
+
+            }, function complete() {
+                var downloadURL = task.snapshot.downloadURL;
+                firebase.auth().onAuthStateChanged((user) => {
+                    firebase.database().ref('users/' + user.uid).set({
+                username: user.displayName,
+                email: user.email,
+                picture: task.snapshot.downloadURL
+            });
+
+                });
+                
+                var user = firebase.auth().currentUser;
+
+                user.updateProfile({
+                  photoURL: task.snapshot.downloadURL
+                })
+
+
+            });
+        });
+    };
+
+
+
+
 
     /*
     var emailAddress = "botarea@gmail.com";
@@ -424,7 +463,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     $scope.getLocation = function() {
         if (navigator.geolocation) {
-            
+
             navigator.geolocation.getCurrentPosition(showPosition);
         } else {
             alert("Geolocation is not supported by this browser.");
@@ -433,7 +472,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     function showPosition(position) {
         console.log("POSITION", position);
-        $scope.centerMap = ""+position.coords.latitude+","+position.coords.longitude+"";
+        $scope.centerMap = "" + position.coords.latitude + "," + position.coords.longitude + "";
         $scope.latlng = [];
         $scope.latlng.push(position.coords.latitude);
         $scope.latlng.push(position.coords.longitude);
@@ -465,9 +504,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     $scope.centerMap = "10.314919285813161,124.453125";
     $scope.zoomMap = 5;
 
-    $scope.getLocationProfile = function (){
+    $scope.getLocationProfile = function() {
         if (navigator.geolocation) {
-            
+
             navigator.geolocation.getCurrentPosition(showGeoPosition);
         } else {
             alert("Geolocation is not supported by this browser.");
@@ -476,7 +515,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     function showGeoPosition(position) {
         console.log("POSITION", position);
-        $scope.qualityCenter = ""+position.coords.latitude+","+position.coords.longitude+"";
+        $scope.qualityCenter = "" + position.coords.latitude + "," + position.coords.longitude + "";
         console.log("Position", $scope.qualityCenter);
         $scope.zoomMap = 10;
         var zlat = [];
@@ -495,7 +534,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 $timeout(function() {
 
                     $scope.latlngaddress = results;
-                     $scope.qualityCenter = ""+position.coords.latitude+","+position.coords.longitude+"";
+                    $scope.qualityCenter = "" + position.coords.latitude + "," + position.coords.longitude + "";
                     firebase.auth().onAuthStateChanged((user) => {
 
                         let ref = firebase.database().ref("Guest")
@@ -505,10 +544,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                         ref.once("value", function(snapshot) {
                             key = Object.keys(snapshot.val())
                             firebase.database().ref().child('Guest/' + key)
-                                .update({ lot: [position.coords.latitude,position.coords.longitude], place: results[0].formatted_address });
+                                .update({ lot: [position.coords.latitude, position.coords.longitude], place: results[0].formatted_address });
                         });
                     });
-                    
+
                 });
                 var address = (results[0].formatted_address);
 
@@ -696,6 +735,25 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         })
 
     }
+    firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref('users')
+                .orderByChild("email")
+                .equalTo(user.email)
+                .limitToLast(1)
+            ref.on("value", function(snapshot) {
+                $timeout(function() {
+                   
+                   key = Object.keys(snapshot.val());
+                   $scope.displayName = snapshot.val()[key].username
+                    $scope.photoURL = snapshot.val()[key].picture;
+                    $scope.welcomeUser = snapshot.val()[key].username;
+                });
+            });
+
+        })
+
+     
+
 
     function getApplyDetails() {
         firebase.auth().onAuthStateChanged((user) => {
@@ -1627,9 +1685,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         if (user) {
             // User is signed in.;
             console.log(user);
-            $scope.displayName = user.displayName;
-            $scope.photoURL = user.photoURL;
-            $scope.welcomeUser = user.displayName;
+           
         } else {
             $window.location = 'login';
             console.log('not signed in');
@@ -1661,7 +1717,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                     $scope.latlngaddress = results;
                     $scope.JobPostAddress = address;
                 });
-                
+
 
             }
         });
@@ -1980,6 +2036,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         if (!a.advertAddress) {
             a.advertAddress = this.advertisment.Address;
         }
+
         firebase.auth().onAuthStateChanged((user) => {
             let ref = firebase.database().ref("Advertisement").orderByChild("createdAt").equalTo(this.advertisment.createdAt)
             ref.once("child_added", function(snapshot) {
