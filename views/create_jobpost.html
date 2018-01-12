@@ -6,7 +6,7 @@
              </div>
             <div class="row wrapper">
                 <section id="map">
-                    <ng-map center="{{centerMap}}" zoom="5" on-click="getpos($event)" map-type-id="HYBRID">
+                    <ng-map center="{{centerMap}}" zoom="{{zoomMap}}" on-click="getpos($event)" map-type-id="HYBRID">
                         <marker position="{{latlng}}" title="Hello World!" on-dragend="getpos($event)" animation="Animation.BOUNCE" animation="DROP" draggable="true"></marker>
                     </ng-map>
                 </section>
