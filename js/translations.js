@@ -29,7 +29,7 @@ function config($translateProvider) {
             // Define some custom text
             WELCOME: 'Communicate with the world and trade around you on Merkadu',
             MESSAGEINFO: 'You have 42 messages and 6 notifications.',
-            SEARCH: 'Search for something...',
+            SEARCH: 'Search User',
             Activity: "Activity",
             TODO: "To-do",
             Title: "Title",
