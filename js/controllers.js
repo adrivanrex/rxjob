@@ -477,7 +477,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         $scope.latlng.push(position.coords.latitude);
         $scope.latlng.push(position.coords.longitude);
         console.log("Position", $scope.latlng);
-        $scope.zoomMap = 10;
+        $scope.zoomMap = 13;
         var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         // This is making the Geocode request
         var geocoder = new google.maps.Geocoder();
@@ -502,7 +502,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
     $scope.centerMap = "10.314919285813161,124.453125";
-    $scope.zoomMap = 5;
+    $scope.zoomMap = 13;
 
     $scope.getLocationProfile = function() {
         if (navigator.geolocation) {
@@ -517,7 +517,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         console.log("POSITION", position);
         $scope.qualityCenter = "" + position.coords.latitude + "," + position.coords.longitude + "";
         console.log("Position", $scope.qualityCenter);
-        $scope.zoomMap = 10;
+        $scope.zoomMap = 13;
         var zlat = [];
         zlat.push(position.coords.latitude);
         zlat.push(position.coords.longitude);
