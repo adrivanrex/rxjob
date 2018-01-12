@@ -1733,7 +1733,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 .orderByChild("email")
                 .equalTo(user.email)
                 .limitToLast(1)
-            ref.once("value", function(snapshot) {
+            ref.on("value", function(snapshot) {
                 key = Object.keys(snapshot.val());
                 if (key == null) {
                     $scope.qualityCenter = [10.314919285813161, 124.453125];
@@ -1741,7 +1741,9 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
                 lat = snapshot.val()[key].lot[0];
                 lang = snapshot.val()[key].lot[1];
+                $timeout(function() {
                 $scope.qualityCenter = [lat, lang];
+            });
             });
         });
 
