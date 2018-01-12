@@ -254,10 +254,10 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     var database = firebase.database();
     $scope.projects = [];
     $scope.searchText = "";
-    $scope.add = function() {
+    $scope.changeProPic = function() {
     var file = document.getElementById('file').files[0],
         r = new FileReader();
-        
+
             var storageRef = firebase.storage().ref('img/' + file.name);
             var task = storageRef.put(file);
             task.on('state_changed', function progress(snapshot) {
@@ -286,13 +286,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
             });
-    r.onloadend = function(e) {
-      var data = e.target.result;
-      //send your binary data via $http or $resource or do anything else with it
-
-    }
-
-    r.readAsBinaryString(f);
+    
 }
 
   
