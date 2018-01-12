@@ -2,23 +2,24 @@
     <div class="sidebar-collapse">
         <ul side-navigation class="nav" id="side-menu">
             <li class="nav-header">
-                <div class="dropdown profile-element" dropdown>
-                    <img alt="image" class="img-circle profilepic" src="{{photoURL}}" />
-                    <a class="dropdown-toggle" dropdown-toggle href>
+                <div  dropdown>
+                    <img dropdown-toggle href alt="image" class="img-circle profilepic" src="{{photoURL}}" />
+                    <a class="dropdown-toggle" >
                             <span class="clear">
                                 <span class="block m-t-xs">
                                     <strong class="font-bold">{{ displayName }}</strong>
                              </span>
-                                <span class="text-muted text-xs block">View <b class="caret"></b></span>
                             </span>
                     </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
                         <li><a href="#!/app/profile">Profile</a></li>
                     </ul>
                 </div>
+                <!--
                 <div class="logo-element">
-                    <img src="img/logo.png" width="50" height="50"></img>
+                    <img src="img/logo.png" ></img>
                 </div>
+                -->
             </li>
             <li ng-class="{active: $state.includes('dashboards')}">
                 <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">{{ 'DASHBOARD' | translate }}</span> <span class="fa arrow"></span></a>
