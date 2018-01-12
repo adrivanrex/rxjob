@@ -469,7 +469,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
             alert("Geolocation is not supported by this browser.");
         }
     }
-
+    $scope.centerMap = [10.314919285813161, 124.453125];
     function showPosition(position) {
         console.log("POSITION", position);
         $scope.centerMap = "" + position.coords.latitude + "," + position.coords.longitude + "";
@@ -501,8 +501,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     }
 
 
-    $scope.centerMap = "10.314919285813161,124.453125";
-    $scope.zoomMap = 13;
+    $scope.centerMap = [10.314919285813161, 124.453125];
+    $scope.zoomMap = 5;
 
     $scope.getLocationProfile = function() {
         if (navigator.geolocation) {
