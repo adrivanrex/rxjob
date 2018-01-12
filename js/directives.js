@@ -345,9 +345,27 @@ function fullScroll($timeout){
  *
  * Pass all functions into module
  */
- 
+ function ngUploadChange(){
+    return{
+        scope:{
+            ngUploadChange:"&"
+        },
+        link:function($scope, $element, $attrs){
+            $element.on("change",function(event){
+                $scope.$apply(function(){
+                    $scope.ngUploadChange({$event: event})
+                })
+            })
+            $scope.$on("$destroy",function(){
+                $element.off();
+            });
+        }
+    }
+ }
+
 angular
     .module('cabao')
+    .directive('ngUploadChange', ngUploadChange)
     .directive('pageTitle', pageTitle)
     .directive('sideNavigation', sideNavigation)
     .directive('iboxTools', iboxTools)
