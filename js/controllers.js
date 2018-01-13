@@ -360,14 +360,15 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     }
 
 
+    function toTitleCase(str) {
+            return str.replace(/\w\S*/g, function(txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+        }
 
     $scope.changeUserName = function(a) {
         console.log(a.searchUserName);
         query = a.searchUserName;
 
-        function toTitleCase(str) {
-            return str.replace(/\w\S*/g, function(txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
-        }
+        
         toTitleCase(query);
         console.log("QUERY USER", query);
         if (!query) {
@@ -917,6 +918,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 ref.once("value", function(snapshot) {
                     $scope.Guestinfo = snapshot.val();
                     FullName = '' + $scope.verifyFirstName + ' ' + $scope.verifyMiddleName + ' ' + $scope.verifyLastName;
+                    FullName = toTitleCase(FullName);
                     if ($scope.Guestinfo == null) {
                         post = firebase.database().ref('Guest/').push({
                             about: $scope.verifyGuest,
