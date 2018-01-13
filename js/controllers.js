@@ -255,41 +255,41 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
     $scope.projects = [];
     $scope.searchText = "";
     $scope.changeProPic = function() {
-    var file = document.getElementById('file').files[0],
-        r = new FileReader();
+        var file = document.getElementById('file').files[0],
+            r = new FileReader();
 
-            var storageRef = firebase.storage().ref('img/' + file.name);
-            var task = storageRef.put(file);
-            task.on('state_changed', function progress(snapshot) {
-                var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                uploader.value = percentage;
+        var storageRef = firebase.storage().ref('img/' + file.name);
+        var task = storageRef.put(file);
+        task.on('state_changed', function progress(snapshot) {
+            var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            uploader.value = percentage;
 
-            }, function error(err) {
+        }, function error(err) {
 
 
-            }, function complete() {
-                var downloadURL = task.snapshot.downloadURL;
-                firebase.auth().onAuthStateChanged((user) => {
-                    firebase.database().ref('users/' + user.uid).set({
-                username: user.displayName,
-                email: user.email,
-                picture: task.snapshot.downloadURL
-            });
-
+        }, function complete() {
+            var downloadURL = task.snapshot.downloadURL;
+            firebase.auth().onAuthStateChanged((user) => {
+                firebase.database().ref('users/' + user.uid).set({
+                    username: user.displayName,
+                    email: user.email,
+                    picture: task.snapshot.downloadURL
                 });
-                
-                var user = firebase.auth().currentUser;
-
-                user.updateProfile({
-                  photoURL: task.snapshot.downloadURL
-                })
-
 
             });
-    
-}
 
-  
+            var user = firebase.auth().currentUser;
+
+            user.updateProfile({
+                photoURL: task.snapshot.downloadURL
+            })
+
+
+        });
+
+    }
+
+
 
 
 
@@ -361,6 +361,38 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
 
 
+    $scope.changeUserName = function(a) {
+        console.log(a.searchUserName);
+        query = a.searchUserName;
+
+        function toTitleCase(str) {
+            return str.replace(/\w\S*/g, function(txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+        }
+        toTitleCase(query);
+        console.log("QUERY USER", query);
+        if (!query) {
+            $scope.SearchUser = "";
+        }
+        firebase.auth().onAuthStateChanged((user) => {
+            let ref = firebase.database().ref("Guest")
+                .orderByChild("name")
+                .equalTo(toTitleCase(query))
+                .limitToLast(1)
+            ref.on("value", function(snapshot) {
+                if (snapshot.val() == null) {
+                    $scope.SearchUser = { name: "User Not found" };
+                } else {
+                    $timeout(function() {
+                        keys = Object.keys(snapshot.val());
+                        $scope.SearchUser = snapshot.val()[keys];
+                        console.log("Search", snapshot.val());
+                    });
+
+                }
+
+            });
+        });
+    };
 
     $scope.aboutMe = function() {
         console.log("ONCHANGE", this);
@@ -470,6 +502,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         }
     }
     $scope.centerMap = [10.314919285813161, 124.453125];
+
     function showPosition(position) {
         console.log("POSITION", position);
         $scope.centerMap = "" + position.coords.latitude + "," + position.coords.longitude + "";
@@ -736,23 +769,23 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
 
     }
     firebase.auth().onAuthStateChanged((user) => {
-            let ref = firebase.database().ref('users')
-                .orderByChild("email")
-                .equalTo(user.email)
-                .limitToLast(1)
-            ref.on("value", function(snapshot) {
-                $timeout(function() {
-                   
-                   key = Object.keys(snapshot.val());
-                   $scope.displayName = snapshot.val()[key].username
-                    $scope.photoURL = snapshot.val()[key].picture;
-                    $scope.welcomeUser = snapshot.val()[key].username;
-                });
+        let ref = firebase.database().ref('users')
+            .orderByChild("email")
+            .equalTo(user.email)
+            .limitToLast(1)
+        ref.on("value", function(snapshot) {
+            $timeout(function() {
+
+                key = Object.keys(snapshot.val());
+                $scope.displayName = snapshot.val()[key].username
+                $scope.photoURL = snapshot.val()[key].picture;
+                $scope.welcomeUser = snapshot.val()[key].username;
             });
+        });
 
-        })
+    })
 
-     
+
 
 
     function getApplyDetails() {
@@ -1685,7 +1718,7 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
         if (user) {
             // User is signed in.;
             console.log(user);
-           
+
         } else {
             $window.location = 'login';
             console.log('not signed in');
@@ -1742,8 +1775,8 @@ function MainCtrl($window, $scope, $firebaseAuth, $location, $firebaseObject, $t
                 lat = snapshot.val()[key].lot[0];
                 lang = snapshot.val()[key].lot[1];
                 $timeout(function() {
-                $scope.qualityCenter = [lat, lang];
-            });
+                    $scope.qualityCenter = [lat, lang];
+                });
             });
         });
 

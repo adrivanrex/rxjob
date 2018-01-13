@@ -2,9 +2,10 @@
     <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
             <span minimaliza-sidebar></span>
-            <form role="search" class="navbar-form-custom" method="post" action="views/search_results.html">
+            <form role="search" class="navbar-form-custom">
                 <div class="form-group">
-                    <input type="text" placeholder="{{ 'SEARCH' | translate }}" class="form-control" name="top-search" id="top-search">
+                    <input type="text" placeholder="{{ 'SEARCH' | translate }}" ng-model="searchUserName"  ng-change="changeUserName(this)" class="form-control" name="top-search" id="top-search">
+                    <span class="help-block m-b-none"><a href="#!/app/user?id={{SearchUser.user}}">{{SearchUser.name}}</a></span>
                 </div>
             </form>
         </div>
