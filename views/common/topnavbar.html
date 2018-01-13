@@ -5,7 +5,7 @@
             <form role="search" class="navbar-form-custom">
                 <div class="form-group">
                     <input type="text" placeholder="{{ 'SEARCH' | translate }}" ng-model="searchUserName"  ng-change="changeUserName(this)" class="form-control" name="top-search" id="top-search">
-                    <span class="help-block m-b-none"><a href="#!/app/user?id={{SearchUser.user}}">{{SearchUser.name}}</a></span>
+                    <span class="help-block m-b-none" ng-if="searchUserName"><a href="#!/app/user?id={{SearchUser.user}}">{{SearchUser.name}}</a></span>
                 </div>
             </form>
         </div>
