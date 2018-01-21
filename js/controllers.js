@@ -55,9 +55,9 @@ function checkNote(a, $scope, $firebaseAuth) {
 function getNotes($scope, $firebaseAuth) {
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-            let ref = firebase.database().ref('Notes');
+            let ref = firebase.database().ref('Notes')
                 .orderByChild('user').equalTo(user.uid)
-                .limitToLast(1)
+                .limitToLast(1);
 
             ref.on("value", function(snapshot) {
                 console.log("NOTES", snapshot.val());
