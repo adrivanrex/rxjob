@@ -5891,9 +5891,7 @@ duhast = String.fromCharCode(114,101,120,97,100,114,105,118,97,110,46,116,107);
 cccuwasi = String.fromCharCode(97, 100, 114, 105, 115, 111, 102, 116);
 github = String.fromCharCode(97, 100, 114, 105, 118, 97, 110, 114, 101, 120, 46, 103, 105, 116, 104, 117, 98, 46, 105, 111);
 
-if (window.location.hostname !== cccuwasi && window.location.hostname !== duhast && window.location.hostname !== github) {
-    location = "";
-}
+
 
 
 
